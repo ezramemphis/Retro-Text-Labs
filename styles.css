@@ -230,17 +230,33 @@ canvas {
 
   /* Show the block screen */
   .mobile-block {
-    display: flex;
-    position: fixed;
-    inset: 0;
-    background: #0b0b0b;
-    color: #eaeaea;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    text-align: center;
-    padding: 24px;
-  }
+  display: flex;
+  position: fixed;
+  inset: 0;
+  color: #eaeaea;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  text-align: center;
+  padding: 24px;
+
+  /* Cavern / echo texture */
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,255,255,0.04),
+      rgba(0,0,0,0.85) 70%
+    ),
+    repeating-radial-gradient(
+      circle,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 2px,
+      transparent 4px
+    ),
+    #0b0b0b;
+}
+
 
   .mobile-block-content {
     max-width: 420px;
@@ -255,11 +271,11 @@ canvas {
   }
 
   .mobile-block h1 {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'sans-serif';
     font-size: 1rem;
     margin-bottom: 12px;
-    color: #ff6666;
-    text-shadow: 0 0 8px rgba(255, 102, 102, 0.6);
+    color: #e8e8e8;
+    text-shadow: 0 0 8px rgba(16, 16, 16, 0.6);
   }
 
   .mobile-block p {
