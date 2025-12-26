@@ -992,3 +992,114 @@ function animate(ts) {
 
 toggleSpin.onclick = () => running = !running
 animate()
+
+
+// Background Music
+
+// === Elements ===
+const bgMusic = document.getElementById("bgMusic");
+const mobileMusic = document.getElementById("mobileMusic");
+
+// === Track List ===
+const backgroundTracks = [
+  "./music/Life-at-sea-Knobs.mp3", // Always first
+  "./music/Lazy-House-Sam-Prekop.mp3",
+  "./music/10-Fax.mp3",
+  "./music/Transmitter-Spacetime-Continuum.mp3",
+  "./music/Amygdala-JakoJako.mp3"
+];
+
+// === Mobile Detection ===
+const isMobileBlocked = window.matchMedia("(max-width: 1024px)").matches;
+
+// === Background Music Logic ===
+let isFirstTrack = true;
+
+function playBackgroundMusic() {
+  let track;
+
+  if (isFirstTrack) {
+    track = backgroundTracks[0]; // Always play first
+    isFirstTrack = false;
+  } else {
+    const remainingTracks = backgroundTracks.slice(1);
+    track = remainingTracks[Math.floor(Math.random() * remainingTracks.length)];
+  }
+
+  bgMusic.src = track;
+  bgMusic.volume = 0.25;
+  bgMusic.loop = false;
+
+  bgMusic.play().catch(() => {
+    // Autoplay blocked until user interaction
+    document.addEventListener("click", resumeBgMusic, { once: true });
+  });
+
+  bgMusic.onended = playBackgroundMusic;
+}
+
+function resumeBgMusic() {
+  bgMusic.play().catch(() => {});
+}
+
+// === Mobile Music Logic ===
+function playMobileMusic() {
+  mobileMusic.volume = 0.3;
+  mobileMusic.loop = true;
+  mobileMusic.src = "./music/mobilemusic.mp3";
+
+  mobileMusic.play().catch(() => {
+    document.addEventListener("click", () => {
+      mobileMusic.play().catch(() => {});
+    }, { once: true });
+  });
+}
+
+// === Decide what to play ===
+if (isMobileBlocked) {
+  playMobileMusic();
+} else {
+  playBackgroundMusic();
+}
+
+
+const muteBtn = document.getElementById("muteBtn");
+const shuffleBtn = document.getElementById("shuffleBtn");
+
+// Load saved mute status from localStorage
+let isMuted = localStorage.getItem("retroTextLabMuted") === "true";
+
+// Apply mute status immediately
+bgMusic.volume = isMuted ? 0 : 0.25;
+mobileMusic.volume = isMuted ? 0 : 0.3;
+muteBtn.textContent = isMuted ? "🔇" : "🔈";
+
+// Mute / Unmute toggle
+muteBtn.addEventListener("click", () => {
+  isMuted = !isMuted;
+
+  // Apply volume
+  bgMusic.volume = isMuted ? 0 : 0.25;
+  mobileMusic.volume = isMuted ? 0 : 0.3;
+
+  // Save to localStorage
+  localStorage.setItem("retroTextLabMuted", isMuted);
+
+  // Update button icon
+  muteBtn.textContent = isMuted ? "🔇" : "🔈";
+});
+
+// Shuffle next track
+shuffleBtn.addEventListener("click", () => {
+  if (!isMobileBlocked) {
+    // Stop current music immediately
+    bgMusic.pause();
+
+    // Play a random track (excluding first track if needed)
+    let remainingTracks = backgroundTracks.slice(1);
+    let track = remainingTracks[Math.floor(Math.random() * remainingTracks.length)];
+    bgMusic.src = track;
+    bgMusic.volume = isMuted ? 0 : 0.25;
+    bgMusic.play();
+  }
+});

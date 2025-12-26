@@ -22,264 +22,227 @@ body {
   color: var(--text);
   font-family: system-ui, sans-serif;
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 320px 1fr;  /* aside + main */
+  grid-template-rows: 36px 1fr;      /* header + content */
   height: 100vh;
-  user-select: none;      /* no text highlighting */
-  cursor: default;        /* arrow cursor, not I-beam */
+  user-select: none;
+  cursor: default;
 }
 
-/* Apply RetroFont specifically to the "Retro Text Engine" h2 inside #controls */
+/* === Header === */
+#topHeader {
+  grid-column: 1 / -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 36px;
+  background: rgba(28, 28, 28, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 10000;
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+#topHeader a {
+  margin-right: 12px;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+#topHeader a:hover {
+  color: var(--accent);
+}
+
+/* Header Right Container */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-50px); /* move left by 50px */
+}
+
+/* Buttons styling */
+.header-right button {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-right button:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+/* === Controls Panel === */
+#controls {
+  grid-row: 2;
+  background: var(--panel);
+  padding: 16px;
+  overflow-y: auto;
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.06);
+  z-index: 1;
+  height: calc(100vh - 36px);
+}
+
 #controls > h2 {
   font-family: 'RetroFont', sans-serif;
   margin-top: 0;
   text-align: center;
   letter-spacing: 0.12em;
-
-  /* Neon color core */
   color: #ffe7a3;
-
-  /* Glow stack */
-text-shadow:
-  0 0 1px #ffe7a3,
-  0 0 4px rgba(255, 207, 102, 0.6),
-  0 0 8px rgba(255, 180, 80, 0.4);
-
-
-  /* Subtle depth */
+  text-shadow:
+    0 0 1px #ffe7a3,
+    0 0 4px rgba(255, 207, 102, 0.6),
+    0 0 8px rgba(255, 180, 80, 0.4);
   filter: brightness(1.05);
-
+  animation: neonFlicker 4.5s infinite;
   user-select: none;
   cursor: default;
-
-  animation: neonFlicker 4.5s infinite;
 }
 
 @keyframes neonFlicker {
-  0%, 100% {
-    opacity: 1;
-    filter: brightness(1.05);
-  }
-
-  92% {
-    opacity: 0.95;
-    filter: brightness(1);
-  }
-
-  94% {
-    opacity: 0.85;
-    filter: brightness(0.9);
-  }
-
-  96% {
-    opacity: 1;
-    filter: brightness(1.1);
-  }
-
-  97% {
-    opacity: 0.9;
-    filter: brightness(0.95);
-  }
-
-  98% {
-    opacity: 1;
-    filter: brightness(1.15);
-  }
+  0%,100% { opacity:1; filter:brightness(1.05); }
+  92% { opacity:0.95; filter:brightness(1); }
+  94% { opacity:0.85; filter:brightness(0.9); }
+  96% { opacity:1; filter:brightness(1.1); }
+  97% { opacity:0.9; filter:brightness(0.95); }
+  98% { opacity:1; filter:brightness(1.15); }
 }
 
-
-#controls {
-  background: var(--panel);
-  padding: 16px;
-  overflow-y: auto;
-  box-shadow: inset -1px 0 0 rgba(255,255,255,0.06);
-}
-
-h2 {
-  margin-top: 0;
-  color: var(--accent);
-  letter-spacing: 0.08em;
-}
-
-label {
-  display: block;
-  margin-top: 12px;
-  font-size: 0.8rem;
-}
-
+h2 { margin-top:0; color: var(--accent); letter-spacing: 0.08em; }
+label { display:block; margin-top:12px; font-size:0.8rem; }
 input, select, button {
   width: 100%;
-  margin-top: 6px;
-  padding: 6px;
-  background: #1f1f1f;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  margin-top:6px;
+  padding:6px;
+  background:#1f1f1f;
+  color:white;
+  border:none;
+  border-radius:4px;
 }
-
 button {
-  margin-top: 16px;
-  cursor: pointer;
+  margin-top:16px;
+  cursor:pointer;
   background: var(--accent);
-  color: black;
-  font-weight: bold;
+  color:black;
+  font-weight:bold;
 }
 
+/* === Main Canvas === */
 main {
+  grid-row: 2;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: calc(100vh - 36px);
 }
-
 canvas {
   width: 100%;
   height: 100%;
   image-rendering: pixelated;
 }
 
-
-/* Retro metal frame edges */
+/* === Frame Edges === */
 .frame-edge {
   position: fixed;
   background-image: url('./metal.jpg');
   background-repeat: repeat;
-  z-index: 0;           /* Behind everything */
-  pointer-events: none; /* Allow clicks through */
+  z-index: 0;
+  pointer-events: none;
 }
+.frame-top { top:36px; left:0; width:100%; height:20px; }
+.frame-bottom { bottom:0; left:0; width:100%; height:20px; }
+.frame-left { top:36px; left:320px; width:20px; height:calc(100% - 36px); }
+.frame-right { top:36px; right:0; width:20px; height:calc(100% - 36px); }
 
-/* Top */
-.frame-top {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 20px; /* thickness */
-}
-
-/* Bottom */
-.frame-bottom {
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 20px;
-}
-
-/* Left edge starts right after the aside panel */
-.frame-left {
-  top: 0;
-  left: 320px;   /* match aside width */
-  width: 20px;
-  height: 100%;
-}
-
-/* Right */
-.frame-right {
-  top: 0;
-  right: 0;
-  width: 20px;
-  height: 100%;
-}
-
-/* Ensure aside panel is above frame */
-#controls {
-  position: relative;
-  z-index: 1;
-}
-
-
-
-.section {
-  --accent-color: #ffcf66; /* fallback */
-}
-
-/* Different vibes per section */
+/* === Section Accent Colors === */
+.section { --accent-color:#ffcf66; }
 .section-text    { --accent-color: #ffcf66; } /* amber */
 .section-bg      { --accent-color: #66ffcc; } /* teal */
 .section-effects { --accent-color: #ffb648; } /* magenta */
-.section-crt     { --accent-color: hsl(309, 100%, 73%); } /* blue */
+.section-crt     { --accent-color: hsl(309,100%,73%); } /* blue */
 .section-analog  { --accent-color: #5eff41; } /* green */
 .section-motion  { --accent-color: #47b9ff; } /* orange */
 
 .section input[type="range"],
 .section input[type="checkbox"],
-.section input[type="radio"] {
-  accent-color: var(--accent-color);
-}
-
-
-
-
-
-
+.section input[type="radio"] { accent-color: var(--accent-color); }
 
 /* === Mobile Block Screen === */
-.mobile-block {
-  display: none;
+.mobile-block { display:none; }
+@media (max-width:1024px) {
+  body { overflow:hidden; }
+  aside, main, .frame-edge { display:none !important; }
+  .mobile-block {
+    display:flex;
+    position:fixed;
+    inset:0;
+    color:#eaeaea;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    text-align:center;
+    padding:24px;
+    background:
+      radial-gradient(circle at center, rgba(255,255,255,0.04), rgba(0,0,0,0.85) 70%),
+      repeating-radial-gradient(circle, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 2px, transparent 4px),
+      #0b0b0b;
+  }
+  .mobile-block-content { max-width:420px; }
+  .mobile-block img { width:220px; max-width:80%; margin-bottom:24px; opacity:0.9; image-rendering:pixelated; }
+  .mobile-block h1 { font-family:sans-serif; font-size:1rem; margin-bottom:12px; color:#e8e8e8; text-shadow:0 0 8px rgba(16,16,16,0.6);}
+  .mobile-block p { font-size:0.85rem; opacity:0.7;}
 }
 
-/* iPad / iPhone / small screens */
+
+
+/* === Desktop Responsive: Hide header + aside on small screens === */
 @media (max-width: 1024px) {
   body {
-    overflow: hidden;
+    display: block; /* normal flow for canvas to fill */
+    margin: 0;
+    height: 100vh;
   }
 
-  /* Hide the entire app */
-  aside,
-  main,
+  /* Hide header and aside */
+  #topHeader,
+  #controls {
+    display: none;
+  }
+
+  /* Resize the canvas to fill viewport */
+  main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Keep frame edges visible */
   .frame-edge {
-    display: none !important;
-  }
-
-  /* Show the block screen */
-  .mobile-block {
-  display: flex;
-  position: fixed;
-  inset: 0;
-  color: #eaeaea;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  text-align: center;
-  padding: 24px;
-
-  /* Cavern / echo texture */
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(255,255,255,0.04),
-      rgba(0,0,0,0.85) 70%
-    ),
-    repeating-radial-gradient(
-      circle,
-      rgba(255,255,255,0.015) 0px,
-      rgba(255,255,255,0.015) 1px,
-      transparent 2px,
-      transparent 4px
-    ),
-    #0b0b0b;
-}
-
-
-  .mobile-block-content {
-    max-width: 420px;
-  }
-
-  .mobile-block img {
-    width: 220px;
-    max-width: 80%;
-    margin-bottom: 24px;
-    opacity: 0.9;
-    image-rendering: pixelated; /* fun retro touch */
-  }
-
-  .mobile-block h1 {
-    font-family: 'sans-serif';
-    font-size: 1rem;
-    margin-bottom: 12px;
-    color: #e8e8e8;
-    text-shadow: 0 0 8px rgba(16, 16, 16, 0.6);
-  }
-
-  .mobile-block p {
-    font-size: 0.85rem;
-    opacity: 0.7;
+    /* optionally adjust top frame if needed */
   }
 }

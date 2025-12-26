@@ -34,6 +34,21 @@ rel="stylesheet">
   <div class="frame-edge frame-left"></div>
   <div class="frame-edge frame-right"></div>
 
+  <header id="topHeader">
+  <div class="header-left">
+    <a href="https://www.buymeacoffee.com/yourusername" target="_blank">☕ Buy Me Coffee</a>
+    <a href="https://instagram.com/yourusername" target="_blank">📸 Instagram</a>
+    <a href="https://discord.gg/yourserver" target="_blank">💬 Discord</a>
+    <a href="https://twitter.com/yourusername" target="_blank">🐦 Twitter</a>
+  </div>
+
+  <div class="header-right">
+    <button id="muteBtn" title="Mute / Unmute">🔈</button>
+    <button id="shuffleBtn" title="Shuffle Background Music">🔀</button>
+  </div>
+</header>
+
+
   <aside id="controls">
     <h2>Retro Text Lab</h2>
 
@@ -314,6 +329,15 @@ rel="stylesheet">
   <main>
     <canvas id="canvas"></canvas>
   </main>
+
+  <!-- Background Music -->
+<audio id="bgMusic" preload="auto"></audio>
+
+<!-- Mobile Block Music -->
+<audio id="mobileMusic" preload="auto" loop>
+  <source src="./music/Antibes-RTF-July-1963-autumn leaves.mp3" type="audio/mpeg">
+</audio>
+
 
   <script src="script.js"></script>
 </body>
