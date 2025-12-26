@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="matrix.css" />
+  <link rel="stylesheet" href="header.css" />
   <link rel="icon" type="image/svg+xml" href="gameboy.svg">
 
     <link href="https://fonts.googleapis.com/css2?
@@ -31,10 +32,10 @@ rel="stylesheet">
 <body>
 
   <!-- Frame Edges -->
-  <div class="frame-edge frame-top"></div>
-  <div class="frame-edge frame-bottom"></div>
   <div class="frame-edge frame-left"></div>
   <div class="frame-edge frame-right"></div>
+  <div class="frame-edge frame-bottom"></div>
+  <div class="frame-edge frame-top"></div>
 
   <header id="topHeader">
   <div class="header-left">
@@ -44,11 +45,97 @@ rel="stylesheet">
     <a href="https://twitter.com/yourusername" target="_blank">🐦 Twitter</a>
   </div>
 
+  <div class="header-center">
+    <div class="disc-tray">
+      <!-- Vintage disc tray placeholder -->
+      <div class="tray-slot"></div>
+      <div class="tray-slot"></div>
+    </div>
+    <button id="cdCollectionBtn" title="Open CD Collection">💿</button>
+    <button id="burnCdBtn" title="Burn a CD">BURN</button>
+  </div>
+
   <div class="header-right">
-    <button id="muteBtn" title="Mute / Unmute">🔈</button>
-    <button id="shuffleBtn" title="Shuffle Background Music">🔀</button>
+    <button id="muteBtn" title="Mute / Unmute">MUTE</button>
+    <button id="shuffleBtn" title="Shuffle Background Music">SHUFFLE</button>
+    <button id="devNotesBtn" title="Dev Notes">DEV</button>
   </div>
 </header>
+
+<!-- CD Collection Modal -->
+<div id="cdCollectionModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>CD Collection</h2>
+    <div class="cd-binder">
+      <div class="page left">
+        <div class="cd-grid">
+          <div class="cd-slot">CD 1</div>
+          <div class="cd-slot">CD 2</div>
+          <div class="cd-slot">CD 3</div>
+          <div class="cd-slot">CD 4</div>
+        </div>
+      </div>
+      <div class="page right">
+        <div class="cd-grid">
+          <div class="cd-slot">CD 5</div>
+          <div class="cd-slot">CD 6</div>
+          <div class="cd-slot">CD 7</div>
+          <div class="cd-slot">CD 8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CD Burn Window -->
+<div id="cdBurnWindow" class="cd-window hidden">
+  <!-- Left Side: CD + Track Editor -->
+  <div class="cd-left">
+    <div class="cd-container">
+      <div class="cd-shape"></div>
+      <input type="text" placeholder="Title: ___________" class="cd-title">
+    </div>
+
+    <div class="track-list">
+      <!-- Example track entry, repeatable -->
+      <div class="track-item">
+        <label>Track 1: <input type="text" placeholder="Track Name"></label>
+        <input type="file" accept=".mp3,.wav">
+        <button class="advanced-btn">Advanced Settings</button>
+        <div class="advanced-settings hidden">
+          <label>Artist: <input type="text"></label>
+          <label>Album: <input type="text"></label>
+          <label>Genre: <input type="text"></label>
+          <label>Year: <input type="text"></label>
+        </div>
+      </div>
+    </div>
+
+    <button class="burn-btn">BURN THE DISC</button>
+  </div>
+
+  <!-- Right Side: Cover Editor -->
+  <div class="cd-right">
+    <div class="cover-editor">
+      <h3>Edit Cover Image</h3>
+      <input type="file" accept="image/*" class="cover-file">
+      <div class="cover-preview"></div>
+      <div class="cover-tools">
+        <button>Draw Mode</button>
+        <button>Import Visualizer</button>
+        <button>Stickers Galore</button>
+        <button>Text Editor</button>
+      </div>
+      <div class="cd-canvas-container">
+        <canvas class="cd-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <button class="close-cd-window">X</button>
+</div>
+
 
 
   <aside id="controls">
@@ -364,6 +451,18 @@ rel="stylesheet">
 <audio id="mobileMusic" preload="auto" loop>
   <source src="./music/Antibes-RTF-July-1963-autumn-leaves.mp3" type="audio/mpeg">
 </audio>
+
+<div id="devNotesModal" class="dev-notes hidden">
+  <div class="dev-notes-header">
+    <span>Dev Notes</span>
+    <button id="closeDevNotes">✕</button>
+  </div>
+
+  <textarea
+    id="devNotesTextarea"
+    placeholder="Type dev notes, TODOs, ideas…"
+  ></textarea>
+</div>
 
 
   <script src="script.js"></script>

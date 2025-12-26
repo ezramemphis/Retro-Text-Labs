@@ -1,0 +1,351 @@
+/* === Header === */
+#topHeader {
+  grid-column: 1 / -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 36px;
+  background: rgba(28, 28, 28, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 10000;
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+#topHeader a {
+  margin-right: 12px;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+#topHeader a:hover {
+  color: var(--accent);
+}
+
+/* Header Right Container */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translate(-0px, -8px); /* 0 left + slightly up */
+}
+
+/* Buttons styling */
+.header-right button {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  /* fixed width */
+  width: 110px; /* adjust to fit longest text, e.g., UNMUTE */
+  text-align: center;
+}
+
+
+.header-right button:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+
+
+
+
+
+
+
+/* CD UI */
+
+/* Header Center */
+.header-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Disc tray */
+.disc-tray {
+  display: flex;
+  flex-direction: column; /* Stack slots vertically */
+  gap: 4px; /* spacing between slots */
+}
+
+/* Tray slot */
+.tray-slot {
+  width: 340px;
+  height: 10px;
+  background: #aaa;
+  border: 2px solid #666;
+  border-radius: 2px;
+}
+
+
+/* Buttons */
+#cdCollectionBtn, #burnCdBtn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transform: translate(-0px, -8px); /* 0 left + slightly up */
+}
+
+/* Modal */
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  overflow: auto;
+}
+
+.modal-content {
+  background: #111;
+  margin: 5% auto;
+  padding: 20px;
+  width: 80%;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.cd-binder {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.page {
+  background: #222;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.cd-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.cd-slot {
+  width: 80px;
+  height: 80px;
+  background: #444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+}
+
+
+
+
+
+/* CD Burn Window */
+.cd-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #1a1f3a; /* dark blue */
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 999;
+  overflow: auto;
+}
+
+.cd-window.hidden {
+  display: none;
+}
+
+.cd-left, .cd-right {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cd-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+
+.cd-shape {
+  position: absolute;
+  left: -30%;
+  top: -10%;
+  width: 60%;
+  height: 120%;
+  border-radius: 50%;
+  background: #ccc;
+  box-shadow: inset -5px -5px 20px rgba(255,255,255,0.2),
+              inset 5px 5px 20px rgba(0,0,0,0.2);
+}
+
+.cd-title {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #fff;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.track-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.advanced-settings {
+  display: none;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 5px;
+}
+
+.advanced-settings label input {
+  width: 100%;
+}
+
+.advanced-btn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 2px 6px;
+  cursor: pointer;
+  width: 150px;
+}
+
+.advanced-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.burn-btn {
+  margin-top: auto;
+  padding: 10px;
+  background: #ff5555;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.burn-btn:hover {
+  background: #ff3333;
+}
+
+/* Right Side Cover Editor */
+.cover-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cover-preview {
+  width: 100%;
+  height: 200px;
+  background: #333;
+  border: 2px dashed #fff;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+}
+
+.cover-tools {
+  display: flex;
+  gap: 10px;
+}
+
+.cover-tools button {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #fff;
+  background: transparent;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cover-tools button:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.cd-canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cd-canvas {
+  width: 200px;
+  height: 200px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.5;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.close-cd-window {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff5555;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 3px;
+}

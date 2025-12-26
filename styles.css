@@ -29,67 +29,6 @@ body {
   cursor: default;
 }
 
-/* === Header === */
-#topHeader {
-  grid-column: 1 / -1;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 36px;
-  background: rgba(28, 28, 28, 0.85);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 12px;
-  z-index: 10000;
-  font-family: 'VT323', monospace;
-  font-size: 0.8rem;
-  color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-#topHeader a {
-  margin-right: 12px;
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-#topHeader a:hover {
-  color: var(--accent);
-}
-
-/* Header Right Container */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transform: translateX(-50px); /* move left by 50px */
-}
-
-/* Buttons styling */
-.header-right button {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
-  padding: 2px 6px;
-  font-size: 0.85rem;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.header-right button:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-
 /* === Controls Panel === */
 #controls {
   grid-row: 2;
@@ -335,4 +274,77 @@ canvas {
   color: #ffe7a3;
   display: block;
   margin-top: 6px;
+}
+
+
+
+/* DEV button */
+#devNotesBtn {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #222;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+#devNotesBtn:hover {
+  opacity: 1;
+}
+
+/* Modal */
+.dev-notes {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 320px;
+  height: 260px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Header */
+.dev-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  font-size: 13px;
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.dev-notes-header button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.dev-notes-header button:hover {
+  color: #fff;
+}
+
+/* Textarea */
+#devNotesTextarea {
+  flex: 1;
+  resize: none;
+  background: #0d0d0d;
+  color: #eaeaea;
+  border: none;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 12px;
+  outline: none;
 }

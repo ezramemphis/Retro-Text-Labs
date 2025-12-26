@@ -44,6 +44,7 @@ function hexToHSL(H) {
 
 
 
+
 //Background image 
 
 const bgType = document.getElementById("bgType")
@@ -72,17 +73,52 @@ function drawBackground() {
   const color2 = bgGradient.value;
 
   // Apply LFO patches
-  lfos.forEach(lfo => {
-    if (lfo.patch.hueCheckbox.checked) {
-      const baseHSL = hexToHSL(color1);
-      const hueShift = (lfo.value + 1) / 2; // [-1,1] → [0,1]
-      const range = parseFloat(lfo.patch.rangeInput.value);
-      const offset = parseFloat(lfo.patch.offsetInput.value);
+lfos.forEach(lfo => {
+  if (!lfo.patch || !lfo.patch.paramSelect) return;
 
-      const modHue = (offset + hueShift * range + baseHSL.h) % 1;
+  const target = lfo.patch.paramSelect.value;
+  const range = parseFloat(lfo.patch.rangeInput.value);
+  const offset = parseFloat(lfo.patch.offsetInput.value);
+  const lfoVal = (lfo.value + 1) / 2; // convert [-1,1] → [0,1]
+  const modVal = offset + lfoVal * range; // scaled by range and offset
+
+  switch(target) {
+    case "Hue: Primary Color":
+      const baseHSL = hexToHSL(color1);
+      const modHue = (baseHSL.h + modVal) % 1;
       color1 = `hsl(${modHue*360}, ${baseHSL.s*100}%, ${baseHSL.l*100}%)`;
-    }
-  });
+      break;
+
+    case "Hue: Secondary Color":
+      const baseHSL2 = hexToHSL(color2);
+      const modHue2 = (baseHSL2.h + modVal) % 1;
+      color2 = `hsl(${modHue2*360}, ${baseHSL2.s*100}%, ${baseHSL2.l*100}%)`;
+      break;
+
+    case "Effects: Glow Strength":
+      glowStrength = modVal;
+      break;
+
+    case "Animation: Speed":
+      animSpeed = modVal;
+      break;
+
+    case "Animation: Depth":
+      animDepth = modVal;
+      break;
+
+    case "Animation: Wobble":
+      animWobble = modVal;
+      break;
+
+    case "Animation: Pixelation":
+      pixelation = modVal;
+      break;
+
+    // add more parameters here if needed
+  }
+});
+
 
   switch(bgType.value) {
     case "solidColor":
@@ -722,13 +758,65 @@ function lfoWave(wave, phase) {
   const t = phase % 1;
 
   switch (wave) {
-    case "sine":     return Math.sin(t * Math.PI * 2);
-    case "triangle": return 1 - 4 * Math.abs(t - 0.5);
-    case "saw":      return 2 * t - 1;
-    case "square":   return t < 0.5 ? 1 : -1;
-    default:         return 0;
+
+    /* === Classic === */
+    case "sine":
+      return Math.sin(t * Math.PI * 2);
+
+    case "triangle":
+      return 1 - 4 * Math.abs(t - 0.5);
+
+    case "saw":
+      return 2 * t - 1;
+
+    case "square":
+      return t < 0.5 ? 1 : -1;
+
+    /* === New === */
+
+    // 90/10 pulse width (sharp, gated feel)
+    case "pulse90":
+      return t < 0.9 ? 1 : -1;
+
+    // Exponential curve (slow rise, fast fall)
+    case "expo":
+      return Math.pow(t, 3) * 2 - 1;
+
+    // Bounce / elastic feel
+    case "bounce": {
+      const b = Math.abs(Math.sin(t * Math.PI));
+      return (1 - Math.pow(b, 3)) * 2 - 1;
+    }
+
+    // Granular Saw/ stepped with jitter
+    case "granular_saw": {
+      const steps = 8; // increase for smoother, lower for choppier
+      const stepped = Math.floor(t * steps) / steps;
+      const jitter = (Math.random() - 0.5) * 0.15;
+      return (stepped + jitter) * 2 - 1;
+    }
+
+    case "granular_sine": {
+  const wobble = (Math.random() - 0.5) * 0.2;   // phase instability
+  const ampJitter = 1 + (Math.random() - 0.5) * 0.1;
+  const sine = Math.sin((t + wobble) * Math.PI * 2);
+  return sine * ampJitter;
+}
+
+case "granular_chaos": {
+  const chaos = Math.random() * 2 - 1;
+  const smear = Math.sin(t * Math.PI * 2) * 0.3;
+  return chaos + smear;
+  return (Math.random() - 0.5) * 4; // intentionally exceeds ±1
+}
+
+
+
+    default:
+      return 0;
   }
 }
+
 
 function updateLFOs(ts) {
   const delta = (ts - lastLFOTime) / 1000;
@@ -739,6 +827,121 @@ function updateLFOs(ts) {
     lfo.value = lfoWave(lfo.waveform, lfo.phase);
   });
 }
+
+/// We need one universal LFO processor that reads wave types, applies wave-specific params, applies gain & bias, supports modultation inputs. This is the sauce
+
+const LFO = {
+  wave: "sine",
+  phase: 0,
+  rate: 0.1,
+
+  params: {
+    pulseWidth: 0.9,
+    pump: 3,
+    tension: 2,
+    chaos: 0.1,
+    steps: 8,
+    density: 0.05
+  },
+
+  gain: 5,   // volts
+  bias: 0,   // volts
+
+  modInput: null // for AM / Ring Mod
+};
+
+function applyGainBias(signal, gain = 5, bias = 0) {
+  return signal * gain + bias;
+}
+
+function fourQuadrantVCA(carrier, modulator, mode = "ring") {
+  if (!modulator) return carrier;
+
+  switch (mode) {
+    case "am":
+      return carrier * ((modulator + 1) / 2);
+    case "ring":
+      return carrier * modulator;
+    default:
+      return carrier;
+  }
+}
+
+function processLFO(lfo, deltaTime) {
+  lfo.phase += lfo.rate * deltaTime;
+
+  let signal = baseWave(
+    lfo.wave,
+    lfo.phase,
+    lfo.params
+  );
+
+  // VCA / modulation
+  if (lfo.modInput) {
+    signal = fourQuadrantVCA(
+      signal,
+      lfo.modInput.value,
+      lfo.modInput.mode
+    );
+  }
+
+  // Gain + bias
+  return applyGainBias(signal, lfo.gain, lfo.bias);
+}
+
+
+
+// Visual Patch Cable System Cuz I'm Down wit the sickness
+
+const Cable = {
+  from: "LFO_1",
+  to: "LFO_2",
+  mode: "ring" // or "am"
+};
+
+function resolveConnections(lfos, cables) {
+  cables.forEach(cable => {
+    const source = lfos[cable.from];
+    const target = lfos[cable.to];
+
+    target.modInput = {
+      value: source.output,
+      mode: cable.mode
+    };
+  });
+}
+
+// Dynamic panel that changes per waweform type
+
+const waveParamMap = {
+  pulse90: [
+    { key: "pulseWidth", label: "Pulse Width", min: 0.05, max: 0.95 }
+  ],
+
+  expo: [
+    { key: "pump", label: "Pump", min: 0.5, max: 5 }
+  ],
+
+  bounce: [
+    { key: "tension", label: "Tension", min: 0.5, max: 5 }
+  ],
+
+  granular_saw: [
+    { key: "steps", label: "Steps", min: 2, max: 32, step: 1 },
+    { key: "chaos", label: "Chaos", min: 0, max: 1 }
+  ],
+
+  granular_sine: [
+    { key: "chaos", label: "Chaos", min: 0, max: 1 }
+  ],
+
+  granular_chaos: [
+    { key: "density", label: "Density", min: 0, max: 1 }
+  ]
+};
+
+
+
 
 
 // Controls
@@ -1134,7 +1337,9 @@ let isMuted = localStorage.getItem("retroTextLabMuted") === "true";
 // Apply mute status immediately
 bgMusic.volume = isMuted ? 0 : 0.25;
 mobileMusic.volume = isMuted ? 0 : 0.3;
-muteBtn.textContent = isMuted ? "🔇" : "🔈";
+
+// Update button text
+muteBtn.textContent = isMuted ? "UNMUTE" : "MUTE";
 
 // Mute / Unmute toggle
 muteBtn.addEventListener("click", () => {
@@ -1147,9 +1352,10 @@ muteBtn.addEventListener("click", () => {
   // Save to localStorage
   localStorage.setItem("retroTextLabMuted", isMuted);
 
-  // Update button icon
-  muteBtn.textContent = isMuted ? "🔇" : "🔈";
+  // Update button text
+  muteBtn.textContent = isMuted ? "UNMUTE" : "MUTE";
 });
+
 
 // Shuffle next track
 shuffleBtn.addEventListener("click", () => {
@@ -1165,6 +1371,60 @@ shuffleBtn.addEventListener("click", () => {
     bgMusic.play();
   }
 });
+
+
+// CD Open/Close modal
+
+const cdCollectionBtn = document.getElementById("cdCollectionBtn");
+const cdCollectionModal = document.getElementById("cdCollectionModal");
+const cdModalClose = cdCollectionModal.querySelector(".close");
+
+cdCollectionBtn.addEventListener("click", () => {
+  cdCollectionModal.style.display = "block";
+});
+
+cdModalClose.addEventListener("click", () => {
+  cdCollectionModal.style.display = "none";
+});
+
+// Close modal by clicking outside
+window.addEventListener("click", e => {
+  if (e.target === cdCollectionModal) cdCollectionModal.style.display = "none";
+});
+
+
+
+// Show / hide CD burn window
+// Grab the CD burn window and the header button
+const cdBurnWindow = document.getElementById("cdBurnWindow");
+const burnCdBtn = document.getElementById("burnCdBtn");
+
+// Open the CD burn window when header button is clicked
+burnCdBtn.addEventListener("click", () => {
+  cdBurnWindow.classList.remove("hidden");
+});
+
+// Close button inside CD burn window
+document.querySelector(".close-cd-window").addEventListener("click", () => {
+  cdBurnWindow.classList.add("hidden");
+});
+
+// Optional: close the window if you click outside the content (nice touch)
+cdBurnWindow.addEventListener("click", e => {
+  if (e.target === cdBurnWindow) {
+    cdBurnWindow.classList.add("hidden");
+  }
+});
+
+
+// Advanced toggle
+document.querySelectorAll(".advanced-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const adv = btn.nextElementSibling;
+    adv.classList.toggle("hidden");
+  });
+});
+
 
 const bgColorInput = document.getElementById("bgColor");
 const bgGradientInput = document.getElementById("bgGradient");
@@ -1231,8 +1491,19 @@ lfos.forEach((lfo, i) => {
       <option value="triangle">Triangle</option>
       <option value="saw">Saw</option>
       <option value="square">Square</option>
+      <option value="pulse90">Pulse 90%</option>
+      <option value="expo">Exponential</option>
+      <option value="bounce">Bounce</option>
+      <option value="granular_saw">Granular Saw</option>
+      <option value="granular_sine">Granular Sine</option>
+      <option value="granular_chaos">Granular Chaos</option>
+
     </select>
   </label>
+
+  <div class="wave-params">
+    <div class="wave-params-title">Wave Parameters</div>
+  </div>
 `;
 
   const rate = el.querySelector("input");
@@ -1280,9 +1551,10 @@ function drawLFOScope(lfo) {
 }
 
 
+// LFO Matrix
 const lfoMatrixBody = document.querySelector("#lfoMatrix tbody");
 
-// Targets list
+// Single target for now
 const targets = ["Primary Color Hue"];
 
 lfos.forEach((lfo, i) => {
@@ -1293,13 +1565,39 @@ lfos.forEach((lfo, i) => {
   lfoLabel.textContent = `LFO ${i + 1}`;
   row.appendChild(lfoLabel);
 
-  // Primary Color Hue checkbox
-  const hueCell = document.createElement("td");
-  const hueCheckbox = document.createElement("input");
-  hueCheckbox.type = "checkbox";
- hueCheckbox.checked = false; // Don't patch any LFO by default
-  hueCell.appendChild(hueCheckbox);
-  row.appendChild(hueCell);
+  // Parameter select dropdown (replaces checkbox)
+  const paramCell = document.createElement("td");
+  const paramSelect = document.createElement("select");
+
+  // Default "None" option
+  const noneOption = document.createElement("option");
+  noneOption.value = "";
+  noneOption.textContent = "None";
+  paramSelect.appendChild(noneOption);
+
+// Match these exactly to your switch statement
+const options = [
+  "Hue: Primary Color",
+  "Hue: Secondary Color",
+  "Effects: Glow Strength",
+  "Animation: Speed",
+  "Animation: Depth",
+  "Animation: Wobble",
+  "Animation: Pixelation"
+];
+
+options.forEach(opt => {
+  const optionEl = document.createElement("option");
+  optionEl.value = opt;
+  optionEl.textContent = opt;
+  paramSelect.appendChild(optionEl);
+});
+
+  // Default to "None"
+  paramSelect.value = "";
+
+  paramCell.appendChild(paramSelect);
+  row.appendChild(paramCell);
 
   // Range slider
   const rangeCell = document.createElement("td");
@@ -1308,7 +1606,7 @@ lfos.forEach((lfo, i) => {
   rangeInput.min = 0;
   rangeInput.max = 1;
   rangeInput.step = 0.01;
-  rangeInput.value = 1; // full spectrum by default
+  rangeInput.value = 1; // full spectrum
   rangeCell.appendChild(rangeInput);
   row.appendChild(rangeCell);
 
@@ -1319,13 +1617,13 @@ lfos.forEach((lfo, i) => {
   offsetInput.min = 0;
   offsetInput.max = 1;
   offsetInput.step = 0.01;
-  offsetInput.value = 0; // start at beginning of spectrum
+  offsetInput.value = 0; // start
   offsetCell.appendChild(offsetInput);
   row.appendChild(offsetCell);
 
   // Save references
   lfo.patch = {
-    hueCheckbox,
+    paramSelect,
     rangeInput,
     offsetInput
   };
@@ -1333,6 +1631,40 @@ lfos.forEach((lfo, i) => {
   lfoMatrixBody.appendChild(row);
 });
 
+// Update wave parameters UI when waveform changes
+
+function renderWaveParams(lfo, el) {
+  const container = el.querySelector(".wave-params");
+
+  // Clear everything except title
+  container.innerHTML = `<div class="wave-params-title">Wave Parameters</div>`;
+
+  const params = waveParamMap[lfo.wave];
+  if (!params) return;
+
+  params.forEach(p => {
+    const wrap = document.createElement("label");
+    wrap.className = "wave-param";
+
+    const span = document.createElement("span");
+    span.textContent = p.label;
+
+    const input = document.createElement("input");
+    input.type = "range";
+    input.min = p.min;
+    input.max = p.max;
+    input.step = p.step ?? 0.01;
+    input.value = lfo.params[p.key] ?? p.min;
+
+    input.oninput = e => {
+      lfo.params[p.key] = +e.target.value;
+    };
+
+    wrap.appendChild(span);
+    wrap.appendChild(input);
+    container.appendChild(wrap);
+  });
+}
 
 
 // ====== LOOP ======
@@ -1367,4 +1699,37 @@ function animate(ts) {
 toggleSpin.onclick = () => running = !running;
 
 requestAnimationFrame(animate);
+
+
+
+
+
+
+// Dev Notes Script 
+
+const devBtn = document.getElementById("devNotesBtn")
+const modal = document.getElementById("devNotesModal")
+const closeBtn = document.getElementById("closeDevNotes")
+const textarea = document.getElementById("devNotesTextarea")
+
+const STORAGE_KEY = "devNotes"
+
+// Load saved notes on startup
+textarea.value = localStorage.getItem(STORAGE_KEY) || ""
+
+// Open modal
+devBtn.addEventListener("click", () => {
+  modal.classList.remove("hidden")
+  textarea.focus()
+})
+
+// Close modal
+closeBtn.addEventListener("click", () => {
+  modal.classList.add("hidden")
+})
+
+// Auto-save as you type
+textarea.addEventListener("input", () => {
+  localStorage.setItem(STORAGE_KEY, textarea.value)
+})
 

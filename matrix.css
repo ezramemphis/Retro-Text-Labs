@@ -46,3 +46,31 @@
 #lfoMatrix {
   box-shadow: 0 0 10px rgba(255,204,102,0.15);
 }
+
+
+
+.wave-params {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.wave-params-title {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.wave-param {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.wave-param span {
+  font-size: 11px;
+  opacity: 0.75;
+}
