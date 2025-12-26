@@ -1046,7 +1046,7 @@ function resumeBgMusic() {
 function playMobileMusic() {
   mobileMusic.volume = 0.3;
   mobileMusic.loop = true;
-  mobileMusic.src = "./music/mobilemusic.mp3";
+  mobileMusic.src = "./music/Antibes-RTF-July-1963-autumn-leaves.mp3";
 
   mobileMusic.play().catch(() => {
     document.addEventListener("click", () => {
