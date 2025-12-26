@@ -204,3 +204,66 @@ canvas {
   accent-color: var(--accent-color);
 }
 
+
+
+
+
+
+
+/* === Mobile Block Screen === */
+.mobile-block {
+  display: none;
+}
+
+/* iPad / iPhone / small screens */
+@media (max-width: 1024px) {
+  body {
+    overflow: hidden;
+  }
+
+  /* Hide the entire app */
+  aside,
+  main,
+  .frame-edge {
+    display: none !important;
+  }
+
+  /* Show the block screen */
+  .mobile-block {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: #0b0b0b;
+    color: #eaeaea;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .mobile-block-content {
+    max-width: 420px;
+  }
+
+  .mobile-block img {
+    width: 220px;
+    max-width: 80%;
+    margin-bottom: 24px;
+    opacity: 0.9;
+    image-rendering: pixelated; /* fun retro touch */
+  }
+
+  .mobile-block h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #ff6666;
+    text-shadow: 0 0 8px rgba(255, 102, 102, 0.6);
+  }
+
+  .mobile-block p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+}
