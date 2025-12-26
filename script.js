@@ -8,6 +8,44 @@ function resize() {
 resize()
 window.addEventListener("resize", resize)
 
+// Hex to HSL Helper
+
+function hexToHSL(hex) {
+  let r = 0, g = 0, b = 0;
+
+  if (hex.length === 4) {
+    r = parseInt(hex[1] + hex[1], 16);
+    g = parseInt(hex[2] + hex[2], 16);
+    b = parseInt(hex[3] + hex[3], 16);
+  } else {
+    r = parseInt(hex[1] + hex[2], 16);
+    g = parseInt(hex[3] + hex[4], 16);
+    b = parseInt(hex[5] + hex[6], 16);
+  }
+
+  r /= 255; g /= 255; b /= 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0;
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+
+  return { h, s, l };
+}
+
+
 //Background image 
 
 const bgType = document.getElementById("bgType")
@@ -653,6 +691,42 @@ case "glitchSquares":
   }
 }
 
+// ================= LFO SYSTEM =================
+
+const LFO_COUNT = 5;
+
+const lfos = Array.from({ length: LFO_COUNT }, () => ({
+  rate: 1.0,             // default 1 Hz
+  waveform: "sine",
+  phase: 0,
+  value: 0,
+  scope: null
+}));
+
+
+let lastLFOTime = performance.now();
+
+function lfoWave(wave, phase) {
+  const t = phase % 1;
+
+  switch (wave) {
+    case "sine":     return Math.sin(t * Math.PI * 2);
+    case "triangle": return 1 - 4 * Math.abs(t - 0.5);
+    case "saw":      return 2 * t - 1;
+    case "square":   return t < 0.5 ? 1 : -1;
+    default:         return 0;
+  }
+}
+
+function updateLFOs(ts) {
+  const delta = (ts - lastLFOTime) / 1000;
+  lastLFOTime = ts;
+
+  lfos.forEach(lfo => {
+    lfo.phase += delta * lfo.rate;
+    lfo.value = lfoWave(lfo.waveform, lfo.phase);
+  });
+}
 
 
 // Controls
@@ -969,30 +1043,6 @@ function pixelate() {
   ctx.drawImage(temp, 0, 0, canvas.width, canvas.height)
 }
 
-// ====== LOOP ======
-function animate(ts) {
-  const fps = parseInt(fpsInput.value)
-  if (ts - lastFrame < 1000 / fps) {
-    requestAnimationFrame(animate)
-    return
-  }
-  lastFrame = ts
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    drawBackground()
-    drawText3D()
-    pixelate()
-    crtEffect()
-
-
-  if (running) time += parseFloat(speedInput.value)
-  requestAnimationFrame(animate)
-}
-
-toggleSpin.onclick = () => running = !running
-animate()
-
 
 // Background Music
 
@@ -1003,7 +1053,7 @@ const mobileMusic = document.getElementById("mobileMusic");
 // === Track List ===
 const backgroundTracks = [
   "./music/Life-at-sea-Knobs.mp3", // Always first
-  "./music/Lazy-House-Sam-Prekop.mp3",
+  "./music/neptune.wav",
   "./music/10-Fax.mp3",
   "./music/Transmitter-Spacetime-Continuum.mp3",
   "./music/Amygdala-JakoJako.mp3"
@@ -1103,3 +1153,154 @@ shuffleBtn.addEventListener("click", () => {
     bgMusic.play();
   }
 });
+
+const bgColorInput = document.getElementById("bgColor");
+const bgGradientInput = document.getElementById("bgGradient");
+const swapBtn = document.getElementById("swapColors");
+
+swapBtn.addEventListener("click", () => {
+  const temp = bgColorInput.value;
+  bgColorInput.value = bgGradientInput.value;
+  bgGradientInput.value = temp;
+
+  // Hue Shift function
+
+  function hexToHSL(hex) {
+  let r = parseInt(hex.substr(1,2),16)/255;
+  let g = parseInt(hex.substr(3,2),16)/255;
+  let b = parseInt(hex.substr(5,2),16)/255;
+
+  const max = Math.max(r,g,b), min = Math.min(r,g,b);
+  let h, s, l = (max + min) / 2;
+
+  if (max === min) h = s = 0;
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max){
+      case r: h=(g-b)/d+(g<b?6:0); break;
+      case g: h=(b-r)/d+2; break;
+      case b: h=(r-g)/d+4; break;
+    }
+    h /= 6;
+  }
+
+  return { h, s, l };
+}
+
+
+  // If you already have a background update function, call it here
+  updateBackground?.();
+});
+
+
+// ================= LFO UI =================
+
+const lfoList = document.getElementById("lfoList");
+
+lfos.forEach((lfo, i) => {
+  const el = document.createElement("div");
+  el.className = "lfo";
+
+  el.innerHTML = `
+  <h4>LFO ${i + 1}</h4>
+
+  <canvas width="120" height="40" class="lfo-scope"></canvas>
+
+  <label>
+    Rate (<span class="rateVal">${lfo.rate.toFixed(2)}</span> Hz)
+    <input type="range" min="0.01" max="20" step="0.01" value="${lfo.rate}">
+  </label>
+
+  <label>
+    Wave
+    <select>
+      <option value="sine">Sine</option>
+      <option value="triangle">Triangle</option>
+      <option value="saw">Saw</option>
+      <option value="square">Square</option>
+    </select>
+  </label>
+`;
+
+  const rate = el.querySelector("input");
+  const rateSpan = el.querySelector(".rateVal");
+  const wave = el.querySelector("select");
+  const scope = el.querySelector("canvas");
+
+  rate.oninput = e => {
+  lfo.rate = +e.target.value;
+  rateSpan.textContent = lfo.rate.toFixed(2); // update the text
+};
+
+
+  wave.onchange = e => lfo.waveform = e.target.value;
+
+  lfo.scope = scope.getContext("2d");
+
+  lfoList.appendChild(el);
+});
+
+
+function drawLFOScope(lfo) {
+  if (!lfo.scope) return;
+
+  const ctx = lfo.scope;
+  const w = ctx.canvas.width;
+  const h = ctx.canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  ctx.strokeStyle = "#ffcc66";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+
+  for (let x = 0; x < w; x++) {
+    const t = x / w;
+    const y = lfoWave(lfo.waveform, t + lfo.phase);
+    const py = h / 2 - y * (h / 2 - 2);
+
+    if (x === 0) ctx.moveTo(x, py);
+    else ctx.lineTo(x, py);
+  }
+
+  ctx.stroke();
+}
+
+
+
+
+
+// ====== LOOP ======
+function animate(ts) {
+  const fps = parseInt(fpsInput.value);
+
+  if (ts - lastFrame < 1000 / fps) {
+    requestAnimationFrame(animate);
+    return;
+  }
+
+  lastFrame = ts;
+
+  // ✅ update LFOs (time-accurate)
+  updateLFOs(ts);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawBackground();
+  drawText3D();
+  pixelate();
+  crtEffect();
+
+  // ✅ draw LFO scopes
+  lfos.forEach(drawLFOScope);
+
+  if (running) time += parseFloat(speedInput.value);
+
+  requestAnimationFrame(animate);
+}
+
+toggleSpin.onclick = () => running = !running;
+
+requestAnimationFrame(animate);
+
