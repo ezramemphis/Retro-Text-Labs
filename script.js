@@ -10,40 +10,38 @@ window.addEventListener("resize", resize)
 
 // Hex to HSL Helper
 
-function hexToHSL(hex) {
+function hexToHSL(H) {
+  // Convert hex to RGB first
   let r = 0, g = 0, b = 0;
-
-  if (hex.length === 4) {
-    r = parseInt(hex[1] + hex[1], 16);
-    g = parseInt(hex[2] + hex[2], 16);
-    b = parseInt(hex[3] + hex[3], 16);
-  } else {
-    r = parseInt(hex[1] + hex[2], 16);
-    g = parseInt(hex[3] + hex[4], 16);
-    b = parseInt(hex[5] + hex[6], 16);
+  if (H.length == 4) {
+    r = "0x" + H[1] + H[1];
+    g = "0x" + H[2] + H[2];
+    b = "0x" + H[3] + H[3];
+  } else if (H.length == 7) {
+    r = "0x" + H[1] + H[2];
+    g = "0x" + H[3] + H[4];
+    b = "0x" + H[5] + H[6];
   }
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0, l = (max + min) / 2;
 
-  r /= 255; g /= 255; b /= 255;
-
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
-
-  if (max === min) {
-    h = s = 0;
-  } else {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
+  if(max !== min){
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch(max){
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
   }
 
   return { h, s, l };
 }
+
 
 
 //Background image 
@@ -67,10 +65,19 @@ bgImageInput.addEventListener("change", e => {
 })
 
 function drawBackground() {
-  const w = canvas.width
-  const h = canvas.height
-  const color1 = bgColor.value
-  const color2 = bgGradient.value
+  const w = canvas.width;
+  const h = canvas.height;
+
+  // Base colors
+  let color1 = bgColor.value;
+  const color2 = bgGradient.value;
+
+  // Apply LFO 0 to primary color hue
+  const lfo = lfos[0]; // first LFO controls hue
+  const baseHSL = hexToHSL(color1);
+  const hueShift = (lfo.value + 1) / 2; // map [-1,1] → [0,1]
+  const modHue = (baseHSL.h + hueShift) % 1;
+  color1 = `hsl(${modHue*360}, ${baseHSL.s*100}%, ${baseHSL.l*100}%)`;
 
   switch(bgType.value) {
     case "solidColor":
