@@ -1,0 +1,206 @@
+:root {
+  --bg: #0b0b0b;
+  --panel: #141414;
+  --accent: #ffcf66;
+  --text: #eaeaea;
+}
+
+@font-face {
+  font-family: 'RetroFont';
+  src: url('./fonts/retrofunk.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: 100vh;
+  user-select: none;      /* no text highlighting */
+  cursor: default;        /* arrow cursor, not I-beam */
+}
+
+/* Apply RetroFont specifically to the "Retro Text Engine" h2 inside #controls */
+#controls > h2 {
+  font-family: 'RetroFont', sans-serif;
+  margin-top: 0;
+  text-align: center;
+  letter-spacing: 0.12em;
+
+  /* Neon color core */
+  color: #ffe7a3;
+
+  /* Glow stack */
+text-shadow:
+  0 0 1px #ffe7a3,
+  0 0 4px rgba(255, 207, 102, 0.6),
+  0 0 8px rgba(255, 180, 80, 0.4);
+
+
+  /* Subtle depth */
+  filter: brightness(1.05);
+
+  user-select: none;
+  cursor: default;
+
+  animation: neonFlicker 4.5s infinite;
+}
+
+@keyframes neonFlicker {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1.05);
+  }
+
+  92% {
+    opacity: 0.95;
+    filter: brightness(1);
+  }
+
+  94% {
+    opacity: 0.85;
+    filter: brightness(0.9);
+  }
+
+  96% {
+    opacity: 1;
+    filter: brightness(1.1);
+  }
+
+  97% {
+    opacity: 0.9;
+    filter: brightness(0.95);
+  }
+
+  98% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+}
+
+
+#controls {
+  background: var(--panel);
+  padding: 16px;
+  overflow-y: auto;
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.06);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.8rem;
+}
+
+input, select, button {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  background: #1f1f1f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 16px;
+  cursor: pointer;
+  background: var(--accent);
+  color: black;
+  font-weight: bold;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+
+/* Retro metal frame edges */
+.frame-edge {
+  position: fixed;
+  background-image: url('./metal.jpg');
+  background-repeat: repeat;
+  z-index: 0;           /* Behind everything */
+  pointer-events: none; /* Allow clicks through */
+}
+
+/* Top */
+.frame-top {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px; /* thickness */
+}
+
+/* Bottom */
+.frame-bottom {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+/* Left edge starts right after the aside panel */
+.frame-left {
+  top: 0;
+  left: 320px;   /* match aside width */
+  width: 20px;
+  height: 100%;
+}
+
+/* Right */
+.frame-right {
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+}
+
+/* Ensure aside panel is above frame */
+#controls {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+.section {
+  --accent-color: #ffcf66; /* fallback */
+}
+
+/* Different vibes per section */
+.section-text    { --accent-color: #ffcf66; } /* amber */
+.section-bg      { --accent-color: #66ffcc; } /* teal */
+.section-effects { --accent-color: #ffb648; } /* magenta */
+.section-crt     { --accent-color: hsl(309, 100%, 73%); } /* blue */
+.section-analog  { --accent-color: #5eff41; } /* green */
+.section-motion  { --accent-color: #47b9ff; } /* orange */
+
+.section input[type="range"],
+.section input[type="checkbox"],
+.section input[type="radio"] {
+  accent-color: var(--accent-color);
+}
+

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Retro Text Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+
+    <link href="https://fonts.googleapis.com/css2?
+family=Press+Start+2P&
+family=VT323&
+family=Share+Tech+Mono&
+family=Pixelify+Sans&
+family=Orbitron:wght@400;700&
+family=Audiowide&
+family=Oxanium:wght@400;700&
+family=Exo+2:wght@400;700&
+family=Major+Mono+Display&
+family=Rubik+Glitch&
+family=Monoton&
+family=Zen+Dots&
+family=Permanent+Marker&
+family=Special+Elite&
+family=Noto+Sans+Symbols&
+display=swap"
+rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Frame Edges -->
+  <div class="frame-edge frame-top"></div>
+  <div class="frame-edge frame-bottom"></div>
+  <div class="frame-edge frame-left"></div>
+  <div class="frame-edge frame-right"></div>
+
+  <aside id="controls">
+    <h2>Retro Text Lab</h2>
+
+    <!-- ================= TEXT ================= -->
+    <div class="section section-text">
+      <h3>Text</h3>
+
+      <label>
+        Text
+        <input id="textInput" type="text" value="RETROCORE" />
+      </label>
+
+      <label>
+        Font
+        <select id="fontSelect">
+          <option value="serif">Classic Serif</option>
+          <option value="sans-serif">Clean Sans</option>
+          <option value="monospace">Monospace</option>
+
+          <option value="'Press Start 2P'">Press Start 2P</option>
+          <option value="'VT323'">VT323</option>
+          <option value="'Share Tech Mono'">Share Tech Mono</option>
+          <option value="'Pixelify Sans'">Pixelify Sans</option>
+
+          <option value="'Orbitron'">Orbitron</option>
+          <option value="'Audiowide'">Audiowide</option>
+          <option value="'Oxanium'">Oxanium</option>
+          <option value="'Exo 2'">Exo 2</option>
+
+          <option value="'Major Mono Display'">Major Mono Display</option>
+          <option value="'Rubik Glitch'">Rubik Glitch</option>
+          <option value="'Monoton'">Monoton</option>
+          <option value="'Zen Dots'">Zen Dots</option>
+
+          <option value="'Permanent Marker'">Permanent Marker</option>
+          <option value="'Special Elite'">Special Elite</option>
+
+          <option value="'Noto Sans Symbols'">Symbol Font</option>
+        </select>
+      </label>
+
+      <label>
+        Animation Mode
+        <select id="modeSelect"></select>
+      </label>
+
+      <label>
+        Color
+        <input id="colorInput" type="color" value="#ffcc66" />
+      </label>
+    </div>
+
+    <!-- ================= BACKGROUND ================= -->
+    <div class="section section-bg">
+      <h3>Background</h3>
+
+      <label>
+        Background Type
+        <select id="bgType">
+          <option value="solidColor">Solid Color</option>
+          <option value="gradient">Gradient</option>
+          <option value="image">Image</option>
+
+          <option value="checkerboard">Checkerboard</option>
+          <option value="stripes">Stripes</option>
+          <option value="dots">Dots</option>
+          <option value="diagonalLines">Diagonal Lines</option>
+          <option value="noise">Noise</option>
+          <option value="waves">Waves</option>
+          <option value="radialRays">Radial Rays</option>
+          <option value="grid">Grid</option>
+          <option value="hexagon">Hexagon Pattern</option>
+          <option value="spiral">Spiral</option>
+
+          <option value="triangles">Triangles</option>
+          <option value="zigzag">Zigzag</option>
+          <option value="concentricCircles">Concentric Circles</option>
+          <option value="nestedSquares">Nested Squares</option>
+          <option value="crosshatch">Crosshatch</option>
+          <option value="diamondGrid">Diamond Grid</option>
+          <option value="radialDots">Radial Dots</option>
+          <option value="curvedStripes">Curved Stripes</option>
+          <option value="mesh">Mesh</option>
+          <option value="starburst">Starburst</option>
+          <option value="maze">Maze</option>
+          <option value="waveGrid">Wave Grid</option>
+          <option value="circuit">Circuit Lines</option>
+          <option value="randomTriangles">Random Triangles</option>
+          <option value="overlappingCircles">Overlapping Circles</option>
+
+          <option value="sineGrid">Sine Wave Grid</option>
+          <option value="hexWave">Hexagon Wave</option>
+          <option value="circlesOverlap">Overlapping Circles 2</option>
+          <option value="triangleMesh">Triangle Mesh</option>
+          <option value="radialGrid">Radial Grid</option>
+          <option value="concentricPolygons">Concentric Polygons</option>
+          <option value="checkerLines">Checker Lines</option>
+          <option value="wobbleStripes">Wobble Stripes</option>
+          <option value="pixelMaze">Pixel Maze</option>
+          <option value="spiralDots">Spiral Dots</option>
+          <option value="diamondRipples">Diamond Ripples</option>
+          <option value="circleRings">Circle Rings</option>
+          <option value="zigDots">Zigzag Dots</option>
+          <option value="hexStars">Hex Stars</option>
+          <option value="waveTriangles">Wave Triangles</option>
+          <option value="randomLines">Random Lines</option>
+          <option value="tunnel">Tunnel</option>
+          <option value="nestedCircles">Nested Circles</option>
+          <option value="diamondWaves">Diamond Waves</option>
+          <option value="glitchSquares">Glitch Squares</option>
+        </select>
+      </label>
+
+      <label>
+        Primary Color
+        <input id="bgColor" type="color" value="#0b0b0b">
+      </label>
+
+      <label>
+        Secondary Color
+        <input id="bgGradient" type="color" value="#1f1f1f">
+      </label>
+
+      <label>
+        Background Image
+        <input id="bgImage" type="file" accept="image/*">
+      </label>
+    </div>
+
+    <!-- ================= EFFECTS ================= -->
+    <div class="section section-effects">
+      <h3>Effects</h3>
+
+      <label>
+        Depth Shadow Strength
+        <input id="bgDepth" type="range" min="0" max="200" value="100">
+      </label>
+
+      <label>
+        Glow Strength
+        <input id="glowBlur" type="range" min="0" max="50" value="20">
+      </label>
+
+      <label>
+        Enable Trailing Streaks
+        <input id="enableTrails" type="checkbox" checked>
+      </label>
+
+      <label>
+        Trail Opacity
+        <input id="trailAlpha" type="range" min="0" max="1" step="0.01" value="0.1">
+      </label>
+
+      <label>
+        Text Rotation / Wobble
+        <input id="rotationAmount" type="range" min="0" max="0.5" step="0.01" value="0.1">
+      </label>
+    </div>
+
+    <!-- ================= CRT ================= -->
+    <div class="section section-crt">
+      <h3>CRT / VHS Effect</h3>
+
+      <label>
+        Enable CRT/VHS
+        <input id="enableCRT" type="checkbox">
+      </label>
+
+      <label>
+        Pixel Step
+        <input id="crtStep" type="range" min="1" max="50" value="9">
+      </label>
+
+      <label>
+        RGB Shift Probability
+        <input id="rgbShiftProb" type="range" min="0" max="0.01" step="0.001" value="0.002">
+      </label>
+
+      <label>
+        Scanline Darkness
+        <input id="scanlineDark" type="range" min="0" max="1" step="0.01" value="0.2">
+      </label>
+
+      <label>
+        Distortion Strength
+        <input id="distortAmount" type="range" min="0" max="10" step="0.1" value="2">
+      </label>
+    </div>
+
+    <!-- ================= ANALOG ================= -->
+    <div class="section section-analog">
+      <h3>Analog Video Synth</h3>
+
+      <label>
+        Horizontal Jitter
+        <input id="hJitter" type="range" min="0" max="20" step="0.1" value="3">
+      </label>
+
+      <label>
+        Vertical Roll
+        <input id="vRoll" type="range" min="0" max="10" step="0.1" value="1">
+      </label>
+
+      <label>
+        Color Bleed
+        <input id="colorBleed" type="range" min="0" max="10" step="0.1" value="2">
+      </label>
+
+      <label>
+        VHS Noise
+        <input id="vhsNoise" type="range" min="0" max="0.5" step="0.01" value="0.08">
+      </label>
+
+      <label>
+        Tape Warp
+        <input id="tapeWarp" type="range" min="0" max="20" step="0.1" value="4">
+      </label>
+
+      <label>
+        Line Tear Probability
+        <input id="lineTear" type="range" min="0" max="0.2" step="0.01" value="0.04">
+      </label>
+
+      <label>
+        Chromatic Offset
+        <input id="chromaOffset" type="range" min="0" max="10" step="0.1" value="2">
+      </label>
+
+      <label>
+        Signal Dropout
+        <input id="signalDrop" type="range" min="0" max="0.2" step="0.01" value="0.03">
+      </label>
+    </div>
+
+    <!-- ================= ANIMATION ================= -->
+    <div class="section section-motion">
+      <h3>Animation</h3>
+
+      <label>
+        Speed
+        <input id="speedInput" type="range" min="0" max="0.1" step="0.001" value="0.015" />
+      </label>
+
+      <label>
+        Depth
+        <input id="depthInput" type="range" min="0" max="300" value="150" />
+      </label>
+
+      <label>
+        Wobble
+        <input id="wobbleInput" type="range" min="0" max="80" value="0" />
+      </label>
+
+      <label>
+        Pixelation
+        <input id="pixelInput" type="range" min="0" max="14" value="2" />
+      </label>
+
+      <label>
+        FPS
+        <input id="fpsInput" type="range" min="6" max="60" value="60" />
+      </label>
+
+      <button id="toggleSpin">Toggle Motion</button>
+    </div>
+
+  </aside>
+
+  <main>
+    <canvas id="canvas"></canvas>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
