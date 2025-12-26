@@ -68,16 +68,21 @@ function drawBackground() {
   const w = canvas.width;
   const h = canvas.height;
 
-  // Base colors
   let color1 = bgColor.value;
   const color2 = bgGradient.value;
 
-  // Apply LFO 0 to primary color hue
-  const lfo = lfos[0]; // first LFO controls hue
-  const baseHSL = hexToHSL(color1);
-  const hueShift = (lfo.value + 1) / 2; // map [-1,1] → [0,1]
-  const modHue = (baseHSL.h + hueShift) % 1;
-  color1 = `hsl(${modHue*360}, ${baseHSL.s*100}%, ${baseHSL.l*100}%)`;
+  // Apply LFO patches
+  lfos.forEach(lfo => {
+    if (lfo.patch.hueCheckbox.checked) {
+      const baseHSL = hexToHSL(color1);
+      const hueShift = (lfo.value + 1) / 2; // [-1,1] → [0,1]
+      const range = parseFloat(lfo.patch.rangeInput.value);
+      const offset = parseFloat(lfo.patch.offsetInput.value);
+
+      const modHue = (offset + hueShift * range + baseHSL.h) % 1;
+      color1 = `hsl(${modHue*360}, ${baseHSL.s*100}%, ${baseHSL.l*100}%)`;
+    }
+  });
 
   switch(bgType.value) {
     case "solidColor":
@@ -1275,6 +1280,58 @@ function drawLFOScope(lfo) {
 }
 
 
+const lfoMatrixBody = document.querySelector("#lfoMatrix tbody");
+
+// Targets list
+const targets = ["Primary Color Hue"];
+
+lfos.forEach((lfo, i) => {
+  const row = document.createElement("tr");
+
+  // LFO label
+  const lfoLabel = document.createElement("td");
+  lfoLabel.textContent = `LFO ${i + 1}`;
+  row.appendChild(lfoLabel);
+
+  // Primary Color Hue checkbox
+  const hueCell = document.createElement("td");
+  const hueCheckbox = document.createElement("input");
+  hueCheckbox.type = "checkbox";
+ hueCheckbox.checked = false; // Don't patch any LFO by default
+  hueCell.appendChild(hueCheckbox);
+  row.appendChild(hueCell);
+
+  // Range slider
+  const rangeCell = document.createElement("td");
+  const rangeInput = document.createElement("input");
+  rangeInput.type = "range";
+  rangeInput.min = 0;
+  rangeInput.max = 1;
+  rangeInput.step = 0.01;
+  rangeInput.value = 1; // full spectrum by default
+  rangeCell.appendChild(rangeInput);
+  row.appendChild(rangeCell);
+
+  // Offset slider
+  const offsetCell = document.createElement("td");
+  const offsetInput = document.createElement("input");
+  offsetInput.type = "range";
+  offsetInput.min = 0;
+  offsetInput.max = 1;
+  offsetInput.step = 0.01;
+  offsetInput.value = 0; // start at beginning of spectrum
+  offsetCell.appendChild(offsetInput);
+  row.appendChild(offsetCell);
+
+  // Save references
+  lfo.patch = {
+    hueCheckbox,
+    rangeInput,
+    offsetInput
+  };
+
+  lfoMatrixBody.appendChild(row);
+});
 
 
 

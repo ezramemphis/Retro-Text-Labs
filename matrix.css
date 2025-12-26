@@ -1,0 +1,48 @@
+/* ====== LFO Matrix / Patch Table ====== */
+#lfoMatrix {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-family: 'VT323', monospace;
+  font-size: 0.85rem;
+  color: #ffcc66;
+  background: rgba(40, 32, 26, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#lfoMatrix th, #lfoMatrix td {
+  padding: 6px 10px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#lfoMatrix th {
+  background: rgba(0, 0, 0, 0.3);
+  font-weight: normal;
+}
+
+#lfoMatrix tr:last-child td {
+  border-bottom: none;
+}
+
+#lfoMatrix input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #ffcc66; /* makes the check nice color */
+  cursor: pointer;
+}
+
+#lfoMatrix td {
+  background: rgba(0,0,0,0.2);
+}
+
+#lfoMatrix tr:hover td {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Optional: give the table a subtle glowing border */
+#lfoMatrix {
+  box-shadow: 0 0 10px rgba(255,204,102,0.15);
+}
