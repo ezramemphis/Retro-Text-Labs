@@ -1,20 +1,14 @@
 {
   "version": 1,
-
-   "meta": {
-    "creator": "Ezra Bennett",
-    "created": "2025-12-27",
-    "notes": "Glitch preset focused on hexWave + hue modulation"
-  },
   "text": {
-    "value": "GLITCH GLITCH GLITCH GLITCH GLITCH GLITCH",
-    "font": "'Share Tech Mono'",
-    "mode": "helix",
-    "color": "#09ff05"
+    "value": "RETROCORE",
+    "font": "serif",
+    "mode": "orbit",
+    "color": "#ffcc66"
   },
   "background": {
-    "type": "hexWave",
-    "primary": "#ff3d3d",
+    "type": "solidColor",
+    "primary": "#0b0b0b",
     "secondary": "#1f1f1f"
   },
   "effects": {
@@ -25,17 +19,17 @@
   },
   "animation": {
     "speed": "0.015",
-    "depth": "94",
+    "depth": "150",
     "wobble": "0",
     "pixelation": "2",
     "fps": "60"
   },
   "lfos": [
     {
-      "rate": 0.08,
+      "rate": 1,
       "params": {},
       "patch": {
-        "target": "Hue: Primary Color",
+        "target": "",
         "range": "1",
         "offset": "0"
       }

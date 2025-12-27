@@ -515,3 +515,120 @@ canvas {
   color: #fff;
   border-color: #666;
 }
+
+
+
+
+.export-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none; /* <-- hide by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.export-modal.show {
+  display: flex; /* <-- show when "show" class is added */
+}
+
+.export-modal-content {
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  color: #eee;
+  width: 320px;
+  box-shadow: 0 0 20px #000;
+}
+
+
+.export-modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+}
+
+.export-modal-content label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.export-modal-content input,
+.export-modal-content textarea {
+  width: 100%;
+  padding: 6px 8px;
+  margin-top: 4px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #222;
+  color: #eee;
+}
+
+.export-modal-content button {
+  margin-left: 4px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #0b84ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.export-modal-content button:hover {
+  background: #0a6cd5;
+}
+
+
+/* ================= RESTORE CONFIRM PANEL ================= */
+.restore-confirm {
+  position: fixed;
+  top: -160px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+
+  /* 👇 IMAGE BACKGROUND */
+  background-image: url("retro-wooden-panel.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  padding: 16px;
+
+  font-family: "Courier New", monospace;
+  color: #f5e6c8;
+  z-index: 99099;
+  transition: top 0.35s ease;
+}
+
+
+.restore-confirm.show {
+  top: 20px;
+}
+
+.restore-confirm h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.restore-confirm .buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.restore-confirm button {
+  background: #2a1a10;
+  border: 2px solid #cfa76e;
+  color: #f5e6c8;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.restore-confirm button:hover {
+  background: #3a2416;
+}

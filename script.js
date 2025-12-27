@@ -43,18 +43,6 @@ function hexToHSL(H) {
 }
 
 
-// Call for default
-
-let DEFAULT_STATE = null;
-
-function captureDefaultState() {
-  DEFAULT_STATE = exportPresetState();
-}
-
-window.addEventListener("load", () => {
-  captureDefaultState();
-});
-
 
 //Background image 
 
@@ -1962,17 +1950,177 @@ async function loadPresetFromFile(category, filename) {
   }
 }
 
-
-
+// ================= RESTORE DEFAULT PRESET =================
 const restoreBtn = document.getElementById("restoreDefaultBtn");
 
+// Create confirm panel once
+const restoreConfirm = document.createElement("div");
+restoreConfirm.className = "restore-confirm";
+restoreConfirm.innerHTML = `
+  <h4>Confirm: Restore Default Preset</h4>
+  <div class="buttons">
+    <button id="restoreCancelBtn">Cancel</button>
+    <button id="restoreYesBtn">Yes</button>
+  </div>
+`;
+document.body.appendChild(restoreConfirm);
+
+const restoreCancelBtn = restoreConfirm.querySelector("#restoreCancelBtn");
+const restoreYesBtn = restoreConfirm.querySelector("#restoreYesBtn");
+
+// Open panel
 restoreBtn.addEventListener("click", () => {
-  if (!DEFAULT_STATE) return;
-  applyPreset(DEFAULT_STATE);
+  restoreConfirm.classList.add("show");
 });
 
-restoreBtn.addEventListener("click", () => {
-  if (!DEFAULT_STATE) return;
-  if (!confirm("Restore default preset?")) return;
-  applyPreset(DEFAULT_STATE);
+// Cancel
+restoreCancelBtn.addEventListener("click", () => {
+  restoreConfirm.classList.remove("show");
+});
+
+// Confirm restore
+restoreYesBtn.addEventListener("click", async () => {
+  restoreConfirm.classList.remove("show");
+
+  try {
+    const res = await fetch("presets/default.json");
+    if (!res.ok) throw new Error("Failed to load default preset");
+
+    const preset = await res.json();
+    applyPreset(preset);
+  } catch (err) {
+    console.error("Restore default failed:", err);
+    alert("Could not restore default preset.");
+  }
+});
+
+
+
+
+// ================= PRESET EXPORT MODAL =================
+const exportPresetBtn = document.getElementById("exportPresetBtn");
+
+// Create modal container
+const exportModal = document.createElement("div");
+exportModal.className = "export-modal"; // hidden by default via CSS
+exportModal.innerHTML = `
+  <div class="export-modal-content">
+    <h3>Export Preset</h3>
+    <label>
+      Name
+      <input id="presetNameInput" type="text" placeholder="Enter preset name" />
+    </label>
+    <div id="presetFileNamePreview" style="font-size: 0.8em; color: #888; margin-bottom: 8px;">File will be called: .json</div>
+    <label>
+      Creator
+      <input id="presetCreatorInput" type="text" placeholder="Your name" />
+    </label>
+    <label>
+      Notes
+      <textarea id="presetNotesInput" placeholder="Optional notes about this preset"></textarea>
+    </label>
+    <div style="text-align: right; margin-top: 10px;">
+      <button id="exportPresetConfirm">Export</button>
+      <button id="exportPresetCancel">Cancel</button>
+    </div>
+  </div>
+`;
+document.body.appendChild(exportModal);
+
+// Elements inside modal
+const presetNameInput = exportModal.querySelector("#presetNameInput");
+const presetCreatorInput = exportModal.querySelector("#presetCreatorInput");
+const presetNotesInput = exportModal.querySelector("#presetNotesInput");
+const presetFileNamePreview = exportModal.querySelector("#presetFileNamePreview");
+const exportPresetConfirm = exportModal.querySelector("#exportPresetConfirm");
+const exportPresetCancel = exportModal.querySelector("#exportPresetCancel");
+
+// Open modal
+exportPresetBtn.addEventListener("click", () => {
+  presetNameInput.value = "";
+  presetCreatorInput.value = "";
+  presetNotesInput.value = "";
+  presetFileNamePreview.textContent = "File will be called: .json";
+  exportModal.style.display = "flex"; // show modal
+  presetNameInput.focus();
+});
+
+// Update file name preview dynamically
+presetNameInput.addEventListener("input", () => {
+  const kebabName = presetNameInput.value.trim().toLowerCase().replace(/\s+/g, "-");
+  presetFileNamePreview.textContent = `File will be called: ${kebabName || ""}.json`;
+});
+
+// Cancel button closes modal
+exportPresetCancel.addEventListener("click", () => {
+  exportModal.style.display = "none";
+});
+
+// Also close modal if clicking outside content
+exportModal.addEventListener("click", e => {
+  if (e.target === exportModal) exportModal.style.display = "none";
+});
+
+// Confirm export
+exportPresetConfirm.addEventListener("click", () => {
+  const name = presetNameInput.value.trim();
+  const creator = presetCreatorInput.value.trim() || "Unknown";
+  const notes = presetNotesInput.value.trim();
+
+  if (!name) {
+    alert("Please enter a preset name.");
+    return;
+  }
+
+  // Generate file name
+  const kebabName = name.toLowerCase().replace(/\s+/g, "-");
+  const date = new Date().toISOString();
+
+  // Build preset JSON
+  const presetData = {
+    meta: { creator, created: date, notes },
+    text: {
+      value: textInput.value,
+      font: fontSelect.value,
+      mode: modeSelect.value,
+      color: colorInput.value
+    },
+    background: {
+      type: bgType.value,
+      primary: bgColor.value,
+      secondary: bgGradient.value
+    },
+    effects: {
+      glow: glowBlur.value,
+      depth: bgDepth.value,
+      trails: enableTrails.checked,
+      trailAlpha: trailAlpha.value
+    },
+    animation: {
+      speed: speedInput.value,
+      depth: depthInput.value,
+      wobble: wobbleInput.value,
+      pixelation: pixelInput.value,
+      fps: fpsInput.value
+    },
+    lfos: lfos.map(lfo => ({
+      rate: lfo.rate,
+      params: lfo.params || {},
+      patch: {
+        target: lfo.patch?.paramSelect?.value || "",
+        range: lfo.patch?.rangeInput?.value || "1",
+        offset: lfo.patch?.offsetInput?.value || "0"
+      }
+    }))
+  };
+
+  // Export as JSON file
+  const blob = new Blob([JSON.stringify(presetData, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${kebabName}.json`;
+  link.click();
+
+  // Close modal after export
+  exportModal.style.display = "none";
 });
