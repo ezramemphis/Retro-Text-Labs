@@ -43,6 +43,17 @@ function hexToHSL(H) {
 }
 
 
+// Call for default
+
+let DEFAULT_STATE = null;
+
+function captureDefaultState() {
+  DEFAULT_STATE = exportPresetState();
+}
+
+window.addEventListener("load", () => {
+  captureDefaultState();
+});
 
 
 //Background image 
@@ -1267,11 +1278,11 @@ const mobileMusic = document.getElementById("mobileMusic");
 
 // === Track List ===
 const backgroundTracks = [
-  "./music/Life-at-sea-Knobs.mp3", // Always first
-  "./music/neptune.wav",
-  "./music/10-Fax.mp3",
-  "./music/Transmitter-Spacetime-Continuum.mp3",
-  "./music/Amygdala-JakoJako.mp3"
+  "./music/honey-suckle.mp3", // Always first
+  "./music/honey-suckle.mp3",
+  "./music/honey-suckle.mp3",
+  "./music/honey-suckle.mp3",
+  "./music/honey-suckle.mp3"
 ];
 
 // === Mobile Detection ===
@@ -1733,3 +1744,235 @@ textarea.addEventListener("input", () => {
   localStorage.setItem(STORAGE_KEY, textarea.value)
 })
 
+
+
+// Export and Import Script
+
+function collectPreset() {
+  return {
+    version: 1,
+
+    text: {
+      value: textInput.value,
+      font: fontSelect.value,
+      mode: modeSelect.value,
+      color: colorInput.value
+    },
+
+    background: {
+      type: bgType.value,
+      primary: bgColor.value,
+      secondary: bgGradient.value
+    },
+
+    effects: {
+      glow: glowBlur.value,
+      depth: bgDepth.value,
+      trails: enableTrails.checked,
+      trailAlpha: trailAlpha.value
+    },
+
+    animation: {
+      speed: speedInput.value,
+      depth: depthInput.value,
+      wobble: wobbleInput.value,
+      pixelation: pixelInput.value,
+      fps: fpsInput.value
+    },
+
+    lfos: lfos.map(lfo => ({
+      rate: lfo.rate,
+      wave: lfo.wave,
+      params: { ...lfo.params },
+
+      patch: {
+        target: lfo.patch?.paramSelect?.value ?? "none",
+        range: lfo.patch?.rangeInput?.value ?? 0,
+        offset: lfo.patch?.offsetInput?.value ?? 0
+      }
+    }))
+  };
+}
+
+
+document.getElementById("exportPresetBtn").onclick = () => {
+  const preset = collectPreset();
+  const blob = new Blob([JSON.stringify(preset, null, 2)], {
+    type: "application/json"
+  });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "retro-text-lab-preset.json";
+  a.click();
+};
+
+document
+  .getElementById("importPresetInput")
+  .addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = evt => {
+      try {
+        const preset = JSON.parse(evt.target.result);
+        applyPreset(preset);
+      } catch (err) {
+        alert("Invalid preset file");
+      }
+    };
+    reader.readAsText(file);
+  });
+
+
+  function applyPreset(preset) {
+  if (!preset || preset.version !== 1) return;
+
+  // TEXT
+  textInput.value = preset.text.value;
+  fontSelect.value = preset.text.font;
+  modeSelect.value = preset.text.mode;
+  colorInput.value = preset.text.color;
+
+  // BACKGROUND
+  bgType.value = preset.background.type;
+  bgColor.value = preset.background.primary;
+  bgGradient.value = preset.background.secondary;
+
+  // EFFECTS
+  glowBlur.value = preset.effects.glow;
+  bgDepth.value = preset.effects.depth;
+  enableTrails.checked = preset.effects.trails;
+  trailAlpha.value = preset.effects.trailAlpha;
+
+  // ANIMATION
+  speedInput.value = preset.animation.speed;
+  depthInput.value = preset.animation.depth;
+  wobbleInput.value = preset.animation.wobble;
+  pixelInput.value = preset.animation.pixelation;
+  fpsInput.value = preset.animation.fps;
+
+  // LFOs
+  preset.lfos.forEach((p, i) => {
+    const lfo = lfos[i];
+    if (!lfo) return;
+
+    lfo.rate = p.rate;
+    lfo.wave = p.wave;
+    lfo.params = { ...p.params };
+
+    if (lfo.patch) {
+      lfo.patch.paramSelect.value = p.patch.target;
+      lfo.patch.rangeInput.value = p.patch.range;
+      lfo.patch.offsetInput.value = p.patch.offset;
+    }
+  });
+}
+
+const PRESET_CATEGORIES = [
+  "Ambient",
+  "Glitch",
+  "Minimal",
+  "Psychedelic",
+  "Typography",
+  "Motion",
+  "Experimental"
+];
+
+
+
+const categoryContainer = document.querySelector(".preset-categories");
+const presetList = document.querySelector(".preset-list");
+
+// TEMP mock data (replace later with fetch)
+const PRESET_INDEX = {
+  Ambient: [
+    { name: "Slow Drift", file: "slow-drift.json" }
+  ],
+  Glitch: [
+    { name: "Glitch Helix", file: "glitch-helix.json" }
+  ],
+  Minimal: [
+    { name: "Pale Drift", file: "pale-drift.json" }
+  ],
+  Psychedelic: [],
+  Typography: [],
+  Motion: [],
+  Experimental: []
+};
+
+
+// Build category buttons
+PRESET_CATEGORIES.forEach(cat => {
+  const el = document.createElement("div");
+  el.className = "preset-category";
+  el.textContent = cat;
+  el.onclick = () => selectCategory(cat, el);
+  categoryContainer.appendChild(el);
+});
+
+function selectCategory(category, el) {
+  document
+    .querySelectorAll(".preset-category")
+    .forEach(c => c.classList.remove("active"));
+
+  el.classList.add("active");
+  renderPresetList(category);
+}
+
+function renderPresetList(category) {
+  presetList.innerHTML = "";
+
+  const presets = PRESET_INDEX[category] || [];
+
+  if (!presets.length) {
+    presetList.innerHTML =
+      `<div class="preset-placeholder">No presets yet</div>`;
+    return;
+  }
+
+  presets.forEach(preset => {
+    const p = document.createElement("div");
+    p.className = "preset-item";
+    p.textContent = preset.name;
+
+    p.onclick = () => {
+      loadPresetFromFile(category, preset.file);
+    };
+
+    presetList.appendChild(p);
+  });
+}
+
+async function loadPresetFromFile(category, filename) {
+  const path = `presets/${category.toLowerCase()}/${filename}`;
+
+  try {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error("Fetch failed");
+
+    const preset = await res.json();
+    applyPreset(preset);
+
+    console.log("Preset loaded:", path);
+  } catch (err) {
+    console.error("Preset load error:", err);
+    alert("Could not load preset.");
+  }
+}
+
+
+
+const restoreBtn = document.getElementById("restoreDefaultBtn");
+
+restoreBtn.addEventListener("click", () => {
+  if (!DEFAULT_STATE) return;
+  applyPreset(DEFAULT_STATE);
+});
+
+restoreBtn.addEventListener("click", () => {
+  if (!DEFAULT_STATE) return;
+  if (!confirm("Restore default preset?")) return;
+  applyPreset(DEFAULT_STATE);
+});

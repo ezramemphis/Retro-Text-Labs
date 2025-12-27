@@ -124,30 +124,73 @@ canvas {
 .section input[type="checkbox"],
 .section input[type="radio"] { accent-color: var(--accent-color); }
 
+
+
+
+
 /* === Mobile Block Screen === */
-.mobile-block { display:none; }
-@media (max-width:1024px) {
-  body { overflow:hidden; }
-  aside, main, .frame-edge { display:none !important; }
+.mobile-block { display: none; }
+
+@media (max-width: 1024px) {
+  body {
+    overflow: hidden;
+  }
+
+  /* Hide desktop UI */
+  header,
+  aside,
+  main,
+  .frame-edge {
+    display: none !important;
+  }
+
+  /* Mobile block overlay */
   .mobile-block {
-    display:flex;
-    position:fixed;
-    inset:0;
-    color:#eaeaea;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-    text-align:center;
-    padding:24px;
+    display: flex;
+    position: fixed;
+    inset: 0;
+    color: #eaeaea;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    text-align: center;
+    padding: 24px;
     background:
       radial-gradient(circle at center, rgba(255,255,255,0.04), rgba(0,0,0,0.85) 70%),
-      repeating-radial-gradient(circle, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 2px, transparent 4px),
+      repeating-radial-gradient(
+        circle,
+        rgba(255,255,255,0.015) 0px,
+        rgba(255,255,255,0.015) 1px,
+        transparent 2px,
+        transparent 4px
+      ),
       #0b0b0b;
   }
-  .mobile-block-content { max-width:420px; }
-  .mobile-block img { width:220px; max-width:80%; margin-bottom:24px; opacity:0.9; image-rendering:pixelated; }
-  .mobile-block h1 { font-family:sans-serif; font-size:1rem; margin-bottom:12px; color:#e8e8e8; text-shadow:0 0 8px rgba(16,16,16,0.6);}
-  .mobile-block p { font-size:0.85rem; opacity:0.7;}
+
+  .mobile-block-content {
+    max-width: 420px;
+  }
+
+  .mobile-block img {
+    width: 220px;
+    max-width: 80%;
+    margin-bottom: 24px;
+    opacity: 0.9;
+    image-rendering: pixelated;
+  }
+
+  .mobile-block h1 {
+    font-family: sans-serif;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #e8e8e8;
+    text-shadow: 0 0 8px rgba(16,16,16,0.6);
+  }
+
+  .mobile-block p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
 }
 
 
@@ -347,4 +390,128 @@ canvas {
   font-family: monospace;
   font-size: 12px;
   outline: none;
+}
+
+
+.section-presets button,
+.section-presets label {
+  width: 100%;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+#exportPresetBtn,
+.import-preset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  margin-top: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#exportPresetBtn:hover,
+.import-preset:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+#exportPresetBtn:active,
+.import-preset:active {
+  transform: translateY(1px);
+}
+
+
+
+.preset-browser {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* === Categories === */
+.preset-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preset-category {
+  padding: 8px 10px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.preset-category:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.preset-category.active {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* === Preset List === */
+.preset-list {
+  min-height: 140px;
+  border-radius: 8px;
+  padding: 8px;
+  background: rgba(0,0,0,0.25);
+  overflow-y: auto;
+}
+
+.preset-item {
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+
+.preset-item:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.preset-placeholder {
+  font-size: 11px;
+  opacity: 0.5;
+  padding: 10px;
+}
+
+
+.restore-default {
+  margin-top: 12px;
+  background: #1a1a1a;
+  color: #aaa;
+  border: 1px solid #333;
+  font-family: inherit;
+  padding: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.restore-default:hover {
+  color: #fff;
+  border-color: #666;
 }

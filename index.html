@@ -140,6 +140,39 @@ rel="stylesheet">
   <aside id="controls">
     <h2>Retro Text Lab</h2>
 
+    <!-- ================= PRESETS ================= -->
+    <div class="section section-presets">
+  <h3>Presets</h3>
+
+  <label class="import-preset">
+    IMPORT PRESET
+    <input id="importPresetInput" type="file" accept=".json" hidden />
+  </label>
+
+  <button id="exportPresetBtn">EXPORT PRESET</button>
+</div>
+
+<!-- ================= PRESET BROWSER ================= -->
+<div class="preset-browser">
+
+  <div class="preset-categories">
+    <!-- categories injected here -->
+  </div>
+
+  <div class="preset-list">
+    <div class="preset-placeholder">
+      Select a category
+    </div>
+  </div>
+
+</div>
+
+<button id="restoreDefaultBtn" class="restore-default">
+  RESTORE DEFAULT
+</button>
+
+
+
     <!-- ================= TEXT ================= -->
     <div class="section section-text">
       <h3>Text</h3>
