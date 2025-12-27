@@ -114,9 +114,9 @@
   transform: translate(-0px, -8px); /* 0 left + slightly up */
 }
 
-/* Modal */
+/* Modal overlay */
 .modal {
-  display: none; 
+  display: none;
   position: fixed;
   z-index: 9999;
   left: 0; top: 0;
@@ -125,42 +125,68 @@
   overflow: auto;
 }
 
+/* Modal content wrapper */
 .modal-content {
-  background: #111;
+  position: relative;
+  background: #111; /* fallback */
   margin: 5% auto;
   padding: 20px;
-  width: 80%;
+  width: 90%;
+  max-width: 1200px;
   color: #fff;
-  border-radius: 8px;
-}
-
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.cd-binder {
+  border-radius: 12px;
   display: flex;
-  gap: 20px;
   justify-content: center;
+  align-items: center;
+  perspective: 1200px;
 }
 
+/* Binder background */
+.cd-binder {
+  position: relative;
+  display: flex;
+  gap: 60px; /* space between left/right pages */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #191612; /* woodish binder color */
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  transform: translateX(-70px);
+}
+
+/* Page styling */
 .page {
-  background: #222;
-  padding: 10px;
-  border-radius: 6px;
+  position: relative;
+  width: 600px;
+  height: 600px;
+  background-image: url("retro-cd-page.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(0px);
 }
 
+/* CD grid inside each page */
 .cd-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0px 20px; /* fine-tune horizontal & vertical spacing */
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  padding: 0px 0px; /* adjust to center properly */
 }
 
+/* Each CD slot circle */
 .cd-slot {
-  width: 80px;
-  height: 80px;
+  width: 280px;
+  height: 280px;
   background: #444;
   border-radius: 50%;
   display: flex;
@@ -168,7 +194,89 @@
   justify-content: center;
   cursor: pointer;
   color: #fff;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+  transition: transform 0.2s;
+  position: relative;
+  z-index: 2;
 }
+
+.cd-slot:hover {
+  transform: scale(1.01);
+}
+
+/* Specific CD positions (adjust as needed) */
+.cd-slot.top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.cd-slot.top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.cd-slot.bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.cd-slot.bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+
+/* Polypropylene pocket overlay with gaps around CDs */
+.page::aftr {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 3;
+  backdrop-filter: blur(2px);
+  mask-image: radial-gradient(circle 90px at 25% 25%, transparent 0%, black 100%),
+              radial-gradient(circle 90px at 75% 25%, transparent 0%, black 100%),
+              radial-gradient(circle 90px at 25% 75%, transparent 0%, black 100%),
+              radial-gradient(circle 90px at 75% 75%, transparent 0%, black 100%);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-composite: intersect;
+  -webkit-mask-image: radial-gradient(circle 90px at 25% 25%, transparent 0%, black 100%),
+                      radial-gradient(circle 90px at 75% 25%, transparent 0%, black 100%),
+                      radial-gradient(circle 90px at 25% 75%, transparent 0%, black 100%),
+                      radial-gradient(circle 90px at 75% 75%, transparent 0%, black 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-composite: destination-in;
+}
+
+/* Stacked effect for binder */
+.cd-binder::before,
+.cd-binder::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  width: 60px;
+  height: 360px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.cd-binder::before {
+  left: -40px;
+  transform: rotate(-2deg);
+}
+
+.cd-binder::after {
+  right: -40px;
+  transform: rotate(2deg);
+}
+
 
 
 

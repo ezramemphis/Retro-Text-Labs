@@ -597,9 +597,12 @@ canvas {
   padding: 16px;
 
   font-family: "Courier New", monospace;
-  color: #f5e6c8;
+  color: #fffaf1;
   z-index: 99099;
   transition: top 0.35s ease;
+
+  /* 👇 Text shadow for dropshadow effect */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 
@@ -621,9 +624,10 @@ canvas {
 
 .restore-confirm button {
   background: #2a1a10;
-  border: 2px solid #cfa76e;
+  border: 2px solid #c4a473;
   color: #f5e6c8;
   padding: 6px 14px;
+  margin: 4px;
   cursor: pointer;
   font-family: inherit;
   font-size: 12px;
