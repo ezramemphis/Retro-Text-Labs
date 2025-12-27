@@ -183,47 +183,68 @@
   padding: 0px 0px; /* adjust to center properly */
 }
 
-/* Each CD slot circle */
+/* CD Slot */
 .cd-slot {
-  width: 280px;
+  position: absolute;
+  width: 280px;   /* smaller for fit */
   height: 280px;
-  background: #444;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  color: #fff;
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
-  transition: transform 0.2s;
-  position: relative;
+  transition: transform 0.3s;
+  background-size: cover;
+  background-position: center;
   z-index: 2;
 }
 
+/* Hover rotation */
 .cd-slot:hover {
-  transform: scale(1.01);
+  transform: rotate(10deg);
 }
 
-/* Specific CD positions (adjust as needed) */
-.cd-slot.top-right {
-  top: 20px;
-  right: 20px;
+/* Optional: CD template layer */
+.cd-slot::after {
+  content: '';
+  position: absolute;
+  top: -20px; left: -20px;
+  width: 115%; height: 115%;
+  background-image: url('images/CD/cd-template.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .44;
 }
 
-.cd-slot.top-left {
-  top: 20px;
-  left: 20px;
+
+/* Album cover behind the template */
+.cd-cover {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
 }
 
-.cd-slot.bottom-right {
-  bottom: 20px;
-  right: 20px;
+/* CD template on top with hole + hub baked in */
+.cd-template {
+  position: absolute;
+  top: -13px; left: -17px;
+  width: 110%;
+  height: 110%;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  z-index: 2;
+  pointer-events: none; /* allow hover rotation to pass through */
+  opacity: 0.3;
 }
 
-.cd-slot.bottom-left {
-  bottom: 20px;
-  left: 20px;
-}
+
+
 
 
 /* Polypropylene pocket overlay with gaps around CDs */
@@ -266,6 +287,7 @@
   border-radius: 6px;
   z-index: 1;
 }
+
 
 .cd-binder::before {
   left: -40px;
