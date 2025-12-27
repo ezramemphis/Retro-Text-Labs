@@ -207,7 +207,7 @@
   position: absolute;
   top: -20px; left: -20px;
   width: 115%; height: 115%;
-  background-image: url('images/CD/cd-template.png');
+  background-image: url('../images/CD/cd-template.png');
   background-size: cover;
   background-position: center;
   border-radius: 50%;
