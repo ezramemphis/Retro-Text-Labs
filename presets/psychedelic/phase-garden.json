@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Organic psychedelic drift"
+  },
+  "text": {
+    "value": "+++++ +++++",
+    "font": "'Georgia'",
+    "mode": "float",
+    "color": "#f4fff0"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#00ff6a",
+    "secondary": "#a4ff00"
+  },
+  "effects": {
+    "glow": "0.3",
+    "depth": "130",
+    "trails": true,
+    "trailAlpha": "0.12"
+  },
+  "animation": {
+    "speed": "0.009",
+    "depth": "190",
+    "wobble": "0.3",
+    "pixelation": "1",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 0.25,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.3",
+        "offset": "0.55"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

@@ -1,24 +1,18 @@
 {
   "version": 1,
-
-   "meta": {
-    "creator": "Ezra Bennett",
-    "created": "2025-12-27",
-    "notes": "First Minimal Preset"
-  },
   "text": {
-    "value": "............................",
-    "font": "'VT323'",
-    "mode": "orbit",
-    "color": "#fff3d1"
+    "value": "qqqqppppqppqpqpqpqppqpqpqpqppqpqpqp",
+    "font": "serif",
+    "mode": "orbitStack",
+    "color": "#ffcc66"
   },
   "background": {
-    "type": "waves",
-    "primary": "#d09090",
-    "secondary": "#a57e7e"
+    "type": "gradient",
+    "primary": "#b82e2e",
+    "secondary": "#270057"
   },
   "effects": {
-    "glow": "0",
+    "glow": "20",
     "depth": "100",
     "trails": true,
     "trailAlpha": "0.1"
@@ -36,8 +30,8 @@
       "params": {},
       "patch": {
         "target": "Hue: Primary Color",
-        "range": "0.15",
-        "offset": "0.79"
+        "range": "0.1",
+        "offset": "0.68"
       }
     },
     {

@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Slow liquid color breathing"
+  },
+  "text": {
+    "value": "~~~~~~~~~~~~~",
+    "font": "'VT323'",
+    "mode": "orbit",
+    "color": "#ffe6ff"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#ff4fd8",
+    "secondary": "#4fffd4"
+  },
+  "effects": {
+    "glow": "0.4",
+    "depth": "120",
+    "trails": true,
+    "trailAlpha": "0.18"
+  },
+  "animation": {
+    "speed": "0.01",
+    "depth": "180",
+    "wobble": "0.6",
+    "pixelation": "1",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 0.35,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.45",
+        "offset": "0.2"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Minimal — Quiet Grid"
+  },
+  "text": {
+    "value": "+ + + + + + + + +",
+    "font": "'Arial'",
+    "mode": "orbit",
+    "color": "#f5f5f5"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#2e2e2e",
+    "secondary": "#1c1c1c"
+  },
+  "effects": {
+    "glow": "0",
+    "depth": "90",
+    "trails": false,
+    "trailAlpha": "0"
+  },
+  "animation": {
+    "speed": "0.01",
+    "depth": "130",
+    "wobble": "0",
+    "pixelation": "1",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.03",
+        "offset": "0.02"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

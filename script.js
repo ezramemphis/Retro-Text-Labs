@@ -1873,22 +1873,100 @@ const PRESET_CATEGORIES = [
 const categoryContainer = document.querySelector(".preset-categories");
 const presetList = document.querySelector(".preset-list");
 
-// TEMP mock data (replace later with fetch)
+
 const PRESET_INDEX = {
   Ambient: [
-    { name: "Slow Drift", file: "slow-drift.json" }
+    { name: "Slow Drift", file: "slow-drift.json" },
+    { name: "Q P", file: "qp.json" },
+    { name: "Air Static", file: "air-static.json" },
+    { name: "Low Tide", file: "low-tide.json" },
+    { name: "Distant Rooms", file: "distant-rooms.json" },
+    { name: "Fog Memory", file: "fog-memory.json" },
+    { name: "Still Light", file: "still-light.json" },
+    { name: "Afterimage", file: "afterimage.json" },
+    { name: "Quiet Bloom", file: "quiet-bloom.json" },
+    { name: "Night Floor", file: "night-floor.json" }
   ],
+
   Glitch: [
-    { name: "Glitch Helix", file: "glitch-helix.json" }
+    { name: "Glitch Helix", file: "glitch-helix.json" },
+    { name: "Buffer Collapse", file: "buffer-collapse.json" },
+    { name: "Signal Tear", file: "signal-tear.json" },
+    { name: "Data Shards", file: "data-shards.json" },
+    { name: "Phase Error", file: "phase-error.json" },
+    { name: "Frame Skip", file: "frame-skip.json" },
+    { name: "Bit Rot", file: "bit-rot.json" },
+    { name: "Compression Ghost", file: "compression-ghost.json" },
+    { name: "Memory Leak", file: "memory-leak.json" },
+    { name: "Artifact Bloom", file: "artifact-bloom.json" }
   ],
+
   Minimal: [
-    { name: "Pale Drift", file: "pale-drift.json" }
+    { name: "Pale Drift", file: "pale-drift.json" },
+    { name: "Single Line", file: "single-line.json" },
+    { name: "Empty Measure", file: "empty-measure.json" },
+    { name: "Soft Click", file: "soft-click.json" },
+    { name: "Quiet Grid", file: "quiet-grid.json" },
+    { name: "Bare Signal", file: "bare-signal.json" },
+    { name: "Thin Space", file: "thin-space.json" },
+    { name: "Reduced Form", file: "reduced-form.json" },
+    { name: "Still Axis", file: "still-axis.json" },
+    { name: "White Interval", file: "white-interval.json" }
   ],
-  Psychedelic: [],
-  Typography: [],
-  Motion: [],
-  Experimental: []
+
+  Psychedelic: [
+    { name: "Liquid Bloom", file: "liquid-bloom.json" },
+    { name: "Color Melt", file: "color-melt.json" },
+    { name: "Neon Mirage", file: "neon-mirage.json" },
+    { name: "Optic Spiral", file: "optic-spiral.json" },
+    { name: "Phase Garden", file: "phase-garden.json" },
+    { name: "Chromatic Pulse", file: "chromatic-pulse.json" },
+    { name: "Dream Fractals", file: "dream-fractals.json" },
+    { name: "Electric Bloom", file: "electric-bloom.json" },
+    { name: "Prism Wake", file: "prism-wake.json" },
+    { name: "Hallucination Field", file: "hallucination-field.json" }
+  ],
+
+  Typography: [
+    { name: "Bold Serif Glow", file: "bold-serif-glow.json" },
+    { name: "Mono Terminal", file: "mono-terminal.json" },
+    { name: "Scanline Type", file: "scanline-type.json" },
+    { name: "Broken Headline", file: "broken-headline.json" },
+    { name: "Digital Poster", file: "digital-poster.json" },
+    { name: "Kinetic Letters", file: "kinetic-letters.json" },
+    { name: "Outline Stack", file: "outline-stack.json" },
+    { name: "Type Echo", file: "type-echo.json" },
+    { name: "Raster Font", file: "raster-font.json" },
+    { name: "Glitch Title", file: "glitch-title.json" }
+  ],
+
+  Motion: [
+    { name: "Slow Pan", file: "slow-pan.json" },
+    { name: "Vertical Sweep", file: "vertical-sweep.json" },
+    { name: "Elastic Drift", file: "elastic-drift.json" },
+    { name: "Orbit Pass", file: "orbit-pass.json" },
+    { name: "Pulse Zoom", file: "pulse-zoom.json" },
+    { name: "Frame Glide", file: "frame-glide.json" },
+    { name: "Axis Shift", file: "axis-shift.json" },
+    { name: "Micro Shake", file: "micro-shake.json" },
+    { name: "Time Stretch", file: "time-stretch.json" },
+    { name: "Momentum Fade", file: "momentum-fade.json" }
+  ],
+
+  Experimental: [
+    { name: "Unknown State", file: "unknown-state.json" },
+    { name: "Recursive Field", file: "recursive-field.json" },
+    { name: "Noise Logic", file: "noise-logic.json" },
+    { name: "Broken System", file: "broken-system.json" },
+    { name: "Feedback Loop", file: "feedback-loop.json" },
+    { name: "Synthetic Chaos", file: "synthetic-chaos.json" },
+    { name: "Emergent Shape", file: "emergent-shape.json" },
+    { name: "Ghost Math", file: "ghost-math.json" },
+    { name: "Unstable Model", file: "unstable-model.json" },
+    { name: "Black Box", file: "black-box.json" }
+  ]
 };
+
 
 
 // Build category buttons

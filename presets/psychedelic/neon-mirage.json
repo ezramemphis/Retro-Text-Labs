@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Floating neon hallucination"
+  },
+  "text": {
+    "value": "•••••••••••••••",
+    "font": "'Arial'",
+    "mode": "orbit",
+    "color": "#eaffff"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#8a00ff",
+    "secondary": "#00ffe5"
+  },
+  "effects": {
+    "glow": "0.8",
+    "depth": "160",
+    "trails": true,
+    "trailAlpha": "0.25"
+  },
+  "animation": {
+    "speed": "0.012",
+    "depth": "260",
+    "wobble": "0.4",
+    "pixelation": "1",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 0.5,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.8",
+        "offset": "0.1"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

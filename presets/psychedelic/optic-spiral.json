@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "High-speed visual spin illusion"
+  },
+  "text": {
+    "value": "oooooooooooooo",
+    "font": "'VT323'",
+    "mode": "spin",
+    "color": "#ffffff"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#00ff9c",
+    "secondary": "#003cff"
+  },
+  "effects": {
+    "glow": "0.5",
+    "depth": "200",
+    "trails": true,
+    "trailAlpha": "0.15"
+  },
+  "animation": {
+    "speed": "0.035",
+    "depth": "300",
+    "wobble": "1",
+    "pixelation": "2",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 1.2,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "1",
+        "offset": "0"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

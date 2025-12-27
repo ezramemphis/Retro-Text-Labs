@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Minimal — White Interval"
+  },
+  "text": {
+    "value": "_____     _____     _____",
+    "font": "'Georgia'",
+    "mode": "orbit",
+    "color": "#2b2b2b"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#f2f2f2",
+    "secondary": "#e5e5e5"
+  },
+  "effects": {
+    "glow": "0",
+    "depth": "60",
+    "trails": true,
+    "trailAlpha": "0.02"
+  },
+  "animation": {
+    "speed": "0.004",
+    "depth": "90",
+    "wobble": "0",
+    "pixelation": "1",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.02",
+        "offset": "0.01"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

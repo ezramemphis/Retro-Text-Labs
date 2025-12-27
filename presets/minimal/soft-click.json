@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Minimal — Soft Click"
+  },
+  "text": {
+    "value": "·   ·   ·   ·   ·   ·",
+    "font": "'VT323'",
+    "mode": "sphere",
+    "color": "#fff1dc"
+  },
+  "background": {
+    "type": "mesh",
+    "primary": "#8c5a3c",
+    "secondary": "#6d4430"
+  },
+  "effects": {
+    "glow": "0",
+    "depth": "110",
+    "trails": true,
+    "trailAlpha": "0.12"
+  },
+  "animation": {
+    "speed": "0.02",
+    "depth": "160",
+    "wobble": "0",
+    "pixelation": "3",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.18",
+        "offset": "0.12"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

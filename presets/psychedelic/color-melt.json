@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Aggressive chroma drift"
+  },
+  "text": {
+    "value": "::::::::::::::::",
+    "font": "'Courier New'",
+    "mode": "stretch",
+    "color": "#ffffff"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#ff3c00",
+    "secondary": "#ffd000"
+  },
+  "effects": {
+    "glow": "0.6",
+    "depth": "140",
+    "trails": true,
+    "trailAlpha": "0.22"
+  },
+  "animation": {
+    "speed": "0.022",
+    "depth": "220",
+    "wobble": "0.9",
+    "pixelation": "3",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 0.8,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.65",
+        "offset": "0.4"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}

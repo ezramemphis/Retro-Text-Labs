@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "meta": {
+    "creator": "Ezra Bennett",
+    "created": "2025-12-27",
+    "notes": "Minimal — Still Axis"
+  },
+  "text": {
+    "value": "|",
+    "font": "'VT323'",
+    "mode": "orbit",
+    "color": "#fff7e6"
+  },
+  "background": {
+    "type": "waves",
+    "primary": "#d2bba6",
+    "secondary": "#bda690"
+  },
+  "effects": {
+    "glow": "0",
+    "depth": "100",
+    "trails": true,
+    "trailAlpha": "0.1"
+  },
+  "animation": {
+    "speed": "0.015",
+    "depth": "150",
+    "wobble": "0",
+    "pixelation": "2",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "0.15",
+        "offset": "0.79"
+      }
+    },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } },
+    { "rate": 1, "params": {}, "patch": { "target": "", "range": "1", "offset": "0" } }
+  ]
+}
