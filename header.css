@@ -128,20 +128,53 @@
 /* Modal content wrapper */
 .modal-content {
   position: relative;
-  background: #111; /* fallback */
+  background:transparent;
   margin: 5% auto;
-  padding: 20px;
-  width: 90%;
-  max-width: 1200px;
+  padding: 60px;
+  width: 100%;
   color: #fff;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   perspective: 1200px;
+  transform: translateY(-25px);
 }
 
-/* Binder background */
+/* H2 top left */
+#cdCollectionModal h2 {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+  font-family:'Courier New', Courier, monospace;
+  color: #fff;
+  z-index: 100; /* above everything ;*/
+}
+
+/* Close button top right */
+#cdCollectionModal .close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  z-index: 100; /* above everything */
+  transition: color 0.2s ease;
+}
+
+#cdCollectionModal .close:hover {
+  color: #ff4c4c;
+}
+
+
+
+
+/* Ultra-rich textured binder background */
 .cd-binder {
   position: relative;
   display: flex;
@@ -149,11 +182,53 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: #191612; /* woodish binder color */
+
+  /* Base dark leather color */
+  background-color: #18130c;
+
+  /* Multiple layered gradients for rich texture */
+  background-image: 
+    /* fine speckles */
+    radial-gradient(rgba(255,255,255,0.05) 0.5px, transparent 0.5px),
+    radial-gradient(rgba(0,0,0,0.05) 0.5px, transparent 0.5px),
+    /* larger noise for depth */
+    radial-gradient(rgba(255,255,255,0.03) 1.5px, transparent 1.5px),
+    radial-gradient(rgba(0,0,0,0.03) 1.5px, transparent 1.5px),
+    /* soft subtle highlight for leather sheen */
+    linear-gradient(120deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.02) 100%);
+  
+  /* Different scales for varied depth */
+  background-size: 2px 2px, 3px 3px, 6px 6px, 9px 9px, 100% 100%;
+  
+  background-blend-mode: overlay, overlay, overlay, overlay, overlay;
+
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  transform: translateX(-70px);
+  transform: translateX(0px);
 }
+
+/* Leather overlays */
+.binder-leather {
+  position: absolute;
+  top: 0;
+  width: 50%;          /* half the binder width */
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.19;       /* adjust for subtlety */
+  pointer-events: none;
+  filter: brightness(1.4) contrast(1.1); /* brighten and enhance texture */
+  z-index: 1;
+}
+
+/* Position left and right overlays */
+.binder-leather.left {
+  left: 0;
+}
+
+.binder-leather.right {
+  right: 0;
+}
+
 
 /* Page styling */
 .page {
@@ -233,6 +308,7 @@
    CD DISC
 ===================== */
 
+/* Make CD artwork punchier */
 .cd {
   width: 100%;
   height: 100%;
@@ -250,7 +326,11 @@
   /* Center hole */
   mask: radial-gradient(circle, transparent 50px, black 50px);
   -webkit-mask: radial-gradient(circle, transparent 50px, black 50px);
+
+  /* Boost visual impact */
+  filter: brightness(1.1) contrast(1.3) saturate(1.2);
 }
+
 
 /* Light streak overlay */
 .cd::before {
