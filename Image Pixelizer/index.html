@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pixel Forge</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside>
+  <h1>Pixel Forge</h1>
+
+  <input type="file" accept="image/png,video/*" id="upload">
+
+  <div class="group">
+    <label>Pixel Size</label>
+    <input type="range" id="pixelSize" min="2" max="64" value="8">
+  </div>
+
+  <div class="group">
+    <label>Saturation</label>
+    <input type="range" id="saturation" min="0" max="200" value="100">
+  </div>
+
+  <div class="group">
+    <label>Contrast</label>
+    <input type="range" id="contrast" min="50" max="200" value="100">
+  </div>
+
+  <div class="group">
+    <label>Brightness</label>
+    <input type="range" id="brightness" min="50" max="200" value="100">
+  </div>
+
+  <div class="group">
+    <label>Hue</label>
+    <input type="range" id="hue" min="0" max="360" value="0">
+  </div>
+
+  <div class="group">
+    <label>Invert</label>
+    <input type="range" id="invert" min="0" max="100" value="0">
+  </div>
+
+  <div class="group">
+    <label>Grayscale</label>
+    <input type="range" id="grayscale" min="0" max="100" value="0">
+  </div>
+
+  <div class="group">
+    <label>Sepia</label>
+    <input type="range" id="sepia" min="0" max="100" value="0">
+  </div>
+
+  <div class="group">
+    <label>Opacity</label>
+    <input type="range" id="opacity" min="0" max="100" value="100">
+  </div>
+
+  <div class="group">
+    <label>Noise</label>
+    <input type="range" id="noise" min="0" max="50" value="0">
+  </div>
+
+  <div class="group">
+    <label>Scanlines</label>
+    <input type="range" id="scanlines" min="0" max="20" value="0">
+  </div>
+
+  <div class="group">
+    <label>Posterize</label>
+    <input type="range" id="posterize" min="2" max="32" value="32">
+  </div>
+
+  <div class="group">
+    <label>Channel Shift</label>
+    <input type="range" id="channelShift" min="0" max="20" value="0">
+  </div>
+
+  <div class="group">
+    <label>Invert X</label>
+    <input type="checkbox" id="flipX">
+  </div>
+
+  <div class="group">
+    <label>Invert Y</label>
+    <input type="checkbox" id="flipY">
+  </div>
+
+  <div class="group">
+    <label>Blend Mode</label>
+    <select id="blendMode">
+      <option value="source-over">Normal</option>
+      <option value="multiply">Multiply</option>
+      <option value="screen">Screen</option>
+      <option value="overlay">Overlay</option>
+      <option value="difference">Difference</option>
+      <option value="lighter">Additive</option>
+    </select>
+  </div>
+
+  <button id="export">Export</button>
+</aside>
+
+<main>
+  <canvas id="canvas"></canvas>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

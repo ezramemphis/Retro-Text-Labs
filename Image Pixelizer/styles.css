@@ -1,0 +1,84 @@
+:root {
+  --bg: #0e0e0e;
+  --panel: #181818;
+  --accent: #7cffc4;
+  --text: #eaeaea;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  display: flex;
+  height: 100vh;
+}
+
+aside {
+  width: 300px;
+  background: var(--panel);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-right: 1px solid #222;
+  overflow-y: auto;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: var(--accent);
+}
+
+label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+input[type="range"],
+input[type="file"],
+button,
+select {
+  width: 100%;
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+button {
+  background: var(--accent);
+  border: none;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  background:
+      linear-gradient(45deg, #222 25%, transparent 25%),
+      linear-gradient(-45deg, #222 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #222 75%),
+      linear-gradient(-45deg, transparent 75%, #222 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+}
+
+canvas {
+  image-rendering: pixelated;
+  max-width: 90%;
+  max-height: 90%;
+  background: transparent;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

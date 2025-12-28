@@ -65,8 +65,10 @@ rel="stylesheet">
 <!-- CD Collection Modal -->
 <div id="cdCollectionModal" class="modal">
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>CD Collection</h2>
+    <img src="images/close-button-red.png" alt="Close" class="close">
+    <!-- Floating GIF instead of H2 -->
+<img src="images/cd-collection.gif" alt="CD Collection" class="cd-gif">
+
 
     <div class="cd-binder">
 
@@ -535,6 +537,11 @@ rel="stylesheet">
   <!-- Background Music -->
 <audio id="bgMusic" preload="auto"></audio>
 
+<!-- Sound Effects & Other Assets -->
+
+<audio id="cdHoverSound" src="assets/cd-hover.wav" preload="auto"></audio>
+
+
 <!-- Mobile Block Music -->
 <audio id="mobileMusic" preload="auto" loop>
   <source src="./music/Antibes-RTF-July-1963-autumn-leaves.mp3" type="audio/mpeg">
@@ -554,5 +561,79 @@ rel="stylesheet">
 
 
   <script src="script.js"></script>
+
+  <script>
+/* =====================
+   SIMPLE SOUND SYSTEM
+===================== */
+
+const SoundFX = {
+  unlocked: false,
+  sounds: {},
+
+  add(name, src, volume = 1) {
+    const audio = new Audio(src)
+    audio.volume = volume
+    this.sounds[name] = audio
+  },
+
+  play(name) {
+    if (!this.unlocked) return
+    const s = this.sounds[name]
+    if (!s) return
+    s.currentTime = 0
+    s.play().catch(() => {})
+  },
+
+  bind(selector, event, soundName) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.addEventListener(event, () => this.play(soundName))
+    })
+  },
+
+  unlock() {
+    if (this.unlocked) return
+    const first = Object.values(this.sounds)[0]
+    if (!first) return
+
+    first.play().then(() => {
+      first.pause()
+      first.currentTime = 0
+      this.unlocked = true
+      console.log("🔊 audio unlocked")
+    }).catch(() => {})
+  }
+}
+
+/* =====================
+   ADD SOUNDS
+===================== */
+
+SoundFX.add("cdHover", "assets/cd-hover.wav", 0.45)
+SoundFX.add("closeModal", "assets/retro-hit-1.wav", 0.6)
+SoundFX.add("restoreConfirm", "assets/complete-1.wav", 0.35)
+SoundFX.bind("#restoreYesBtn", "click", "restoreConfirm")
+SoundFX.add("restoreCancel", "assets/retro-hit-4.wav", 0.85)
+SoundFX.bind("#restoreCancelBtn", "click", "restoreCancel")
+
+
+/* =====================
+   UNLOCK AUDIO
+===================== */
+
+document.addEventListener("mousedown", () => {
+  SoundFX.unlock()
+}, { once: true })
+
+/* =====================
+   BIND SOUNDS
+===================== */
+
+SoundFX.bind(".cd-slot", "mouseenter", "cdHover")
+SoundFX.bind(".close", "click", "closeModal")
+
+</script>
+
+
 </body>
 </html>
