@@ -2202,3 +2202,132 @@ exportPresetConfirm.addEventListener("click", () => {
   // Close modal after export
   exportModal.style.display = "none";
 });
+
+
+// Script for random light glints on CDs 
+
+function generateCDLights() {
+  const passes = [];
+  const count = Math.floor(Math.random() * 3) + 8;
+
+  for (let i = 0; i < count; i++) {
+    const start = Math.random() * 360;
+    const width = Math.random() * 28 + 6;
+    const alpha = Math.random() * 0.18 + 0.04;
+
+    passes.push(
+      `conic-gradient(
+        from ${start}deg,
+        rgba(255,255,255,${alpha}) 0deg,
+        rgba(255,255,255,${alpha * 0.4}) ${width * 0.6}deg,
+        rgba(255,255,255,0) ${width}deg,
+        rgba(255,255,255,0) 360deg
+      )`
+    );
+  }
+
+  return passes.join(", ");
+}
+
+document.querySelectorAll("[data-cd]").forEach(cd => {
+  cd.style.setProperty("--cd-lights", generateCDLights());
+});
+
+
+
+// Export Videos and Screenshots Easy
+
+function captureScreenshot(scale = 1) {
+  requestAnimationFrame(() => {
+    const out = document.createElement("canvas");
+    out.width = canvas.width * scale;
+    out.height = canvas.height * scale;
+
+    const octx = out.getContext("2d");
+    octx.setTransform(scale, 0, 0, scale, 0, 0);
+    octx.drawImage(canvas, 0, 0);
+
+    out.toBlob(blob => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "visualizer.png";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, "image/png");
+  });
+}
+
+
+
+let recorder;
+let chunks = [];
+
+
+function startRecording({ fps = 60, bitrate = 45_000_000 } = {}) {
+  const stream = canvas.captureStream(fps);
+
+  recorder = new MediaRecorder(stream, {
+    mimeType: "video/webm; codecs=vp9",
+    videoBitsPerSecond: bitrate
+  });
+
+  chunks = [];
+
+  recorder.ondataavailable = e => {
+    if (e.data.size) chunks.push(e.data);
+  };
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "visualizer.webm";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+  recorder.start();
+}
+
+function stopRecording() {
+  recorder?.stop();
+}
+
+
+
+
+
+let captureScale = 1;
+
+function setCaptureScale(scale) {
+  renderCanvas.width  = PRESETS["4K"][0] * scale;
+  renderCanvas.height = PRESETS["4K"][1] * scale;
+}
+
+
+if (frameEnabled) {
+  rctx.drawImage(
+    frameImage,
+    0,
+    0,
+    renderCanvas.width,
+    renderCanvas.height
+  );
+}
+
+const PRESETS = {
+  "1080p": [1920, 1080],
+  "1440p": [2560, 1440],
+  "4K":    [3840, 2160]
+};
+
+function setPreset(name) {
+  const [w, h] = PRESETS[name];
+  renderCanvas.width = w;
+  renderCanvas.height = h;
+}
+
+

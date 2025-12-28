@@ -42,6 +42,7 @@ rel="stylesheet">
     <a href="https://www.buymeacoffee.com/ezrabennett" target="_blank">Buy Me Coffee</a>
     <a href="https://instagram.com/retrotextlab" target="_blank">Instagram</a>
     <a href="https://discord.gg/ER2kz3m9" target="_blank">Discord</a>
+
   </div>
 
   <div class="header-center">
@@ -66,48 +67,55 @@ rel="stylesheet">
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>CD Collection</h2>
+
     <div class="cd-binder">
 
-      <!-- Left Page -->
+      <!-- LEFT PAGE -->
       <div class="page left">
         <div class="cd-grid">
-          <div class="cd-slot" style="top: 0; left: 0;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd1.jpg')"></div>
-            <div class="cd-template"></div>
+          <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd1.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
-          <div class="cd-slot" style="top: 0; left: 50%;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd2.jpg')"></div>
-            <div class="cd-template"></div>
+
+          <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd2.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
-          <div class="cd-slot" style="top: 50%; left: 0;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd3.jpg')"></div>
-            <div class="cd-template"></div>
+
+          <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd3.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
-          <div class="cd-slot" style="top: 50%; left: 50%;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd4.jpg')"></div>
-            <div class="cd-template"></div>
+
+          <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd4.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
         </div>
       </div>
 
-      <!-- Right Page -->
+      <!-- RIGHT PAGE -->
       <div class="page right">
         <div class="cd-grid">
-          <div class="cd-slot" style="top: 0; left: 0;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd5.jpg')"></div>
-            <div class="cd-template"></div>
+          <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd5.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
-          <div class="cd-slot" style="top: 0; left: 50%;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd6.jpg')"></div>
-            <div class="cd-template"></div>
+
+          <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd6.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
-          <div class="cd-slot" style="top: 50%; left: 0;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd7.jpg')"></div>
-            <div class="cd-template"></div>
+
+          <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd7.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
-          <div class="cd-slot" style="top: 50%; left: 50%;">
-            <div class="cd-cover" style="background-image: url('images/CD/cd8.jpg')"></div>
-            <div class="cd-template"></div>
+
+          <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
+            <div class="cd" data-cd style="--art:url('images/CD/cd8.jpg')"></div>
+            <div class="hub-ring"></div>
           </div>
         </div>
       </div>
@@ -115,6 +123,7 @@ rel="stylesheet">
     </div>
   </div>
 </div>
+
 
 
 
@@ -493,7 +502,15 @@ rel="stylesheet">
   </table>
 </div>
 
+<h3>Export Video & Photo</h3>
+<div class="capture-ui">
+  <button onclick="captureScreenshot()">Screenshot</button>
+  <button onclick="startRecording()">Record</button>
+  <button onclick="stopRecording()">Stop</button>
 
+  <button onclick="setCaptureScale(1)">1×</button>
+  <button onclick="setCaptureScale(2)">2×</button>
+</div>
 
   </aside>
 

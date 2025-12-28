@@ -170,78 +170,154 @@
   transform: translateX(0px);
 }
 
-/* CD grid inside each page */
+:root {
+  --cd-size: 280px;
+}
+
+/* =====================
+   GRID / LAYOUT
+===================== */
+
+.cd-binder {
+  display: flex;
+  gap: 40px;
+}
+
+.page {
+  width: 600px;
+  height: 600px;
+  position: relative;
+}
+
 .cd-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 0px 20px; /* fine-tune horizontal & vertical spacing */
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 30px 40px;
   width: 100%;
   height: 100%;
-  position: relative;
-  z-index: 2;
-  padding: 0px 0px; /* adjust to center properly */
+  place-items: center;
 }
 
-/* CD Slot */
+/* =====================
+   CD SLOT (container)
+===================== */
+
 .cd-slot {
-  position: absolute;
-  width: 280px;   /* smaller for fit */
-  height: 280px;
-  border-radius: 50%;
+  width: var(--cd-size);
+  height: var(--cd-size);
+  position: relative;
   cursor: pointer;
-  transition: transform 0.3s;
-  background-size: cover;
-  background-position: center;
-  z-index: 2;
+  transition: transform 0.3s ease;
+
+  /* Per-CD alignment controls */
+  transform:
+    translate(
+      var(--offset-x, 0px),
+      var(--offset-y, 0px)
+    );
 }
 
-/* Hover rotation */
+
 .cd-slot:hover {
-  transform: rotate(10deg);
-}
-
-/* Optional: CD template layer */
-.cd-slot::after {
-  content: '';
-  position: absolute;
-  top: -20px; left: -20px;
-  width: 115%; height: 115%;
-  background-image: url('../images/CD/cd-template.png');
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
-  z-index: 1;
-  pointer-events: none;
-  opacity: .4;
+  transform:
+    translate(
+      var(--offset-x, 0px),
+      var(--offset-y, 0px)
+    )
+    rotate(10deg);
 }
 
 
-/* Album cover behind the template */
-.cd-cover {
-  position: absolute;
-  top: 0; left: 0;
+/* =====================
+   CD DISC
+===================== */
+
+.cd {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  z-index: 1;
+  position: relative;
+
+  background:
+    var(--cd-lights),
+    var(--art) center / cover;
+
+  box-shadow:
+    inset 0 0 25px rgba(0,0,0,0.4),
+    0 10px 30px rgba(0,0,0,0.3);
+
+  /* Center hole */
+  mask: radial-gradient(circle, transparent 50px, black 50px);
+  -webkit-mask: radial-gradient(circle, transparent 50px, black 50px);
 }
 
-/* CD template on top with hole + hub baked in */
-.cd-template {
+/* Light streak overlay */
+.cd::before {
+  content: "";
   position: absolute;
-  top: -13px; left: -17px;
-  width: 110%;
-  height: 110%;
+  inset: 0;
   border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  z-index: 2;
-  pointer-events: none; /* allow hover rotation to pass through */
-  opacity: 0.3;
+  background: linear-gradient(
+    170deg,
+    rgba(26,26,26,0.58) 0%,
+    rgba(255,255,255,0.64) 41%,
+    rgba(255,255,255,0.79) 45%,
+    rgba(117,117,117,0.58) 57%,
+    rgba(132,132,132,0.44) 60%,
+    rgba(255,255,255,0.96) 100%
+  );
+  opacity: 0.1;
+  pointer-events: none;
 }
+
+/* Outer disc rim */
+.cd::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(110,110,110,0.35);
+  pointer-events: none;
+}
+
+/* =====================
+   HUB RING
+===================== */
+
+.hub-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    transparent 34%,
+    rgba(255,255,255,0.35) 34%,
+    rgba(255,255,255,0.20) 100%
+  );
+
+  box-shadow:
+    inset 0 0 4px rgba(255,255,255,0.35),
+    inset 0 0 6px rgba(0,0,0,0.25);
+
+  pointer-events: none;
+}
+
+/* Inner hole border */
+.hub-ring::before {
+  content: "";
+  position: absolute;
+  inset: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+  opacity: 0.4;
+}
+
 
 
 

@@ -1,0 +1,147 @@
+:root {
+  --cd-size: 280px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, #54869d, #171619);
+}
+
+h1 {
+  position: absolute; /* remove from normal flow */
+  top: 20px;          /* distance from top of page */
+  left: 50%;          /* center horizontally */
+  transform: translateX(-50%); /* perfectly centered */
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;          /* remove default spacing */
+  z-index: 20;        /* make sure it’s above other elements */
+}
+
+
+/* Side-by-side layout */
+.compare {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+/* CD slot with hover rotation */
+.cd-slot {
+  width: var(--cd-size);
+  height: var(--cd-size);
+  position: relative;
+  transition: transform 0.25s ease;
+}
+
+.cd-slot:hover {
+  transform: rotate(10deg);
+}
+
+/* Template image */
+.cd-template {
+  width: calc(var(--cd-size) * 1.1);
+  height: calc(var(--cd-size) * 1.1);
+  object-fit: contain;
+}
+
+
+/* CD itself */
+.cd {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.5); /* 1px semi-transparent border */
+
+
+  background:
+    var(--cd-lights),
+    var(--art) center / cover;
+
+  box-shadow:
+    inset 0 0 25px rgba(0,0,0,0.4),
+    0 10px 30px rgba(0,0,0,0.3);
+
+  /* Make hole slightly bigger to fit hub ring underneath */
+  mask: radial-gradient(circle, transparent 50px, black 50px);
+  -webkit-mask: radial-gradient(circle, transparent 50px, black 50px);
+}
+
+/* Linear streak overlay (non-rotating) */
+.cd::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    170deg,
+    rgba(26,26,26,0.58) 0%,
+    rgba(255,255,255,0.64) 41%,
+    rgba(255,255,255,0.79) 45%,
+    rgba(117,117,117,0.58) 57%,
+    rgba(132,132,132,0.44) 60%,
+    rgba(255,255,255,0.96) 100%
+  );
+  pointer-events: none;
+  opacity: 0.3; /* change this value to tune transparency */
+}
+
+
+/* Outer border overlay */
+.cd::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2.2px solid rgba(109, 109, 109, 0.3); /* obvious border */
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Hub ring overlay */
+.hub-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;   /* Outer diameter of hub ring */
+  height: 100px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+
+  /* Transparent plastic look */
+  background: radial-gradient(
+    circle,
+    transparent 34%,          /* inner hole */
+    rgba(255, 255, 255, 0.35) 34%, /* ring itself */
+    rgba(255, 255, 255, 0.20) 100%
+  );
+
+  box-shadow:
+    inset 0 0 4px rgba(255,255,255,0.35),
+    inset 0 0 6px rgba(0,0,0,0.25);
+
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Inner 1px border around hole */
+.hub-ring::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 48px;    /* Slightly smaller than hub ring */
+  height: 48px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5); /* semi-bright border */
+  background: transparent;
+  pointer-events: none;
+  opacity: .4;
+}
+
+
