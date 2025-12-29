@@ -624,13 +624,17 @@ const SoundFX = {
 
 SoundFX.add("cdHover", "assets/cd-hover.wav", 0.3) // add cd hover sound effect
 SoundFX.add("closeModal", "assets/retro-hit-1.wav", 0.6)
-SoundFX.add("restoreConfirm", "assets/complete-1.wav", 0.25)
+SoundFX.add("restoreConfirm", "assets/complete-1.wav", 0.2)
 SoundFX.bind("#restoreYesBtn", "click", "restoreConfirm")
 SoundFX.add("restoreCancel", "assets/retro-hit-4.wav", 0.85)
 SoundFX.bind("#restoreCancelBtn", "click", "restoreCancel")
 SoundFX.add("button1", "assets/button-1.wav", 0.6) // add my 3 button effects
 SoundFX.add("button2", "assets/button-2.wav", 0.6)
 SoundFX.add("button3", "assets/button-3.wav", 0.6)
+SoundFX.add("button4", "assets/button-4.wav", 0.5)
+SoundFX.add("button5", "assets/button-5.wav", 0.4)
+SoundFX.add("button7", "assets/button-7.wav", 0.5)
+SoundFX.add("button8", "assets/button-8.wav", 0.5)
 
 
 
@@ -673,7 +677,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-const buttonSoundPool = ["button1", "button2", "button3"]
+const buttonSoundPool = ["button1", "button2", "button3", "button4", "button5", "button7", "button8"]
 
 const CLICK_SOUND_TARGETS = [
   "#cdCollectionBtn",

@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "text": {
+    "value": "..........................",
+    "font": "serif",
+    "mode": "orbit",
+    "color": "#66ff85"
+  },
+  "background": {
+    "type": "hexStars",
+    "primary": "#a36262",
+    "secondary": "#2e0a0a"
+  },
+  "effects": {
+    "glow": "20",
+    "depth": "100",
+    "trails": true,
+    "trailAlpha": "0.1"
+  },
+  "animation": {
+    "speed": "0.023",
+    "depth": "45",
+    "wobble": "19",
+    "pixelation": "2",
+    "fps": "60"
+  },
+  "lfos": [
+    {
+      "rate": 0.15,
+      "params": {},
+      "patch": {
+        "target": "Hue: Primary Color",
+        "range": "1",
+        "offset": "0"
+      }
+    },
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "",
+        "range": "1",
+        "offset": "0"
+      }
+    },
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "",
+        "range": "1",
+        "offset": "0"
+      }
+    },
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "",
+        "range": "1",
+        "offset": "0"
+      }
+    },
+    {
+      "rate": 1,
+      "params": {},
+      "patch": {
+        "target": "",
+        "range": "1",
+        "offset": "0"
+      }
+    }
+  ]
+}

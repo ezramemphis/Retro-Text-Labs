@@ -1287,8 +1287,7 @@ const backgroundTracks = [
   "./music/jays-inspiration-retro.mp3",
   "./music/lady-bird-retro.mp3",
   "./music/lose-aretes-de-la-luna-retro.mp3", 
-  "./music/mouthful-retro.mp3",
-  "./music/queen-lizzy-retro.mp3"
+  "./music/mouthful-retro.mp3"
 ];
 
 const MOBILE_TRACK =
@@ -1945,7 +1944,7 @@ const PRESET_INDEX = {
     { name: "Color Melt", file: "color-melt.json" },
     { name: "Neon Mirage", file: "neon-mirage.json" },
     { name: "Optic Spiral", file: "optic-spiral.json" },
-    { name: "Phase Garden", file: "phase-garden.json" },
+    { name: "Magic Ring", file: "magic-ring.json" },
     { name: "Chromatic Pulse", file: "chromatic-pulse.json" },
     { name: "Dream Fractals", file: "dream-fractals.json" },
     { name: "Electric Bloom", file: "electric-bloom.json" },
