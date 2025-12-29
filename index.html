@@ -116,12 +116,12 @@ rel="stylesheet">
           </div>
 
           <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd7.jpg')"></div>
+            <div class="cd" data-cd style="--art:url('images/CD/cd7.png')"></div>
             <div class="hub-ring"></div>
           </div>
  
           <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd8.jpeg')"></div>
+            <div class="cd" data-cd style="--art:url('images/CD/cd8.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
         </div>
@@ -585,6 +585,17 @@ const SoundFX = {
     s.play().catch(() => {})
   },
 
+  playRandom(names) {
+  if (!this.unlocked) return
+  const pick = names[Math.floor(Math.random() * names.length)]
+  const s = this.sounds[pick]
+  if (!s) return
+
+  s.playbackRate = 0.95 + Math.random() * 0.1
+  s.currentTime = 0
+  s.play().catch(() => {})
+},
+
   bind(selector, event, soundName) {
     document.querySelectorAll(selector).forEach(el => {
       el.addEventListener(event, () => this.play(soundName))
@@ -605,16 +616,22 @@ const SoundFX = {
   }
 }
 
+
+
 /* =====================
    ADD SOUNDS
 ===================== */
 
-SoundFX.add("cdHover", "assets/cd-hover.wav", 0.45)
+SoundFX.add("cdHover", "assets/cd-hover.wav", 0.45) // add cd hover sound effect
 SoundFX.add("closeModal", "assets/retro-hit-1.wav", 0.6)
 SoundFX.add("restoreConfirm", "assets/complete-1.wav", 0.35)
 SoundFX.bind("#restoreYesBtn", "click", "restoreConfirm")
 SoundFX.add("restoreCancel", "assets/retro-hit-4.wav", 0.85)
 SoundFX.bind("#restoreCancelBtn", "click", "restoreCancel")
+SoundFX.add("button1", "assets/button-1.wav", 0.6) // add my 3 button effects
+SoundFX.add("button2", "assets/button-2.wav", 0.6)
+SoundFX.add("button3", "assets/button-3.wav", 0.6)
+
 
 
 /* =====================
@@ -631,6 +648,62 @@ document.addEventListener("mousedown", () => {
 
 SoundFX.bind(".cd-slot", "mouseenter", "cdHover")
 SoundFX.bind(".close", "click", "closeModal")
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  SoundFX.bind(".cd-slot", "mouseenter", "cdHover")
+  SoundFX.bind(".close", "click", "closeModal")
+
+  const buttonSoundPool = ["button1", "button2", "button3"]
+
+  [
+    "#cdCollectionBtn",
+    "#burnCdBtn",
+    "#muteBtn",
+    "#shuffleBtn",
+    "#devNotesBtn"
+  ].forEach(selector => {
+    const btn = document.querySelector(selector)
+    if (!btn) return
+
+    btn.addEventListener("click", () => {
+      SoundFX.playRandom(buttonSoundPool)
+    })
+  })
+
+})
+
+const buttonSoundPool = ["button1", "button2", "button3"]
+
+const CLICK_SOUND_TARGETS = [
+  "#cdCollectionBtn",
+  "#burnCdBtn",
+  "#muteBtn",
+  "#shuffleBtn",
+  "#devNotesBtn",
+  "#swapColors",
+  "#importPresetInput",
+  "#exportPresetBtn",
+  "#restoreDefaultBtn",
+  "#toggleSpin",
+  ".capture-ui"
+].join(", ")
+
+document.addEventListener(
+  "click",
+  (e) => {
+    const btn = e.target.closest(CLICK_SOUND_TARGETS)
+    if (!btn) return
+
+    SoundFX.unlock()
+    SoundFX.playRandom(buttonSoundPool)
+  },
+  true // 👈 CAPTURE PHASE (the magic stays)
+)
+
+
+
+
 
 </script>
 

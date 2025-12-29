@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visualizer Hub</title>
+  <link rel="stylesheet" href="homepage.css" />
+</head>
+<body>
+
+  <!-- LEFT PANEL -->
+  <aside class="side-panel left">
+    <h2>News</h2>
+
+    <div class="news-item">
+      <h3>Visualizer v1.4 Update</h3>
+      <p>New CD reflections + performance boosts.</p>
+    </div>
+
+    <div class="news-item">
+      <h3>Weekly Winner</h3>
+      <p>User <strong>AnalogDreams</strong> took #1 this week.</p>
+    </div>
+
+    <div class="news-item">
+      <h3>CD Shop Drop</h3>
+      <p>New artist CDs available now.</p>
+    </div>
+  </aside>
+
+
+  <!-- RIGHT PANEL -->
+  <aside class="side-panel right">
+    <h2>Community</h2>
+
+    <div class="ranking">
+      <h3>Top Visualizers</h3>
+      <ol>
+        <li>Neon Static</li>
+        <li>Ghost Frequencies</li>
+        <li>Chrome Bloom</li>
+      </ol>
+    </div>
+
+    <div class="search">
+      <h3>Search Visualizers</h3>
+      <input type="text" placeholder="Search by name or user..." />
+    </div>
+  </aside>
+
+
+  <!-- CENTER CONTENT -->
+  <main class="center-content">
+
+    <h1 class="featured-title">Visualizer of the Week</h1>
+
+    <div class="featured-visualizer">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="featured-meta">
+      User: <strong>Ezra Bennett</strong>
+    </div>
+
+    <div class="cta-buttons">
+      <button id="startBtn">PRESS TO START</button>
+      <button id="shopBtn">CD SHOP</button>
+    </div>
+
+  </main>
+
+  <script src="homepage.js"></script>
+</body>
+</html>

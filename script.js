@@ -1258,118 +1258,144 @@ function pixelate() {
 }
 
 
-// Background Music
+// ===============================
+// MUSIC CONTROLLER
+// ===============================
 
 // === Elements ===
 const bgMusic = document.getElementById("bgMusic");
 const mobileMusic = document.getElementById("mobileMusic");
+const muteBtn = document.getElementById("muteBtn");
+const shuffleBtn = document.getElementById("shuffleBtn");
 
-// === Track List ===
+// === Config ===
+const BG_VOLUME = 0.2;       // real quiet background level
+const MOBILE_VOLUME = 0.15;
+
 const backgroundTracks = [
-  "./music/honey-suckle.mp3", // Always first
-  "./music/honey-suckle.mp3",
-  "./music/honey-suckle.mp3",
-  "./music/honey-suckle.mp3",
-  "./music/honey-suckle.mp3"
+  "./music/honey-suckle.mp3", // always first
+  "./music/retro-billies-bounce.mp3",
+  "./music/retro-jazz-piano1.mp3",
+  "./music/retro-ketamina.mp3",
+  "./music/25-retro.mp3", 
+  "./music/autumn-in-new-york-retro.mp3",
+  "./music/brahms1-retro.mp3",
+  "./music/bugs-interlude-retro.mp3",
+  "./music/caravan-retro.mp3", 
+  "./music/dont-look-now-retro.mp3",
+  "./music/harry-potter-retro.mp3",
+  "./music/jays-inspiration-retro.mp3",
+  "./music/lady-bird-retro.mp3",
+  "./music/lose-aretes-de-la-luna-retro.mp3", 
+  "./music/mouthful-retro.mp3",
+  "./music/queen-lizzy-retro.mp3"
 ];
 
-// === Mobile Detection ===
+const MOBILE_TRACK =
+  "./music/Antibes-RTF-July-1963-autumn-leaves.mp3";
+
+// === State ===
 const isMobileBlocked = window.matchMedia("(max-width: 1024px)").matches;
-
-// === Background Music Logic ===
 let isFirstTrack = true;
+let isMuted = localStorage.getItem("retroTextLabMuted") === "true";
 
-function playBackgroundMusic() {
-  let track;
+// ===============================
+// INIT
+// ===============================
 
+// Apply base volumes ONCE
+bgMusic.volume = BG_VOLUME;
+mobileMusic.volume = MOBILE_VOLUME;
+
+// Apply mute ONCE
+bgMusic.muted = isMuted;
+mobileMusic.muted = isMuted;
+
+// Update button text
+muteBtn.textContent = isMuted ? "UNMUTE" : "MUTE";
+
+// ===============================
+// DESKTOP BACKGROUND MUSIC
+// ===============================
+function getNextTrack() {
   if (isFirstTrack) {
-    track = backgroundTracks[0]; // Always play first
     isFirstTrack = false;
-  } else {
-    const remainingTracks = backgroundTracks.slice(1);
-    track = remainingTracks[Math.floor(Math.random() * remainingTracks.length)];
+    return backgroundTracks[0];
   }
 
-  bgMusic.src = track;
-  bgMusic.volume = 0.25;
+  const remaining = backgroundTracks.slice(1);
+  return remaining[Math.floor(Math.random() * remaining.length)];
+}
+
+function playBackgroundMusic() {
+  bgMusic.src = getNextTrack();
   bgMusic.loop = false;
 
+  // Re-lock mute after src change
+  bgMusic.muted = isMuted;
+
   bgMusic.play().catch(() => {
-    // Autoplay blocked until user interaction
     document.addEventListener("click", resumeBgMusic, { once: true });
   });
-
-  bgMusic.onended = playBackgroundMusic;
 }
 
 function resumeBgMusic() {
+  bgMusic.muted = isMuted;
   bgMusic.play().catch(() => {});
 }
 
-// === Mobile Music Logic ===
+// Auto-play next track
+bgMusic.addEventListener("ended", playBackgroundMusic);
+
+// ===============================
+// MOBILE HOLD MUSIC
+// ===============================
 function playMobileMusic() {
-  mobileMusic.volume = 0.3;
+  mobileMusic.src = MOBILE_TRACK;
   mobileMusic.loop = true;
-  mobileMusic.src = "./music/Antibes-RTF-July-1963-autumn-leaves.mp3";
+  mobileMusic.muted = isMuted;
 
   mobileMusic.play().catch(() => {
-    document.addEventListener("click", () => {
-      mobileMusic.play().catch(() => {});
-    }, { once: true });
+    document.addEventListener(
+      "click",
+      () => mobileMusic.play().catch(() => {}),
+      { once: true }
+    );
   });
 }
 
-// === Decide what to play ===
+// ===============================
+// START CORRECT SYSTEM
+// ===============================
 if (isMobileBlocked) {
   playMobileMusic();
 } else {
   playBackgroundMusic();
 }
 
+// ===============================
+// CONTROLS
+// ===============================
 
-const muteBtn = document.getElementById("muteBtn");
-const shuffleBtn = document.getElementById("shuffleBtn");
-
-// Load saved mute status from localStorage
-let isMuted = localStorage.getItem("retroTextLabMuted") === "true";
-
-// Apply mute status immediately
-bgMusic.volume = isMuted ? 0 : 0.25;
-mobileMusic.volume = isMuted ? 0 : 0.3;
-
-// Update button text
-muteBtn.textContent = isMuted ? "UNMUTE" : "MUTE";
-
-// Mute / Unmute toggle
+// Mute toggle
 muteBtn.addEventListener("click", () => {
   isMuted = !isMuted;
 
-  // Apply volume
-  bgMusic.volume = isMuted ? 0 : 0.25;
-  mobileMusic.volume = isMuted ? 0 : 0.3;
+  bgMusic.muted = isMuted;
+  mobileMusic.muted = isMuted;
 
-  // Save to localStorage
   localStorage.setItem("retroTextLabMuted", isMuted);
-
-  // Update button text
   muteBtn.textContent = isMuted ? "UNMUTE" : "MUTE";
 });
 
-
-// Shuffle next track
+// Shuffle (desktop only)
 shuffleBtn.addEventListener("click", () => {
-  if (!isMobileBlocked) {
-    // Stop current music immediately
-    bgMusic.pause();
+  if (isMobileBlocked) return;
 
-    // Play a random track (excluding first track if needed)
-    let remainingTracks = backgroundTracks.slice(1);
-    let track = remainingTracks[Math.floor(Math.random() * remainingTracks.length)];
-    bgMusic.src = track;
-    bgMusic.volume = isMuted ? 0 : 0.25;
-    bgMusic.play();
-  }
+  bgMusic.pause();
+  playBackgroundMusic();
 });
+
 
 
 // CD Open/Close modal
