@@ -1332,20 +1332,8 @@ const BG_VOLUME = 0.2;       // real quiet background level
 const MOBILE_VOLUME = 0.15;
 
 const backgroundTracks = [
-  "./music/honey-suckle.mp3", // always first
+  "./music/honey-sucle.mp3", // always first
   "./music/retro-billies-bounce.mp3",
-  "./music/retro-jazz-piano1.mp3",
-  "./music/retro-ketamina.mp3",
-  "./music/25-retro.mp3", 
-  "./music/autumn-in-new-york-retro.mp3",
-  "./music/brahms1-retro.mp3",
-  "./music/bugs-interlude-retro.mp3",
-  "./music/caravan-retro.mp3", 
-  "./music/dont-look-now-retro.mp3",
-  "./music/harry-potter-retro.mp3",
-  "./music/jays-inspiration-retro.mp3",
-  "./music/lady-bird-retro.mp3",
-  "./music/lose-aretes-de-la-luna-retro.mp3", 
   "./music/mouthful-retro.mp3"
 ];
 
