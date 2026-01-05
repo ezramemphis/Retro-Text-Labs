@@ -170,7 +170,7 @@ function updateTransportUI() {
   const img = btn.querySelector("img");
   if (!img) return;
 
-  img.src = CDPlayer.isPlaying ? "images/pause-button.png" : "images/play-button.png";
+  img.src = CDPlayer.isPlaying ? "images/pause-button.PNG" : "images/play-button.PNG";
 }
 
 
