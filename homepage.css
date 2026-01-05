@@ -770,3 +770,16 @@ body {
   border-radius: 3px;
 }
 
+
+/* ============================= */
+/* RESPONSIVE: HIDE PANELS ON SMALL SCREENS */
+/* ============================= */
+@media (max-width: 1160px) {
+  .side-panel {
+    display: none;
+  }
+
+  body {
+    flex-direction: column;
+  }
+}

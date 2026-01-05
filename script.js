@@ -1,3 +1,5 @@
+let frameEnabled = false;
+
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
 
@@ -64,12 +66,25 @@ bgImageInput.addEventListener("change", e => {
   reader.readAsDataURL(file)
 })
 
+
 function drawBackground() {
   const w = canvas.width;
   const h = canvas.height;
 
   let color1 = bgColor.value;
   const color2 = bgGradient.value;
+
+  // To help the image color burn effect
+function safeHexToRGB(hex) {
+  if (!hex || hex[0] !== "#" || hex.length !== 7) {
+    return { r: 0, g: 0, b: 0 };
+  }
+  return {
+    r: parseInt(hex.slice(1, 3), 16),
+    g: parseInt(hex.slice(3, 5), 16),
+    b: parseInt(hex.slice(5, 7), 16)
+  };
+}
 
   // Apply LFO patches
 lfos.forEach(lfo => {
@@ -724,6 +739,50 @@ case "glitchSquares":
     ctx.fillRect(x+Math.random()*5,y+Math.random()*5,s,s);
   }
   break;
+
+  case "binaryThreshold":
+  if (!bgImage) {
+    ctx.fillStyle = color1;
+    ctx.fillRect(0, 0, w, h);
+    break;
+  }
+
+  // draw image
+  ctx.drawImage(bgImage, 0, 0, w, h);
+
+  // read pixels
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const data = imgData.data;
+
+  const c1 = safeHexToRGB(color1);
+  const c2 = safeHexToRGB(color2);
+
+  const threshold = 128;
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+
+    const brightness =
+      0.2126 * r +
+      0.7152 * g +
+      0.0722 * b;
+
+    if (brightness > threshold) {
+      data[i]     = c1.r;
+      data[i + 1] = c1.g;
+      data[i + 2] = c1.b;
+    } else {
+      data[i]     = c2.r;
+      data[i + 1] = c2.g;
+      data[i + 2] = c2.b;
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+  break;
+
 
 
     case "image":
@@ -2265,12 +2324,13 @@ document.querySelectorAll("[data-cd]").forEach(cd => {
 function captureScreenshot(scale = 1) {
   requestAnimationFrame(() => {
     const out = document.createElement("canvas");
-    out.width = canvas.width * scale;
-    out.height = canvas.height * scale;
+    out.width  = 1192 * scale;
+    out.height = 766  * scale;
+
 
     const octx = out.getContext("2d");
     octx.setTransform(scale, 0, 0, scale, 0, 0);
-    octx.drawImage(canvas, 0, 0);
+    octx.drawImage(canvas, 0, 0, out.width, out.height);
 
     out.toBlob(blob => {
       const a = document.createElement("a");
@@ -2289,6 +2349,11 @@ let chunks = [];
 
 
 function startRecording({ fps = 60, bitrate = 45_000_000 } = {}) {
+
+  // ✅ FORCE VIDEO RESOLUTION
+  canvas.width  = 1192;
+  canvas.height = 766;
+
   const stream = canvas.captureStream(fps);
 
   recorder = new MediaRecorder(stream, {
@@ -2316,6 +2381,7 @@ function startRecording({ fps = 60, bitrate = 45_000_000 } = {}) {
 
   recorder.start();
 }
+
 
 function stopRecording() {
   recorder?.stop();
@@ -2358,3 +2424,120 @@ function setPreset(name) {
 
 
 
+// ============================
+// Advanced Panel Controls
+// ============================
+const advancedPanel = document.getElementById("advancedPanel");
+const panelColorPicker = document.getElementById("panelColorPicker");
+const textureSelect = document.getElementById("panelTextureSelect");
+const accentColorPicker = document.getElementById("accentColorPicker");
+const panelOpacity = document.getElementById("panelOpacity");
+
+const controls = document.getElementById("controls");
+const textures = document.querySelectorAll(".controls-texture");
+
+// Panel textures
+const panelTextures = {
+  none: 'none',
+  concrete: 'url("images/concrete-1.jpeg")',
+  plastic: 'url("images/plastic-1.jpeg")',
+  plastic2: 'url("images/plastic-2.jpg")'
+};
+
+// ----------------------
+// Toggle advanced panel
+// ----------------------
+document.addEventListener("keydown", (e) => {
+  if (e.shiftKey && e.metaKey && e.key.toLowerCase() === "k") {
+    e.preventDefault();
+    advancedPanel.classList.toggle("visible");
+  }
+});
+
+// ----------------------
+// Panel color update
+// ----------------------
+panelColorPicker.addEventListener("input", (e) => {
+  document.documentElement.style.setProperty("--panel", e.target.value);
+});
+
+// ----------------------
+// Panel texture update
+// ----------------------
+textureSelect.addEventListener("change", (e) => {
+  const value = e.target.value;
+  const texture = panelTextures[value];
+
+  // Update CSS variable
+  document.documentElement.style.setProperty("--panel-texture", texture);
+
+  // Update all .controls-texture layers
+  textures.forEach(tex => {
+    tex.style.backgroundImage = texture !== "none" ? texture : "";
+  });
+});
+
+// ----------------------
+// Accent color update
+// ----------------------
+accentColorPicker?.addEventListener("input", (e) => {
+  document.documentElement.style.setProperty("--accent", e.target.value);
+});
+
+// ----------------------
+// Panel opacity update
+// ----------------------
+panelOpacity?.addEventListener("input", (e) => {
+  const value = e.target.value;
+  controls.style.background = `rgba(20,20,20,${value})`;
+});
+
+// ----------------------
+// Adjust texture height to match content
+// ----------------------
+function updateTextureHeight() {
+  textures.forEach(tex => {
+    tex.style.height = controls.scrollHeight + "px";
+  });
+}
+
+// Initial set
+updateTextureHeight();
+
+// Update on resize
+window.addEventListener("resize", updateTextureHeight);
+
+
+// ============================
+// Side Menu / CD Volume
+// ============================
+const menuBtn = document.getElementById("menuBtn");
+const sideMenuPanel = document.getElementById("sideMenuPanel");
+const cdVolume = document.getElementById("cdVolume");
+const themeSelect = document.getElementById("themeSelect");
+
+// Toggle side menu
+menuBtn?.addEventListener("click", () => {
+  sideMenuPanel.classList.toggle("visible");
+});
+
+// CD Volume control (link to actual CD player audio if needed)
+cdVolume?.addEventListener("input", (e) => {
+  const volume = e.target.value / 100;
+  console.log("CD Volume:", volume);
+  // Example: myCdPlayerAudio.volume = volume;
+});
+
+// Theme selector
+themeSelect?.addEventListener("change", (e) => {
+  const theme = e.target.value;
+  console.log("Selected theme:", theme);
+  // Example: update CSS variables or classes here
+});
+
+// To make home button work
+const homeBtn = document.getElementById("homeBtn");
+
+homeBtn.addEventListener("click", () => {
+  window.location.href = "homepage.html"; // redirect to homepage
+});

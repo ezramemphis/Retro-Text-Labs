@@ -5,9 +5,17 @@
   --text: #eaeaea;
 }
 
+
 @font-face {
   font-family: 'RetroFont';
   src: url('./fonts/retrofunk.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Righteous';
+  src: url('./fonts/Righteous-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -29,10 +37,14 @@ body {
   cursor: default;
 }
 
+
 /* === Controls Panel === */
+/* Controls panel */
 #controls {
   grid-row: 2;
-  background: var(--panel);
+  position: relative;
+
+  background: var(--panel); /* base color controlled by color picker */
   padding: 16px;
   overflow-y: auto;
   box-shadow: inset -1px 0 0 rgba(255,255,255,0.06);
@@ -40,30 +52,113 @@ body {
   height: calc(100vh - 36px);
 }
 
-#controls > h2 {
+/* texture layer (on top of panel color) */
+.controls-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 95%;  /* crop a little at bottom */
+
+  background-image: url("images/plastic-2.jpg");
+  background-repeat: repeat;
+  background-size: 120% auto;
+  background-position: top left;
+
+  opacity: 0.05;             /* subtle effect */
+  mix-blend-mode: difference; /* lets base color show through */
+  
+  filter: contrast(1) brightness(0.5) saturate(0.5);
+
+  pointer-events: none;
+  z-index: 1; /* sits above panel background but below content */
+}
+
+
+
+
+
+
+/* make content sit above texture */
+#controls > :not(.controls-texture) {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+
+
+/* =====================
+   Neon Sign Heading
+===================== */
+#controls > h1 {
   font-family: 'RetroFont', sans-serif;
+  font-size: 1.8rem;
   margin-top: 0;
   text-align: center;
   letter-spacing: 0.12em;
   color: #ffe7a3;
+
+  /* Layered neon glow for depth and tube effect */
   text-shadow:
-    0 0 1px #ffe7a3,
-    0 0 4px rgba(255, 207, 102, 0.6),
-    0 0 8px rgba(255, 180, 80, 0.4);
-  filter: brightness(1.05);
-  animation: neonFlicker 4.5s infinite;
-  user-select: none;
-  cursor: default;
+  /* softened inner core */
+  0 0 0.5px #fff,
+  0 0 1.5px #ffe7a3,
+  0 0 3px #ffc66b,
+  0 0 5px #ffb84d,
+  /* soft outer halo */
+  0 0 10px rgba(255,180,80,0.45),
+  0 0 20px rgba(255,150,50,0.35),
+  0 0 30px rgba(255,120,20,0.25),
+  0 0 40px rgba(255,100,10,0.2),
+  0 0 50px rgba(255,80,0,0.15);
+
+filter: brightness(1.08);
+animation: neonFlicker 4.5s infinite;
+
+user-select: none;
+cursor: default;
 }
 
+/* Flicker animation for realistic neon effect */
 @keyframes neonFlicker {
-  0%,100% { opacity:1; filter:brightness(1.05); }
-  92% { opacity:0.95; filter:brightness(1); }
-  94% { opacity:0.85; filter:brightness(0.9); }
-  96% { opacity:1; filter:brightness(1.1); }
-  97% { opacity:0.9; filter:brightness(0.95); }
-  98% { opacity:1; filter:brightness(1.15); }
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1.1);
+    text-shadow:
+      0 0 1px #fff,
+      0 0 2px #ffe7a3,
+      0 0 4px #ffc66b,
+      0 0 6px #ffb84d,
+      0 0 10px rgba(255,180,80,0.5),
+      0 0 20px rgba(255,150,50,0.4),
+      0 0 30px rgba(255,120,20,0.3),
+      0 0 40px rgba(255,100,10,0.2),
+      0 0 50px rgba(255,80,0,0.15);
+  }
+  92% {
+    opacity: 0.95;
+    filter: brightness(1);
+  }
+  94% {
+    opacity: 0.85;
+    filter: brightness(0.9);
+  }
+  96% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+  97% {
+    opacity: 0.9;
+    filter: brightness(0.95);
+  }
+  98% {
+    opacity: 1;
+    filter: brightness(1.2);
+  }
 }
+
 
 h2 { margin-top:0; color: var(--accent); letter-spacing: 0.08em; }
 label { display:block; margin-top:12px; font-size:0.8rem; }
@@ -326,8 +421,8 @@ canvas {
   font-size: 11px;
   padding: 4px 8px;
   border-radius: 6px;
-  background: #222;
-  color: #fff;
+  background: #7c6044;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   opacity: 0.7;
@@ -581,6 +676,7 @@ canvas {
 
 
 /* ================= RESTORE CONFIRM PANEL ================= */
+/* This is the custom alert message for the restore default button */
 .restore-confirm {
   position: fixed;
   top: -160px;
@@ -659,5 +755,56 @@ canvas {
 .capture-ui button.recording {
   background: red;
   color: #fff;
+}
+
+
+
+
+#advancedPanel {
+  position: fixed;
+  top: 56px;
+  right: 16px;
+  padding: 10px;
+  width: 170px;
+
+  background: rgba(12, 12, 12, 0.96);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  border-radius: 6px;
+
+  font-family: 'VT323', monospace;
+  font-size: 0.75rem;
+  color: #fff;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: all 0.2s ease;
+
+  z-index: 99999;
+}
+
+#advancedPanel.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+
+
+
+
+/* Hidden surprise image */
+#hiddenSurprise {
+  position: fixed;
+  top: 56px;            /* distance from top of viewport */
+  left: 0;
+  width: 160px;
+  transform: translateX(80px); /* optional offset */
+  height: auto;
+  opacity: 1;           /* keep visible */
+  pointer-events: none;
+  z-index: 0;
+  /* no need for blend-mode unless you want fancy effects */
 }
 

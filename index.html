@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="matrix.css" />
   <link rel="stylesheet" href="header.css" />
-  <link rel="icon" type="image/svg+xml" href="gameboy.svg">
+  <link rel="stylesheet" href="playerview.css" />
+  <link rel="icon" type="image/svg+xml" href="images/icon.svg">
 
     <link href="https://fonts.googleapis.com/css2?
 family=Press+Start+2P&
@@ -46,13 +47,37 @@ rel="stylesheet">
   </div>
 
   <div class="header-center">
-    <div class="disc-tray">
-      <!-- Vintage disc tray placeholder -->
-      <div class="tray-slot"></div>
-      <div class="tray-slot"></div>
-    </div>
-    <button id="cdCollectionBtn" title="Open CD Collection">💿</button>
+
+    <div id="trackDisplay" class="lcd">
+  --
+</div>
+
+   <div class="disc-tray">
+  <div class="tray-slot"></div>
+
+  <!-- Progress bar under the tray -->
+  <div class="disc-progress-container" id="discProgressContainer">
+    <div class="disc-progress-bar" id="discProgressBar"></div>
+  </div>
+</div>
+
+
+    <div class="transport">
+  <button id="rewBtn"><img src="images/rewind-button.png" alt="Rewind"></button>
+  <button id="playPauseBtn"><img src="images/play-button.png" alt="Play/Pause"></button>
+  <button id="fwdBtn"><img src="images/forward-button.png" alt="Forward"></button>
+  <button id="repeatBtn"><img src="images/repeat-button.png" alt="Repeat"></button>
+</div>
+
+
+    <button id="cdCollectionBtn" title="Open CD Collection">
+  <img src="images/cd-icon.png" alt="CD Collection">
+</button>
+
+    <button id="cdPlayerViewBtn" title="CD Player View">PLAYER</button>
     <button id="burnCdBtn" title="Burn a CD">BURN</button>
+
+    
   </div>
 
   <div class="header-right">
@@ -60,9 +85,44 @@ rel="stylesheet">
     <button id="shuffleBtn" title="Shuffle Background Music">SHUFFLE</button>
     <button id="devNotesBtn" title="Dev Notes">DEV</button>
   </div>
+
+  <!-- Home Button -->
+<button id="homeBtn" title="Go to Homepage">🏠</button>
+
+  <!-- Menu button (hamburger) -->
+<div class="header-menu">
+  <button id="menuBtn" title="Menu">
+    &#9776; <!-- three horizontal lines -->
+  </button>
+</div>
+
+<!-- Slide-in control panel -->
+<div id="sideMenuPanel">
+  <h3>Controls</h3>
+
+  <!-- Volume slider -->
+  <label for="cdVolume">CD Volume</label>
+  <input type="range" id="cdVolume" min="0" max="100" value="80">
+
+  <!-- Theme selector -->
+  <label for="themeSelect">Theme</label>
+  <select id="themeSelect">
+    <option value="neon">Neon</option>
+    <option value="retro">Retro</option>
+    <option value="dark">Dark</option>
+  </select>
+
+  <!-- Panel opacity -->
+  <label for="panelOpacity">Panel Opacity</label>
+  <input type="range" id="panelOpacity" min="0" max="1" step="0.01" value="0.93">
+</div>
+
 </header>
 
 <!-- CD Collection Modal -->
+
+<ul id="trackList" class="track-list"></ul>
+
 <div id="cdCollectionModal" class="modal">
   <div class="modal-content">
     <img src="images/close-button-red.PNG" alt="Close" class="close">
@@ -81,22 +141,22 @@ rel="stylesheet">
       <div class="page left">
         <div class="cd-grid">
           <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd1.jpg')"></div>
+            <div class="cd" data-cd="cd1" style="--art:url('images/CD/bach.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd2.jpg')"></div>
+            <div class="cd" data-cd="cd2" style="--art:url('images/CD/beethoven.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd3.jpg')"></div>
+            <div class="cd" data-cd="cd3" style="--art:url('images/CD/lod.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd4.jpg')"></div>
+            <div class="cd" data-cd="cd4" style="--art:url('images/CD/c.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
         </div>
@@ -106,22 +166,22 @@ rel="stylesheet">
       <div class="page right">
         <div class="cd-grid">
           <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd5.jpg')"></div>
+            <div class="cd" data-cd="cd5" style="--art:url('images/CD/cd5.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd6.jpg')"></div>
+            <div class="cd" data-cd="cd6" style="--art:url('images/CD/c6.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd7.jpg')"></div>
+            <div class="cd" data-cd="cd7" style="--art:url('images/CD/c7.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
  
           <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
-            <div class="cd" data-cd style="--art:url('images/CD/cd8.jpg')"></div>
+            <div class="cd" data-cd="cd8" style="--art:url('images/CD/c8.jpg')"></div>
             <div class="hub-ring"></div>
           </div>
         </div>
@@ -130,6 +190,59 @@ rel="stylesheet">
     </div>
   </div>
 </div>
+
+<!-- CD Player View -->
+<div id="cdPlayerView" class="modal">
+
+  <!-- Wrap button in its own container so it ignores flex centering -->
+  <div class="player-close-wrapper">
+    <button id="closeCdPlayerView" class="player-close-btn" aria-label="Close">×</button>
+
+
+
+    
+ <!-- Theme Selection Dropdown -->
+<!-- 
+<div class="theme-selector">
+  <label for="themeSelect">Theme Selection:</label>
+  <select id="themeSelect" name="themeSelect">
+    <option value="neon-nights">Neon Nights</option>
+    <option value="retro-wave">Retro Wave</option>
+    <option value="solar-flare">Solar Flare</option>
+    <option value="deep-space">Deep Space</option>
+    <option value="aurora-glow">Aurora Glow</option>
+    <option value="rainbow-shift">Rainbow Shift</option>
+    <option value="transparent">Transparent as Tea</option>
+    <option value="visualizer">Got that Main Visualizer Here</option>
+  </select>
+</div>
+
+<button id="staticModeBtn" title="Toggle Static Mode">STATIC</button>
+-->
+
+
+
+
+
+  </div>
+
+  <!-- Centered content -->
+  <div class="player-content-wrapper">
+    <div class="player-cd-wrapper">
+      <div class="cd" id="playerCD" style="--art:url('images/CD/lyfestyle.jpeg')"></div>
+      <div class="hub-ring"></div>
+    </div>
+
+    <div id="playerTrackText" class="player-track-text">
+      - No CD Selected -
+    </div>
+  </div>
+
+</div>
+
+
+
+
 
 
 
@@ -186,9 +299,13 @@ rel="stylesheet">
 </div>
 
 
-
+<img id="hiddenSurprise" src="images/pibble.jpeg" alt="Cute Surprise!" />
   <aside id="controls">
-    <h2>Retro Text Lab</h2>
+
+    <!-- texture layer -->
+    <div class="controls-texture"></div>
+    
+    <h1>Retro Text Lab</h1>
 
     <!-- ================= PRESETS ================= -->
     <div class="section section-presets">
@@ -282,6 +399,7 @@ rel="stylesheet">
           <option value="solidColor">Solid Color</option>
           <option value="gradient">Gradient</option>
           <option value="image">Image</option>
+          <option value="binaryThreshold">Binary Threshold</option>
 
           <option value="checkerboard">Checkerboard</option>
           <option value="stripes">Stripes</option>
@@ -559,8 +677,44 @@ rel="stylesheet">
   ></textarea>
 </div>
 
+<!-- Advanced Panel -->
+<div id="advancedPanel">
+  <!-- Panel Color -->
+  <label>
+    Panel Color
+    <input type="color" id="panelColorPicker" value="#141414" />
+  </label>
+
+  <!-- Panel Texture -->
+  <label>
+    Panel Texture
+    <select id="panelTextureSelect">
+      <option value="none">None</option>
+      <option value="concrete">Concrete</option>
+      <option value="plastic">Plastic 1</option>
+      <option value="plastic2">Plastic 2</option>
+    </select>
+  </label>
+
+  <!-- Accent Color -->
+  <label>
+    Accent Color
+    <input type="color" id="accentColorPicker" value="#ffcf66" />
+  </label>
+
+  <!-- Panel Opacity -->
+  <label>
+    Panel Opacity
+    <input type="range" id="panelOpacity" min="0" max="1" step="0.01" value="0.93" />
+  </label>
+</div>
+
+
+
 
   <script src="script.js"></script>
+  <script src="cd.js"></script>
+  <script src="themes.js"></script>
 
   <script>
 /* =====================
@@ -622,21 +776,23 @@ const SoundFX = {
    ADD SOUNDS
 ===================== */
 
-SoundFX.add("cdHover", "assets/cd-hover.wav", 0.3) // add cd hover sound effect
-SoundFX.add("closeModal", "assets/retro-hit-1.wav", 0.6)
+SoundFX.add("cdHover", "assets/cd-hover.wav", 0.35) // add cd hover sound effect
+SoundFX.add("closeModal", "assets/retro-hit-1.wav", 0.8)
 SoundFX.add("restoreConfirm", "assets/complete-1.wav", 0.2)
 SoundFX.bind("#restoreYesBtn", "click", "restoreConfirm")
-SoundFX.add("restoreCancel", "assets/retro-hit-4.wav", 0.85)
+SoundFX.add("restoreCancel", "assets/retro-hit-4.wav", 0.95)
 SoundFX.bind("#restoreCancelBtn", "click", "restoreCancel")
-SoundFX.add("button1", "assets/button-1.wav", 0.6) // add my 3 button effects
-SoundFX.add("button2", "assets/button-2.wav", 0.6)
-SoundFX.add("button3", "assets/button-3.wav", 0.6)
-SoundFX.add("button4", "assets/button-4.wav", 0.5)
-SoundFX.add("button5", "assets/button-5.wav", 0.4)
-SoundFX.add("button7", "assets/button-7.wav", 0.5)
-SoundFX.add("button8", "assets/button-8.wav", 0.5)
+SoundFX.add("button1", "assets/button-1.wav", 0.8) // add my 3 button effects
+SoundFX.add("button2", "assets/button-2.wav", 0.8)
+SoundFX.add("button3", "assets/button-3.wav", 0.8)
+SoundFX.add("button4", "assets/button-4.wav", 0.65)
+SoundFX.add("button5", "assets/button-5.wav", 0.6)
+SoundFX.add("button7", "assets/button-7.wav", 0.7)
+SoundFX.add("button8", "assets/button-8.wav", 0.7)
 
 
+
+SoundFX.bind("#closeCdPlayerView", "click", "closeModal")
 
 /* =====================
    UNLOCK AUDIO
@@ -660,20 +816,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const buttonSoundPool = ["button1", "button2", "button3"]
 
-  [
-    "#cdCollectionBtn",
-    "#burnCdBtn",
-    "#muteBtn",
-    "#shuffleBtn",
-    "#devNotesBtn"
-  ].forEach(selector => {
-    const btn = document.querySelector(selector)
-    if (!btn) return
+  ;[
+  "#cdCollectionBtn",
+  "#burnCdBtn",
+  "#muteBtn",
+  "#shuffleBtn",
+  "#devNotesBtn"
+].forEach(selector => {
+  const btn = document.querySelector(selector)
+  if (!btn) return
 
-    btn.addEventListener("click", () => {
-      SoundFX.playRandom(buttonSoundPool)
-    })
+  btn.addEventListener("click", () => {
+    SoundFX.playRandom(buttonSoundPool)
   })
+})
+
 
 })
 
@@ -690,7 +847,12 @@ const CLICK_SOUND_TARGETS = [
   "#exportPresetBtn",
   "#restoreDefaultBtn",
   "#toggleSpin",
-  ".capture-ui"
+  ".capture-ui",
+  "#rewBtn",
+  "#playPauseBtn",
+  "#fwdBtn",
+  "#repeatBtn",
+  "#cdPlayerViewBtn"
 ].join(", ")
 
 document.addEventListener(

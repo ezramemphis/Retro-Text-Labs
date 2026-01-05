@@ -6,7 +6,24 @@
   left: 0;
   width: 100%;
   height: 36px;
-  background: rgba(28, 28, 28, 0.85);
+
+  /* brown-tinted plastic */
+  background:
+    linear-gradient(
+      rgba(54, 38, 24, 0.9),
+      rgba(46, 32, 20, 0.9)
+    ),
+    url("images/plastic-2.jpg");
+  background-size: 180% 180%;
+  background-repeat: repeat;
+  background-position: center;
+
+  /* material tuning */
+  filter:
+    contrast(1.08)
+    saturate(1.05)
+    brightness(1.1);
+
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: space-between;
@@ -16,8 +33,15 @@
   font-family: 'VT323', monospace;
   font-size: 0.8rem;
   color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  box-shadow:
+    inset 0 -1px 0 rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(0,0,0,0.45);
 }
+
+
+
 
 #topHeader a {
   margin-right: 12px;
@@ -32,7 +56,7 @@
 
 /* Header Right Container */
 .header-right {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
   transform: translate(-0px, -8px); /* 0 left + slightly up */
@@ -75,44 +99,141 @@
 
 /* Header Center */
 .header-center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;       /* position relative to the header */
+  top: 50%;                 /* vertically center */
+  left: 50%;                /* horizontal midpoint of header */
+  transform: translate(-50%, -50%); /* shift back by half width/height */
+  
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Disc tray */
+
+/* =====================
+   Disc Tray - Minimal Vintage
+===================== */
 .disc-tray {
+  position: relative;
+  width: 360px;   /* keep your fixed width */
+  height: 25px;   /* tray height */
+  background: linear-gradient(145deg, #2b2b2b, #121212); /* metallic/plastic feel */
+  border: 2px solid #555;  /* strong outer border */
+  box-shadow: inset -2px -2px 5px rgba(255,255,255,0.08),
+              inset 2px 2px 5px rgba(0,0,0,0.6),
+              0 3px 5px rgba(0,0,0,0.25);
   display: flex;
-  flex-direction: column; /* Stack slots vertically */
-  gap: 4px; /* spacing between slots */
+  flex-direction: column;
+  padding: 3px;  /* slight padding for inner elements */
 }
 
-/* Tray slot */
+/* Single tray slot - black beam at top */
 .tray-slot {
-  width: 340px;
-  height: 10px;
-  background: #aaa;
-  border: 2px solid #666;
-  border-radius: 2px;
+  width: 100%;
+  height: 8px;
+  background: #000;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Very subtle 1px border around the black beam for depth */
+.tray-slot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.08); /* very subtle highlight border */
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+/* Tiny 1px highlight line under the black beam */
+.tray-slot::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: #202020;  /* subtle highlight */
 }
 
 
-/* Buttons */
-#cdCollectionBtn, #burnCdBtn {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
+/* Minimal progress bar container inside remaining space */
+.disc-progress-container {
+  width: 350px;
+  height: 3px;  /* fits nicely under the tray beam */
+  background: #1c1c1c;
+  margin-top: 5px;
+  border-radius: 0;  /* keep crisp edges */
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.15),
+              inset 0 -1px 2px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+
+/* Progress bar fill */
+.disc-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #4cf, #08f);
+  transition: width 0.1s linear;
+  border-radius: 0;  /* crisp edges */
+}
+
+
+
+
+/* Burn and Player buttons */
+.header-right button,
+#burnCdBtn,
+#cdPlayerViewBtn {
+  background: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
   padding: 2px 6px;
   font-size: 0.85rem;
   border-radius: 3px;
   cursor: pointer;
+  transition: all 0.2s;
   white-space: nowrap;
-  transform: translate(-0px, -8px); /* 0 left + slightly up */
+  flex-shrink: 0;
+
+  width: 110px; /* fixed width to match other buttons */
+  text-align: center;
+  transform: translate(0, -8px);
 }
+
+.header-right button:hover,
+#burnCdBtn:hover,
+#cdPlayerViewBtn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+/* CD Collection Button with icon */
+#cdCollectionBtn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  transform: none; /* Remove translation */
+  flex-shrink: 0;  /* prevent it from shrinking in flex container */
+  transform: translate(0, -8px);
+}
+
+#cdCollectionBtn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 
 /* Modal overlay */
 .modal {
@@ -174,6 +295,72 @@
 /* On hover, show original red + glow */
 #cdCollectionModal .close:hover {
   filter: brightness(1) drop-shadow(0 0 8px red);
+}
+
+
+
+
+
+
+/* Menu button */
+.header-menu {
+  position: absolute;
+  right: 12px;       /* far right of header */
+  top: 50%;
+  transform: translate(0, -30px);
+}
+
+.header-menu button {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 2px 8px;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.header-menu button:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Side menu panel */
+#sideMenuPanel {
+  position: fixed;
+  top: 0;
+  right: -240px;        /* hidden by default */
+  width: 240px;
+  height: 100%;
+  background: rgba(20,20,20,0.96);
+  box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  transition: right 0.3s ease;
+  z-index: 9999;
+}
+
+/* Show panel */
+#sideMenuPanel.visible {
+  right: 0;
+}
+
+/* Inputs styling */
+#sideMenuPanel input,
+#sideMenuPanel select {
+  width: 100%;
+  background: #222;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px;
 }
 
 
@@ -262,6 +449,13 @@
 .cd-binder {
   display: flex;
   gap: 40px;
+  position: relative;
+  perspective: 1000px;
+  transition: filter 0.3s ease;
+}
+
+.cd-binder.dimmed {
+  filter: brightness(0.5);
 }
 
 .page {
@@ -281,64 +475,40 @@
 }
 
 /* =====================
-   CD SLOT (container)
+   CD SLOT
 ===================== */
 
 .cd-slot {
-  width: var(--cd-size);
-  height: var(--cd-size);
+  width: var(--cd-size, 80px);
+  height: var(--cd-size, 80px);
   position: relative;
   cursor: pointer;
-  transition: transform 0.3s ease;
-
-  /* Per-CD alignment controls */
-  transform:
-    translate(
-      var(--offset-x, 0px),
-      var(--offset-y, 0px)
-    );
+  transition: transform 0.4s ease, z-index 0.3s ease;
+  transform: translate(var(--offset-x, 0px), var(--offset-y, 0px));
 }
-
 
 .cd-slot:hover {
-  transform:
-    translate(
-      var(--offset-x, 0px),
-      var(--offset-y, 0px)
-    )
-    rotate(10deg);
+  transform: translate(var(--offset-x, 0px), var(--offset-y, 0px)) rotate(10deg);
+  z-index: 10;
 }
-
 
 /* =====================
    CD DISC
 ===================== */
 
-/* Make CD artwork punchier */
 .cd {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   position: relative;
-
-  background:
-    var(--cd-lights),
-    var(--art) center / cover;
-
-  box-shadow:
-    inset 0 0 25px rgba(0,0,0,0.4),
-    0 10px 30px rgba(0,0,0,0.3);
-
-  /* Center hole */
+  background: var(--cd-lights), var(--art) center / cover no-repeat;
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.4), 0 10px 30px rgba(0,0,0,0.3);
+  filter: brightness(1.1) contrast(1.3) saturate(1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   mask: radial-gradient(circle, transparent 50px, black 50px);
   -webkit-mask: radial-gradient(circle, transparent 50px, black 50px);
-
-  /* Boost visual impact */
-  filter: brightness(1.1) contrast(1.3) saturate(1.2);
 }
 
-
-/* Light streak overlay */
 .cd::before {
   content: "";
   position: absolute;
@@ -357,7 +527,6 @@
   pointer-events: none;
 }
 
-/* Outer disc rim */
 .cd::after {
   content: "";
   position: absolute;
@@ -365,6 +534,12 @@
   border-radius: 50%;
   border: 2px solid rgba(110,110,110,0.35);
   pointer-events: none;
+}
+
+.cd-active {
+  transform: translateY(-50px) scale(1.2) !important;
+  z-index: 1000;
+  box-shadow: 0 12px 20px rgba(0,0,0,0.5);
 }
 
 /* =====================
@@ -379,22 +554,11 @@
   height: 100px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    transparent 34%,
-    rgba(255,255,255,0.35) 34%,
-    rgba(255,255,255,0.20) 100%
-  );
-
-  box-shadow:
-    inset 0 0 4px rgba(255,255,255,0.35),
-    inset 0 0 6px rgba(0,0,0,0.25);
-
+  background: radial-gradient(circle, transparent 34%, rgba(255,255,255,0.35) 34%, rgba(255,255,255,0.20) 100%);
+  box-shadow: inset 0 0 4px rgba(255,255,255,0.35), inset 0 0 6px rgba(0,0,0,0.25);
   pointer-events: none;
 }
 
-/* Inner hole border */
 .hub-ring::before {
   content: "";
   position: absolute;
@@ -404,12 +568,10 @@
   opacity: 0.4;
 }
 
+/* =====================
+   POLYPROPYLENE POCKET
+===================== */
 
-
-
-
-
-/* Polypropylene pocket overlay with gaps around CDs */
 .page::after {
   content: "";
   position: absolute;
@@ -438,7 +600,10 @@
   opacity: 0;
 }
 
-/* Stacked effect for binder */
+/* =====================
+   BINDER STACKED EFFECT
+===================== */
+
 .cd-binder::before,
 .cd-binder::after {
   content: "";
@@ -451,30 +616,27 @@
   z-index: 1;
 }
 
-
-.cd-binder::before {
-  left: -40px;
-  transform: rotate(-2deg);
-}
-
-.cd-binder::after {
-  right: -40px;
-  transform: rotate(2deg);
-}
+.cd-binder::before { left: -40px; transform: rotate(-2deg); }
+.cd-binder::after { right: -40px; transform: rotate(2deg); }
 
 
 
 
 
 
-/* CD Burn Window */
+
+
+/* =====================
+   CD BURN WINDOW
+===================== */
+
 .cd-window {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #1a1f3a; /* dark blue */
+  background: #1a1f3a;
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -578,7 +740,10 @@
   background: #ff3333;
 }
 
-/* Right Side Cover Editor */
+/* =====================
+   COVER EDITOR
+===================== */
+
 .cover-editor {
   display: flex;
   flex-direction: column;
@@ -642,3 +807,139 @@
   font-weight: bold;
   border-radius: 3px;
 }
+
+
+
+/* =====================
+   TRANSPORT BUTTONS - MINIMAL RETRO
+===================== */
+
+.transport {
+  display: flex;
+  gap: 6px;              /* small spacing */
+  align-items: center;    /* vertically center buttons */
+  transform: translate(-0px, -8px); /* 0 left + slightly up */
+}
+
+.transport button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+
+
+.transport button img {
+  width: 28px; /* adjust as needed */
+  height: 28px;
+  display: block;
+}
+
+
+.transport button:hover {
+  transform: scale(1.01);   /* slight pop on hover */
+}
+
+.transport button:active {
+  transform: scale(0.95);  /* pressed effect */
+}
+
+/* =====================
+   REPEAT BUTTON ACTIVE INDICATOR
+===================== */
+
+.transport button#repeatBtn.active {  
+  filter: 
+    saturate(300%)                     /* extra saturated colors */
+    contrast(180%)                     /* strong contrast */
+    hue-rotate(180deg)                 /* shift hue */
+    drop-shadow(0 0 2px #ffb11f)       /* orangeish glow shadow */
+  
+}
+
+
+
+
+/* Forward animation for clicked CD */
+.cd-forward {
+  position: fixed !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.4);
+  z-index: 2000;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* Dim other CDs */
+.cd-dimmed {
+  filter: brightness(0.5) blur(1px);
+  pointer-events: none;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+
+/* =====================
+   TRACK DISPLAY LCD
+===================== */
+
+/* Load your digital font */
+@font-face {
+  font-family: 'Digital7';
+  src: url('fonts/digital-7.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#trackDisplay {
+  width: 50px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Digital7', monospace;
+  font-size: 28px;
+  background: #1c1113;
+  color: #e6d1c9;
+  text-shadow: 0 0 3px #e0cec4, 0 0 6px #93817c;
+  border-radius: 6px;
+
+  /* metallic/plastic border depth */
+  border: 2px solid transparent;
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  background-image: 
+    linear-gradient(#1c1113, #1c1113), /* inner background */
+    linear-gradient(145deg, #a0a0a0, #505050, #a0a0a0); /* border gradient */
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.2),
+              inset 0 -1px 2px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+
+
+
+#homeBtn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  width: 36px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: center;
+  transform: translate(-35px, -8px);
+  margin-right: 8px; /* spacing between home and menu button */
+}
+
+#homeBtn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+

@@ -1,0 +1,109 @@
+/* =====================
+   CD PLAYER FULLSCREEN MODAL
+===================== */
+
+/* Modal overlay */
+#cdPlayerView {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(20,20,30,0.9) 0%, rgba(0,0,0,0.95) 100%);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  z-index: 2000;
+  overflow: hidden;
+}
+
+/* Show modal */
+#cdPlayerView.show {
+  display: block; /* modal visible without flex centering the overlay */
+}
+
+/* =====================
+   Centered content wrapper
+===================== */
+.player-content-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =====================
+   CD spinning wrapper
+===================== */
+.player-cd-wrapper {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: spin 12s linear infinite;
+  margin-bottom: 30px;
+}
+
+/* Track text below CD */
+.player-track-text {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+/* CD image */
+#playerCD {
+  width: 250px;
+  height: 250px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* =====================
+   Animations
+===================== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* =====================
+   Close Button Wrapper
+===================== */
+.player-close-wrapper {
+  position: fixed;   /* pinned to viewport top-right */
+  top: 18px;
+  right: 10px;
+  z-index: 3000;     /* above everything */
+}
+
+/* Close Button itself */
+.player-close-btn {
+  background: none;
+  border: none;
+
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1;
+
+  cursor: pointer;
+
+  opacity: 0.9;
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.player-close-btn:hover {
+  color: #ff3b3b;
+  opacity: 1;
+}
