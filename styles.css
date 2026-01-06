@@ -808,3 +808,22 @@ canvas {
   /* no need for blend-mode unless you want fancy effects */
 }
 
+/* Online Active Users Tracker */
+.online-indicator {
+  position: absolute;
+  top: 10px;
+  right: 108px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #00ff66;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #00ff66;
+}

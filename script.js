@@ -2529,3 +2529,23 @@ const homeBtn = document.getElementById("homeBtn");
 homeBtn.addEventListener("click", () => {
   window.location.href = "homepage.html"; // redirect to homepage
 });
+
+
+// Tracks how many users are online using an external API
+const ONLINE_API = "https://black-haze-ea4c.ezramemphis.workers.dev";
+
+async function updateOnlineCount() {
+  try {
+    const res = await fetch(ONLINE_API, { cache: "no-store" });
+    const data = await res.json();
+
+    const el = document.getElementById("onlineCount");
+    if (el) el.textContent = data.count;
+  } catch (err) {
+    console.error("Failed to fetch online count", err);
+  }
+}
+
+// Update immediately, then every 5 seconds
+updateOnlineCount();
+setInterval(updateOnlineCount, 5000);
