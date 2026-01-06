@@ -14,7 +14,9 @@ const CD_LIBRARY = {
     id: "cd1",
     title: "Bach's Greatest Hits", // updated title
     artist: "Johann Sebastian Bach", // artist name
+    genre: "Classical", // genre
     art: "images/CD/bach.jpg",
+    color: "#db8000ff", // warm classical gold
     startupSound: "assets/cd-start.wav",
     tracks: [
       { title: "Preludium in E Major", src: "music/cd1/01.mp3" },
@@ -29,9 +31,11 @@ const CD_LIBRARY = {
   },
   cd2: {
     id: "cd2",
-    title: "Beethoven's Greatest Hits", // updated title
-    artist: "Ludwig van Beethoven", 
-    art: "images/CD/beethoven.jpg",
+    title: "Chopin's Greatest Hits", // updated title
+    artist: "Frédéric Chopin", 
+    genre: "Classical",
+    art: "images/CD/chopin.jpg",
+    color: "#a42b60ff", // warm classical gold
     tracks: [
       { title: "Military Polonaise, Op. 40, No. 1", src: "music/cd2/01.mp3" },
       { title: "Minute Waltz In D-Flat Major, Op. 64, No. 1", src: "music/cd2/02.mp3" },
@@ -48,18 +52,25 @@ const CD_LIBRARY = {
   },
   cd3: {
   id: "cd3",
-  title: "Modular Synthesis",
-  art: "images/CD/cd3.JPG",
+  title: "Modular Synthesis Explorations",
+  artist: "Ezra Bennett", 
+  genre: "Electronic/Alternative",
+  art: "images/CD/modular.JPG",
+  color: "#71fff3ff", // neon green
   tracks: [
-    { title: "Symphony No. 40 in G Minor", src: "music/cd3/01.mp3" },
-    { title: "Eine kleine Nachtmusik", src: "music/cd3/02.mp3" }
+    { title: "Runex", src: "music/cd3/runex.mp3" },
+    { title: "Honey Suckle", src: "music/cd3/honey-suckle.mp3" },
+    { title: "Lost Again", src: "music/cd3/lost-again.mp3" },
+    { title: "Heinous Harry - The Wicked One", src: "music/cd3/harry.mp3" }
   ]
 },
   cd4: {
   id: "cd4",
   title: "Jazz with Levi Bennett",
   artist: "Levi Bennett", 
-  art: "images/CD/cd4.JPG",
+  genre: "Jazz",
+  art: "images/CD/levi-cd-cover1.JPG",
+  color: "#d4b36a", // warm classical gold
   tracks: [
     { title: "Caravan - featuring Levi Bennett", src: "music/cd4/caravan-retro.mp3" },
     { title: "Bug's Interlude", src: "music/cd4/bugs-interlude-retro.mp3" },
@@ -254,33 +265,43 @@ function updatePlayerView() {
   const trackEl = document.getElementById("playerTrackText");
   const titleEl = document.getElementById("playerCDTitle");
   const artistEl = document.getElementById("playerArtistName");
+  const genreEl = document.getElementById("playerGenre");
+  const viewEl = document.getElementById("cdPlayerView");
 
-  if (!CDPlayer.currentCD || !cdEl || !trackEl || !titleEl || !artistEl) return;
+  if (!CDPlayer.currentCD || !viewEl) return;
 
-  // Update CD artwork
+  // 🎨 Apply CD accent color
+  viewEl.style.setProperty(
+    "--cd-accent",
+    CDPlayer.currentCD.color || "#ffd27d"
+  );
+
+  // Artwork
   cdEl.style.backgroundImage = `url(${CDPlayer.currentCD.art})`;
 
-  // Update CD title
+  // Title
   titleEl.textContent = CDPlayer.currentCD.title;
-  titleEl.style.opacity = 0;
-  titleEl.offsetHeight; // trigger reflow
   titleEl.style.animation = "fadeIn 0.6s forwards";
 
-  // Update artist name
+  // Artist
   artistEl.textContent = CDPlayer.currentCD.artist || "";
-  artistEl.style.opacity = 0;
-  artistEl.offsetHeight; // trigger reflow
   artistEl.style.animation = "fadeIn 0.6s forwards";
 
-  // Update track info
-  const currentTrack = CDPlayer.currentCD.tracks[CDPlayer.currentTrackIndex];
-  if (currentTrack) {
-    trackEl.textContent = `Track ${CDPlayer.currentTrackIndex + 1}: ${currentTrack.title}`;
-    trackEl.style.opacity = 0;
-    trackEl.offsetHeight; // trigger reflow
+  // 🎼 Genre
+  if (genreEl) {
+    genreEl.textContent = CDPlayer.currentCD.genre || "";
+    genreEl.style.animation = "fadeIn 0.6s forwards";
+  }
+
+  // Track
+  const track = CDPlayer.currentCD.tracks[CDPlayer.currentTrackIndex];
+  if (track) {
+    trackEl.textContent = `Track ${CDPlayer.currentTrackIndex + 1}: ${track.title}`;
     trackEl.style.animation = "fadeIn 0.6s forwards";
   }
 }
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ DOM READY");
@@ -364,3 +385,56 @@ CDPlayer.audio.addEventListener("ended", () => {
     updatePlayerView();
   };
 });
+
+
+
+
+
+
+
+/* =========================================================
+   PROGRESS BAR LOGIC
+========================================================= */
+
+const progressBar = document.getElementById("playerProgressBar");
+const progressFill = document.getElementById("playerProgressFill");
+const currentTimeEl = document.getElementById("progressCurrentTime");
+const durationEl = document.getElementById("progressDuration");
+
+// Update progress while playing
+CDPlayer.audio.addEventListener("timeupdate", () => {
+  if (!CDPlayer.audio.duration) return;
+
+  const percent =
+    (CDPlayer.audio.currentTime / CDPlayer.audio.duration) * 100;
+
+  progressFill.style.width = `${percent}%`;
+  currentTimeEl.textContent = formatTime(CDPlayer.audio.currentTime);
+  durationEl.textContent = formatTime(CDPlayer.audio.duration);
+});
+
+// Seek when clicking the bar
+progressBar.addEventListener("click", e => {
+  if (!CDPlayer.audio.duration) return;
+
+  const rect = progressBar.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const percent = clickX / rect.width;
+
+  CDPlayer.audio.currentTime = percent * CDPlayer.audio.duration;
+});
+
+// Reset when track changes
+CDPlayer.audio.addEventListener("loadedmetadata", () => {
+  progressFill.style.width = "0%";
+  durationEl.textContent = formatTime(CDPlayer.audio.duration);
+  currentTimeEl.textContent = "0:00";
+});
+
+// Helper
+function formatTime(seconds) {
+  if (isNaN(seconds)) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}

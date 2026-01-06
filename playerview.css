@@ -166,6 +166,24 @@
   word-wrap: break-word;
 }
 
+/* Genre label */
+.player-genre {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: fadeIn 0.6s forwards;
+
+  color: color-mix(
+    in srgb,
+    var(--cd-accent),
+    #aaa 60%
+  );
+}
+
+
 /* Track title */
 .player-track-text {
   font-family: 'Courier New', monospace;
@@ -175,4 +193,47 @@
   margin-bottom: 0;
   opacity: 0;
   animation: fadeIn 0.6s forwards;
+}
+
+
+
+
+
+/* =====================
+   PLAYER PROGRESS BAR
+===================== */
+
+.player-progress-wrapper {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #ccc;
+}
+
+#playerProgressBar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#playerProgressFill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--cd-accent),
+    color-mix(in srgb, var(--cd-accent), white 25%)
+  );
+  transition: width 0.1s linear;
 }
