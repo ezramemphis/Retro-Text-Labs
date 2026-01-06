@@ -2535,35 +2535,3 @@ homeBtn.addEventListener("click", () => {
 
 
 
-
-
-
-// Tracks how many users are online using an external API
-fetch("https://api.countapi.xyz/hit/retrotextlab/online_users")
-  .then(res => res.json())
-  .then(data => console.log(data.value)); // current count
-
-const NAMESPACE = "retrotextlab";
-const KEY = "online_users";
-const el = document.getElementById("onlineCount");
-
-// Hit the counter once per browser session
-if (!localStorage.getItem("counted_online")) {
-  fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`)
-    .then(res => res.json())
-    .then(data => {
-      el.textContent = data.value;
-      localStorage.setItem("counted_online", "true");
-    });
-} else {
-  fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
-    .then(res => res.json())
-    .then(data => el.textContent = data.value);
-}
-
-// Optional: update count every 10s (just read)
-setInterval(() => {
-  fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
-    .then(res => res.json())
-    .then(data => el.textContent = data.value);
-}, 10000);
