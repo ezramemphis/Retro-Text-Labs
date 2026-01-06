@@ -477,25 +477,22 @@
 /* =====================
    CD SLOT
 ===================== */
-
 .cd-slot {
   width: var(--cd-size, 80px);
   height: var(--cd-size, 80px);
-  position: relative;
+  position: relative; /* for absolute positioning of trash button */
   cursor: pointer;
-  transition: transform 0.4s ease, z-index 0.3s ease;
+  transition: z-index 0.3s ease; /* remove transform from slot */
   transform: translate(var(--offset-x, 0px), var(--offset-y, 0px));
 }
 
 .cd-slot:hover {
-  transform: translate(var(--offset-x, 0px), var(--offset-y, 0px)) rotate(10deg);
-  z-index: 10;
+  z-index: 10; /* slot comes to front on hover */
 }
 
 /* =====================
    CD DISC
 ===================== */
-
 .cd {
   width: 100%;
   height: 100%;
@@ -509,6 +506,12 @@
   -webkit-mask: radial-gradient(circle, transparent 50px, black 50px);
 }
 
+/* Rotate only the disc, not the whole slot */
+.cd-slot:hover .cd {
+  transform: rotate(10deg);
+}
+
+/* Highlights overlay */
 .cd::before {
   content: "";
   position: absolute;
@@ -536,6 +539,9 @@
   pointer-events: none;
 }
 
+/* =====================
+   CD ACTIVE (clicked / enlarged)
+===================== */
 .cd-active {
   transform: translateY(-50px) scale(1.2) !important;
   z-index: 1000;

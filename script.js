@@ -2535,3 +2535,104 @@ homeBtn.addEventListener("click", () => {
 
 
 
+/* ===============================
+   LOCAL STORAGE HELPERS
+=============================== */
+function getUserCDs() {
+  return JSON.parse(localStorage.getItem("userCDs") || "[]");
+}
+
+function addCDToUser(cdId) {
+  const userCDs = getUserCDs();
+  if (!userCDs.includes(cdId)) {
+    userCDs.push(cdId);
+    localStorage.setItem("userCDs", JSON.stringify(userCDs));
+  }
+}
+
+function removeCDFromUser(cdId) {
+  let userCDs = getUserCDs();
+  userCDs = userCDs.filter(id => id !== cdId);
+  localStorage.setItem("userCDs", JSON.stringify(userCDs));
+}
+
+/* ===============================
+   SHOP / COLLECTION LOGIC BELOW
+=============================== */
+
+
+function renderUserCDs() {
+  const userCDs = getUserCDs(); // from utils.js
+  const cdSlots = document.querySelectorAll(".cd-grid .cd");
+
+  // First, clear all slots that are meant to be dynamic (e.g., cd1 & cd2)
+  cdSlots.forEach(slot => {
+    if (!slot.dataset.static) { // optional: mark permanent CDs as static
+      slot.dataset.cd = "";
+      slot.style.setProperty("--art", "");
+    }
+  });
+
+  // Fill empty slots with user CDs
+  let cdIndex = 0;
+  cdSlots.forEach(slot => {
+    if (!slot.dataset.cd && cdIndex < userCDs.length) {
+      const cdId = userCDs[cdIndex];
+      const cdData = CD_LIBRARY[cdId];
+      slot.dataset.cd = cdId;
+      slot.style.setProperty("--art", `url('${cdData.art}')`);
+      cdIndex++;
+    }
+  });
+}
+
+function addRemoveButtons() {
+  const cdSlots = document.querySelectorAll(".cd-grid .cd-slot");
+
+  cdSlots.forEach(slot => {
+    const cd = slot.querySelector(".cd");
+    
+    // Skip empty slots
+    if (!cd.dataset.cd) return;
+
+    // Avoid adding multiple buttons
+    if (slot.querySelector(".remove-btn")) return;
+
+    // Create trash button
+    const btn = document.createElement("button");
+    btn.className = "remove-btn";
+    btn.innerText = "🗑";
+    btn.title = "Remove CD";
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // Play a random trash sound at 40% volume
+  const trashSounds = ["assets/trash-2.wav", "assets/trash-2.wav"];
+  const randomSound = trashSounds[Math.floor(Math.random() * trashSounds.length)];
+  const audio = new Audio(randomSound);
+  audio.volume = 0.4; // set volume to 40%
+  audio.play();
+
+      // Remove CD from localStorage
+      removeCDFromUser(cd.dataset.cd);
+      
+      // Re-render binder
+      renderUserCDs();
+      
+      // Re-add buttons to any newly filled slots
+      addRemoveButtons();
+    });
+
+    slot.appendChild(btn); // append to slot, outside the CD
+  });
+}
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderUserCDs();    // fill the binder with downloaded CDs
+  addRemoveButtons(); // add trash buttons to filled CDs
+});

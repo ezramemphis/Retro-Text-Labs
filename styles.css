@@ -827,3 +827,26 @@ canvas {
   border-radius: 50%;
   box-shadow: 0 0 6px #00ff66;
 }
+
+
+.cd-slot {
+  position: relative; /* parent for absolute positioning */
+}
+
+.remove-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 22px;
+  height: 22px;
+  font-size: 14px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: none !important; /* prevent rotation */
+}
