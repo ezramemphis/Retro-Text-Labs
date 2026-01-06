@@ -1020,6 +1020,9 @@ let lastFrame = 0
 
 // ====== ANIMATION MODES ======
 const modes = {
+  // =====================
+  // CLASSIC / PATTERNED MODES
+  // =====================
   orbit: (i, t, d) => ({
     x: Math.cos(t + i) * d,
     y: Math.sin(t + i) * d,
@@ -1045,12 +1048,8 @@ const modes = {
   }),
 
   spiral: (i, t, d) => {
-    const r = d * (i / 6)
-    return {
-      x: Math.cos(t + i) * r,
-      y: Math.sin(t + i) * r,
-      z: r
-    }
+    const r = d * (i / 6);
+    return { x: Math.cos(t + i) * r, y: Math.sin(t + i) * r, z: r };
   },
 
   jitter: (i, t, d) => ({
@@ -1081,8 +1080,83 @@ const modes = {
     x: Math.cos(t + i) * d,
     y: Math.sin(i * 2) * 40,
     z: Math.sin(t + i) * d
+  }),
+
+  // =====================
+  // WILD MODE (kept tornado only)
+  // =====================
+  tornado: (i, t, d) => {
+    const angle = t * 5 + i;
+    const radius = (i * 10) % d + 50;
+    return {
+      x: Math.cos(angle) * radius,
+      y: Math.sin(t * 2 + i) * 50,
+      z: Math.sin(angle) * radius
+    };
+  },
+
+  // ===== NEW ELEGANT / DYNAMIC ANIMATIONS =====
+smoothBounce: (i, t, d, width = 800, height = 600) => ({
+  x: ((i * 70 + t * 80) % width) - width / 2,
+  y: ((i * 50 + Math.sin(t + i) * 100) % height) - height / 2,
+  z: Math.sin(t * 0.5 + i) * d // <--- use depth here
+}),
+
+glidingFlow: (i, t, d) => ({
+  x: Math.sin(t * 0.7 + i) * (d * 1.3), // spread x proportional to depth
+  y: Math.cos(t * 0.5 + i * 0.8) * (d * 1.1), // spread y proportional to depth
+  z: Math.sin(t + i * 0.3) * d
+}),
+
+orbitalDrift: (i, t, d) => {
+  const r = d * 0.8 + Math.sin(i * 2 + t * 0.3) * (d * 0.3);
+  const angle = t * 0.5 + i;
+  return {
+    x: Math.cos(angle) * r,
+    y: Math.sin(angle * 1.2) * r * 0.7,
+    z: Math.sin(angle + t * 0.7) * d
+  };
+},
+
+waveTunnel: (i, t, d) => {
+  const angle = i * 0.6 + t * 0.8;
+  const radius = d * 0.5 + Math.sin(i * 0.5 + t) * (d * 0.3);
+  return {
+    x: Math.cos(angle) * radius,
+    y: Math.sin(angle * 2 + t * 0.3) * (d * 0.7),
+    z: (i * 30 - t * 200) % (d * 4) - d * 2
+  };
+},
+
+helixDrift: (i, t, d) => ({
+  x: Math.cos(i * 0.8 + t * 0.6) * d * 1.2,
+  y: Math.sin(i * 1.2 + t * 0.5) * (d * 0.6) + i * 20 - 100,
+  z: Math.sin(t + i * 0.3) * d
+}),
+
+  // =====================
+  // MORE FOCUSSED / READABLE MODES
+  // =====================
+  floatyFocus: (i, t, d) => ({
+    x: (i - 5) * 80 + Math.sin(t * 2 + i) * 20,
+    y: Math.sin(t + i) * 40,
+    z: Math.cos(t + i) * 10
+  }),
+
+  slowWave: (i, t, d) => ({
+    x: (i - 5) * 60,
+    y: Math.sin(t + i * 0.5) * 40,
+    z: 0
+  }),
+
+  gentleOrbit: (i, t, d) => ({
+    x: Math.cos(t + i * 0.5) * 100,
+    y: (i - 5) * 40,
+    z: Math.sin(t + i * 0.5) * 10
   })
-}
+};
+
+
 
 // Populate dropdown (20+ by cloning variants)
 Object.keys(modes).forEach(m => {

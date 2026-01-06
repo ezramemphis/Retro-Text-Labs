@@ -1,0 +1,198 @@
+/* =====================
+   SHOP PAGE LAYOUT
+===================== */
+
+body.shop-page {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #121212;
+  color: #fff;
+}
+
+.shop-header {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  background: linear-gradient(90deg, #1c1c1c, #111);
+  border-bottom: 1px solid #333;
+}
+
+.shop-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+
+.shop-header p {
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  color: #bbb;
+}
+
+.shop-content {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem;
+  gap: 2rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 150px); /* leave space for header/footer */
+}
+
+/* =====================
+   CD GRID
+===================== */
+.cd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+/* =====================
+   CD SLOT
+===================== */
+.cd-slot {
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-align: center;
+}
+
+.cd-slot .cd {
+  width: 100%;
+  padding-top: 100%;                 /* keeps it a square container for aspect ratio */
+  border-radius: 50%;                /* this makes it a circle */
+  background: var(--art) center / cover no-repeat;
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.3), 0 6px 20px rgba(0, 0, 0, 0.5); /* subtle inner shadow + outer shadow */
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Optional hover effect */
+.cd-slot .cd:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.3), 0 12px 25px rgba(0, 0, 0, 0.7);
+}
+
+/* Optional “hub hole” in the center */
+.cd-slot .cd::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;  /* small central hub */
+  height: 16px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* =====================
+   HUB RING (optional)
+===================== */
+.hub-ring {
+  display: none; /* hide for shop view */
+}
+
+/* =====================
+   DOWNLOAD BUTTON
+===================== */
+.cd-slot button.download-btn {
+  margin-top: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: none;
+  background: #896141;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  
+}
+
+.cd-slot button.download-btn:hover {
+  background: #009acd;
+  transform: scale(1.05);
+}
+
+/* =====================
+   CD TITLE
+===================== */
+.cd-title {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff; /* dark text */
+  text-align: center;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2px 2px;
+  border-radius: 4px;
+  /* Move the title above the CD and slightly to the right */
+  position: relative;                 /* needed for transform */
+  transform: translate(-55px, -24px); /* right 25px, up 54px */
+}
+
+
+/* =====================
+   FOOTER
+===================== */
+.shop-footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid #333;
+}
+
+.shop-footer button {
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
+}
+
+.shop-footer button:hover {
+  background: #666;
+}
+
+/* =====================
+   SCROLLBAR STYLING
+===================== */
+.shop-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.shop-content::-webkit-scrollbar-track {
+  background: #111;
+}
+
+.shop-content::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.shop-content::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* =====================
+   SHOP PAGE PAGES (override header.css)
+===================== */
+.shop-page .page {
+  width: auto; /* let it stretch naturally */
+  height: auto; /* auto height for content */
+  background-image: none !important; /* remove the retro image */
+  border-radius: 0; /* no rounded corners needed */
+  display: flex;
+  justify-content: flex-start; /* align CDs to the start */
+  align-items: flex-start;     /* align CDs to the top */
+  padding: 1rem;
+  transform: none; /* remove any translate */
+}

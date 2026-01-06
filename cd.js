@@ -12,6 +12,7 @@ console.log("🔥 cd.js LOADED");
 const CD_LIBRARY = {
   cd1: {
     id: "cd1",
+    title: "Bach's Greatest Hits", // updated title
     art: "images/CD/bach.jpg",
     startupSound: "assets/cd-start.wav",
     tracks: [
@@ -27,6 +28,7 @@ const CD_LIBRARY = {
   },
   cd2: {
     id: "cd2",
+    title: "Beethoven's Greatest Hits", // updated title
     art: "images/CD/beethoven.jpg",
     tracks: [
       { title: "Military Polonaise, Op. 40, No. 1", src: "music/cd2/01.mp3" },
@@ -41,10 +43,30 @@ const CD_LIBRARY = {
       { title: "Etude In E Major, Op. 10, No. 3", src: "music/cd2/10.mp3" },
       { title: "Grande Valse Brillante In E-Flat Major, Op. 18", src: "music/cd2/11.mp3" }
     ]
+  },
+  cd3: {
+  id: "cd3",
+  title: "Modular Synthesis",
+  art: "images/CD/cd3.JPG",
+  tracks: [
+    { title: "Symphony No. 40 in G Minor", src: "music/cd3/01.mp3" },
+    { title: "Eine kleine Nachtmusik", src: "music/cd3/02.mp3" }
+  ]
+},
+  cd4: {
+  id: "cd4",
+  title: "Jazz Combos with Levi Bennett",
+  art: "images/CD/cd4.JPG",
+  tracks: [
+    { title: "Caravan - featuring Levi Bennett", src: "music/cd4/caravan-retro.mp3" },
+    { title: "Bug's Interlude", src: "music/cd4/bugs-interlude-retro.mp3" },
+    { title: "Autumn in New York - featuring Levi Bennett", src: "music/cd4/autumn-in-new-york-retro.mp3" },
+    { title: "Lady Bird - featuring Levi Bennett", src: "music/cd4/lady-bird-retro.mp3" },
+    { title: "Billie's Bounce - featuring Levi Bennett", src: "music/cd4/retro-billies-bounce.mp3" },
+    { title: "Some Jazz Piano with Levi", src: "music/cd4/retro-jazz-piano1.mp3" }
+    ]
   }
 };
-
-
 
 
 
