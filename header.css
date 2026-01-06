@@ -927,25 +927,28 @@
 
 #homeBtn {
   background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
+  border: 1px solid #ffffff;
   width: 36px;
   padding: 2px 6px;
-  font-size: 0.85rem;
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.2s;
-  white-space: nowrap;
   flex-shrink: 0;
   text-align: center;
   transform: translate(-35px, -8px);
   margin-right: 8px; /* spacing between home and menu button */
 }
 
-#homeBtn:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: var(--accent);
-  color: var(--accent);
+#homeBtn img {
+  display: block;
+  width: 18px; /* adjust size as needed */
+  filter: invert(1); /* only invert the image */
+  transition: filter 0.2s; /* smooth color change */
 }
 
+/* Hover effect */
+#homeBtn:hover {
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.1);
+}
 
