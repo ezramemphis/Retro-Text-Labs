@@ -2534,9 +2534,22 @@ homeBtn.addEventListener("click", () => {
 // Tracks how many users are online using an external API
 const ONLINE_API = "https://black-haze-ea4c.ezramemphis.workers.dev";
 
+// Create / load session FIRST
+let sessionId = localStorage.getItem("sessionId");
+if (!sessionId) {
+  sessionId = crypto.randomUUID();
+  localStorage.setItem("sessionId", sessionId);
+}
+
 async function updateOnlineCount() {
   try {
-    const res = await fetch(ONLINE_API, { cache: "no-store" });
+    const res = await fetch(ONLINE_API, {
+      cache: "no-store",
+      headers: {
+        "X-Session-ID": sessionId
+      }
+    });
+
     const data = await res.json();
 
     const el = document.getElementById("onlineCount");
