@@ -13,12 +13,13 @@ const CD_LIBRARY = {
   cd1: {
     id: "cd1",
     title: "Bach's Greatest Hits", // updated title
+    artist: "Johann Sebastian Bach", // artist name
     art: "images/CD/bach.jpg",
     startupSound: "assets/cd-start.wav",
     tracks: [
       { title: "Preludium in E Major", src: "music/cd1/01.mp3" },
-      { title: "Air On The G String", src: "music/cd1/02.mp3" },
-      { title: "Sleepers Awake", src: "music/cd1/03.mp3" },
+      { title: "Orchestral Suite No. 3 in D Major, BMV 1068: Air", src: "music/cd1/02.mp3" },
+      { title: "Sleepers Awake from Cantata No. 140", src: "music/cd1/03.mp3" },
       { title: "Little Suite (From The Anna Magdalena Notebook)", src: "music/cd1/04.mp3" },
       { title: "Toccata And Fugue In D Minor", src: "music/cd1/05.mp3" },
       { title: "Jesu, Joy Of Man's Desiring", src: "music/cd1/06.mp3" },
@@ -29,6 +30,7 @@ const CD_LIBRARY = {
   cd2: {
     id: "cd2",
     title: "Beethoven's Greatest Hits", // updated title
+    artist: "Ludwig van Beethoven", 
     art: "images/CD/beethoven.jpg",
     tracks: [
       { title: "Military Polonaise, Op. 40, No. 1", src: "music/cd2/01.mp3" },
@@ -55,7 +57,8 @@ const CD_LIBRARY = {
 },
   cd4: {
   id: "cd4",
-  title: "Jazz Combos with Levi Bennett",
+  title: "Jazz with Levi Bennett",
+  artist: "Levi Bennett", 
   art: "images/CD/cd4.JPG",
   tracks: [
     { title: "Caravan - featuring Levi Bennett", src: "music/cd4/caravan-retro.mp3" },
@@ -243,83 +246,79 @@ function startPlaybackSequence(cdId, trackIndex) {
 }
 
 /* =========================================================
-   CD PLAYER VIEW
+   CD PLAYER VIEW + DOM BOOTSTRAP
 ========================================================= */
 
 function updatePlayerView() {
   const cdEl = document.getElementById("playerCD");
-  const textEl = document.getElementById("playerTrackText");
+  const trackEl = document.getElementById("playerTrackText");
+  const titleEl = document.getElementById("playerCDTitle");
+  const artistEl = document.getElementById("playerArtistName");
 
-  if (!cdEl || !textEl || !CDPlayer.currentCD) return;
+  if (!CDPlayer.currentCD || !cdEl || !trackEl || !titleEl || !artistEl) return;
 
+  // Update CD artwork
   cdEl.style.backgroundImage = `url(${CDPlayer.currentCD.art})`;
-  textEl.textContent =
-    `Track ${CDPlayer.currentTrackIndex + 1}: ` +
-    CDPlayer.currentCD.tracks[CDPlayer.currentTrackIndex].title;
-}
 
-/* =========================================================
-   DOM BOOTSTRAP + CD CLICK ANIMATION
-========================================================= */
+  // Update CD title
+  titleEl.textContent = CDPlayer.currentCD.title;
+  titleEl.style.opacity = 0;
+  titleEl.offsetHeight; // trigger reflow
+  titleEl.style.animation = "fadeIn 0.6s forwards";
+
+  // Update artist name
+  artistEl.textContent = CDPlayer.currentCD.artist || "";
+  artistEl.style.opacity = 0;
+  artistEl.offsetHeight; // trigger reflow
+  artistEl.style.animation = "fadeIn 0.6s forwards";
+
+  // Update track info
+  const currentTrack = CDPlayer.currentCD.tracks[CDPlayer.currentTrackIndex];
+  if (currentTrack) {
+    trackEl.textContent = `Track ${CDPlayer.currentTrackIndex + 1}: ${currentTrack.title}`;
+    trackEl.style.opacity = 0;
+    trackEl.offsetHeight; // trigger reflow
+    trackEl.style.animation = "fadeIn 0.6s forwards";
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ DOM READY");
 
   const cds = document.querySelectorAll("[data-cd]");
-  console.log("💿 CDs found:", cds.length);
+  let activeCD = null;
 
-  let activeCD = null; // Track currently forward CD
-
-  // Helper: close any active CD
   function resetCDs() {
     if (!activeCD) return;
     activeCD.classList.remove("cd-forward");
-    document.querySelectorAll("[data-cd]").forEach(cd => {
-      if (cd !== activeCD) cd.classList.remove("cd-dimmed");
-    });
+    cds.forEach(cd => cd.classList.remove("cd-dimmed"));
     activeCD = null;
   }
 
-  // Click on CD
+  // CD click
   cds.forEach(cd => {
     cd.addEventListener("click", e => {
-      e.stopPropagation(); // prevent global click
-
+      e.stopPropagation();
       const cdId = cd.dataset.cd;
       if (!CD_LIBRARY[cdId]) return;
-
-      // If clicking the already active CD, do nothing
       if (activeCD === cd) return;
 
-      // Reset any other active CD
       resetCDs();
-
-      // Mark clicked CD as active
       activeCD = cd;
       cd.classList.add("cd-forward");
+      cds.forEach(other => { if (other !== cd) other.classList.add("cd-dimmed"); });
 
-      // Dim all other CDs
-      cds.forEach(other => {
-        if (other !== cd) other.classList.add("cd-dimmed");
-      });
-
-      // Load CD in player
-      CDPlayer.loadCD(cdId);
+      // Load CD and render tracks
+      CDPlayer.loadCD(cdId, 0); // start at first track
       renderTrackList(cdId);
     });
   });
 
-  // Clicking outside the CD closes the forward view
+  // Clicking outside closes active CD
   document.addEventListener("click", e => {
-    if (!activeCD) return;
-
-    // Ignore clicks on track list or the CD itself
     const trackList = document.getElementById("trackList");
-    if (
-      activeCD.contains(e.target) ||
-      (trackList && trackList.contains(e.target))
-    ) return;
-
+    if (!activeCD) return;
+    if (activeCD.contains(e.target) || (trackList && trackList.contains(e.target))) return;
     resetCDs();
   });
 
@@ -332,33 +331,36 @@ document.addEventListener("DOMContentLoaded", () => {
       : CDPlayer.playTrack(CDPlayer.currentTrackIndex);
   });
 
-  document.getElementById("fwdBtn")?.addEventListener("click", () =>
-    CDPlayer.nextTrack()
-  );
-  document.getElementById("rewBtn")?.addEventListener("click", () =>
-    CDPlayer.prevTrack()
-  );
+  document.getElementById("fwdBtn")?.addEventListener("click", () => CDPlayer.nextTrack());
+  document.getElementById("rewBtn")?.addEventListener("click", () => CDPlayer.prevTrack());
 
   document.getElementById("repeatBtn")?.addEventListener("click", e => {
     CDPlayer.repeat = !CDPlayer.repeat;
     e.currentTarget.classList.toggle("active", CDPlayer.repeat);
   });
 
+  // Open CD Player view
   document.getElementById("cdPlayerViewBtn")?.addEventListener("click", () => {
-    document.getElementById("cdPlayerView")?.classList.add("active");
+    document.getElementById("cdPlayerView")?.classList.add("show");
+  });
+
+  // Close CD Player view
+  document.getElementById("closeCdPlayerView")?.addEventListener("click", () => {
+    document.getElementById("cdPlayerView")?.classList.remove("show");
   });
 });
 
-
-
-// Properly toggles the CD Player View modal
-
-
-cdPlayerViewBtn.addEventListener("click", () => {
-  cdPlayerView.classList.add("show");
+// Update view automatically whenever a track changes
+CDPlayer.audio.addEventListener("ended", () => {
+  CDPlayer.nextTrack();
+  updatePlayerView();
 });
 
-closeCdPlayerView.addEventListener("click", () => {
-  cdPlayerView.classList.remove("show");
+// Ensure view updates when playing or loading CD
+["loadCD", "playTrack"].forEach(fn => {
+  const orig = CDPlayer[fn];
+  CDPlayer[fn] = function(...args) {
+    orig.apply(this, args);
+    updatePlayerView();
+  };
 });
-

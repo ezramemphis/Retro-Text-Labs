@@ -125,7 +125,7 @@ rel="stylesheet">
 
  <div class="online-indicator">
   <span class="dot"></span>
-  <span id="onlineCount">1</span> online
+  <span id="onlineCount">3</span> online
 </div>
 
 </header>
@@ -203,54 +203,46 @@ rel="stylesheet">
   </div>
 </div>
 
-<!-- CD Player View -->
+<!-- CD Player Fullscreen Modal -->
 <div id="cdPlayerView" class="modal">
 
-  <!-- Wrap button in its own container so it ignores flex centering -->
+  <!-- Close Button (fixed at top-right) -->
   <div class="player-close-wrapper">
     <button id="closeCdPlayerView" class="player-close-btn" aria-label="Close">×</button>
-
-
-
-    
- <!-- Theme Selection Dropdown -->
-<!-- 
-<div class="theme-selector">
-  <label for="themeSelect">Theme Selection:</label>
-  <select id="themeSelect" name="themeSelect">
-    <option value="neon-nights">Neon Nights</option>
-    <option value="retro-wave">Retro Wave</option>
-    <option value="solar-flare">Solar Flare</option>
-    <option value="deep-space">Deep Space</option>
-    <option value="aurora-glow">Aurora Glow</option>
-    <option value="rainbow-shift">Rainbow Shift</option>
-    <option value="transparent">Transparent as Tea</option>
-    <option value="visualizer">Got that Main Visualizer Here</option>
-  </select>
-</div>
-
-<button id="staticModeBtn" title="Toggle Static Mode">STATIC</button>
--->
-
-
-
-
-
   </div>
 
-  <!-- Centered content -->
+  <!-- Centered content: CD on left, info on right -->
   <div class="player-content-wrapper">
+
+    <!-- CD spinning wrapper -->
     <div class="player-cd-wrapper">
       <div class="cd" id="playerCD" style="--art:url('images/CD/lyfestyle.jpeg')"></div>
       <div class="hub-ring"></div>
     </div>
 
-    <div id="playerTrackText" class="player-track-text">
-      - No CD Selected -
+    <!-- Track info panel -->
+    <div class="player-track-info">
+
+      <!-- CD Title -->
+      <div id="playerCDTitle" class="player-cd-title">
+        - No CD Selected -
+      </div>
+
+      <!-- Artist Name -->
+      <div id="playerArtistName" class="player-artist-name">
+        
+      </div>
+
+      <!-- Current Track -->
+      <div id="playerTrackText" class="player-track-text">
+      
+      </div>
+
     </div>
   </div>
 
 </div>
+
 
 
 
