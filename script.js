@@ -2539,33 +2539,31 @@ homeBtn.addEventListener("click", () => {
 
 
 // Tracks how many users are online using an external API
-const ONLINE_API = "https://black-haze-ea4c.ezramemphis.workers.dev";
+fetch("https://api.countapi.xyz/hit/retrotextlab/online_users")
+  .then(res => res.json())
+  .then(data => console.log(data.value)); // current count
 
-// Create / load session FIRST
-let sessionId = localStorage.getItem("sessionId");
-if (!sessionId) {
-  sessionId = crypto.randomUUID();
-  localStorage.setItem("sessionId", sessionId);
-}
+const NAMESPACE = "retrotextlab";
+const KEY = "online_users";
+const el = document.getElementById("onlineCount");
 
-async function updateOnlineCount() {
-  try {
-    const res = await fetch(ONLINE_API, {
-      cache: "no-store",
-      headers: {
-        "X-Session-ID": sessionId
-      }
+// Hit the counter once per browser session
+if (!localStorage.getItem("counted_online")) {
+  fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`)
+    .then(res => res.json())
+    .then(data => {
+      el.textContent = data.value;
+      localStorage.setItem("counted_online", "true");
     });
-
-    const data = await res.json();
-
-    const el = document.getElementById("onlineCount");
-    if (el) el.textContent = data.count;
-  } catch (err) {
-    console.error("Failed to fetch online count", err);
-  }
+} else {
+  fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
+    .then(res => res.json())
+    .then(data => el.textContent = data.value);
 }
 
-// Update immediately, then every 5 seconds
-updateOnlineCount();
-setInterval(updateOnlineCount, 5000);
+// Optional: update count every 10s (just read)
+setInterval(() => {
+  fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
+    .then(res => res.json())
+    .then(data => el.textContent = data.value);
+}, 10000);
