@@ -626,196 +626,6 @@
 .cd-binder::after { right: -40px; transform: rotate(2deg); }
 
 
-
-
-
-
-
-
-/* =====================
-   CD BURN WINDOW
-===================== */
-
-.cd-window {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #1a1f3a;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  box-sizing: border-box;
-  z-index: 999;
-  overflow: auto;
-}
-
-.cd-window.hidden {
-  display: none;
-}
-
-.cd-left, .cd-right {
-  width: 48%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.cd-container {
-  position: relative;
-  width: 100%;
-  height: 300px;
-}
-
-.cd-shape {
-  position: absolute;
-  left: -30%;
-  top: -10%;
-  width: 60%;
-  height: 120%;
-  border-radius: 50%;
-  background: #ccc;
-  box-shadow: inset -5px -5px 20px rgba(255,255,255,0.2),
-              inset 5px 5px 20px rgba(0,0,0,0.2);
-}
-
-.cd-title {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #fff;
-  color: #fff;
-  font-size: 1rem;
-}
-
-.track-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.track-item {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  background: rgba(255,255,255,0.05);
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.advanced-settings {
-  display: none;
-  flex-direction: column;
-  gap: 3px;
-  margin-top: 5px;
-}
-
-.advanced-settings label input {
-  width: 100%;
-}
-
-.advanced-btn {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
-  padding: 2px 6px;
-  cursor: pointer;
-  width: 150px;
-}
-
-.advanced-btn:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-.burn-btn {
-  margin-top: auto;
-  padding: 10px;
-  background: #ff5555;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.burn-btn:hover {
-  background: #ff3333;
-}
-
-/* =====================
-   COVER EDITOR
-===================== */
-
-.cover-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.cover-preview {
-  width: 100%;
-  height: 200px;
-  background: #333;
-  border: 2px dashed #fff;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.5);
-}
-
-.cover-tools {
-  display: flex;
-  gap: 10px;
-}
-
-.cover-tools button {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #fff;
-  background: transparent;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.cover-tools button:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-.cd-canvas-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cd-canvas {
-  width: 200px;
-  height: 200px;
-  background: #fff;
-  border-radius: 50%;
-  opacity: 0.5;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
-}
-
-.close-cd-window {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ff5555;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 3px;
-}
-
-
-
 /* =====================
    TRANSPORT BUTTONS - MINIMAL RETRO
 ===================== */
@@ -902,7 +712,7 @@
   width: 50px;
   height: 30px;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* keep digits centered */
   align-items: center;
   font-family: 'Digital7', monospace;
   font-size: 28px;
@@ -922,6 +732,14 @@
               inset 0 -1px 2px rgba(0,0,0,0.5);
   flex-shrink: 0;
 }
+
+/* Each digit gets a fixed width slot but stays centered */
+#trackDisplay .digit {
+  display: inline-block;
+  width: 14px; /* adjust if needed */
+  text-align: center;
+}
+
 
 
 
@@ -952,3 +770,48 @@
   background: rgba(255,255,255,0.1);
 }
 
+
+
+
+.page-flip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 28px;
+  width: 36px;
+  height: 56px;
+  cursor: pointer;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+.page-flip.left {
+  left: -50px; /* pushes OUTSIDE binder */
+}
+
+.page-flip.right {
+  right: -50px;
+}
+
+.page-flip:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.binder-indicators {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  z-index: 4;
+}

@@ -1,0 +1,274 @@
+/* =====================
+   CD BURN WINDOW — MODERN REVAMP
+===================== */
+
+.cd-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #1c1f2e 0%, #121529 100%);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+  box-sizing: border-box;
+  z-index: 999;
+  overflow-y: auto;
+  backdrop-filter: blur(5px);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.cd-window.hidden {
+  display: none;
+}
+
+.cd-left, .cd-right {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* -----------------------------
+   CD Container + Shape
+----------------------------- */
+.cd-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: radial-gradient(circle at 50% 50%, #2b2f48, #191c2b);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 -3px 10px rgba(255,255,255,0.05);
+  overflow: hidden;
+}
+
+.cd-shape {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: #cfcfcf;
+  box-shadow: inset -5px -5px 20px rgba(255,255,255,0.3),
+              inset 5px 5px 20px rgba(0,0,0,0.3),
+              0 5px 15px rgba(0,0,0,0.4);
+}
+
+.cd-title {
+  position: absolute;
+  top: 20px;
+  width: 80%;
+  left: 10%;
+  background: rgba(255,255,255,0.05);
+  border: none;
+  border-bottom: 2px solid #00ffff;
+  color: #00ffff;
+  font-size: 1.1rem;
+  padding: 5px;
+  border-radius: 4px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.cd-title:focus {
+  outline: none;
+  background: rgba(0,255,255,0.1);
+  border-bottom: 2px solid #ff00ff;
+}
+
+/* -----------------------------
+   Track List
+----------------------------- */
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255,255,255,0.03);
+  padding: 12px 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.track-item:hover {
+  background: rgba(255,255,255,0.07);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.track-item input[type="text"], .track-item input[type="file"] {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+.track-item input[type="text"]:focus {
+  outline: none;
+  border-color: #00ffff;
+  background: rgba(0,255,255,0.1);
+}
+
+/* -----------------------------
+   Advanced Settings
+----------------------------- */
+.advanced-settings {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.advanced-settings label input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.advanced-btn {
+  background: transparent;
+  border: 1px solid #00ffff;
+  color: #00ffff;
+  padding: 4px 8px;
+  cursor: pointer;
+  width: max-content;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.advanced-btn:hover {
+  background: rgba(0,255,255,0.15);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+/* -----------------------------
+   Burn Button
+----------------------------- */
+.burn-btn {
+  margin-top: auto;
+  padding: 12px;
+  background: linear-gradient(90deg, #ff0055, #ff5555);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(255,0,85,0.4);
+  transition: all 0.3s ease;
+}
+
+.burn-btn:hover {
+  background: linear-gradient(90deg, #ff33aa, #ff3333);
+  box-shadow: 0 8px 20px rgba(255,0,85,0.6);
+}
+
+/* -----------------------------
+   Cover Editor
+----------------------------- */
+.cover-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cover-preview {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #2a2e3f, #1b1f2f);
+  border: 2px dashed #00ffff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0,255,255,0.3);
+  font-style: italic;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.cover-preview:hover {
+  background: linear-gradient(135deg, #2e3345, #1f1f33);
+}
+
+.cover-tools {
+  display: flex;
+  gap: 12px;
+}
+
+.cover-tools button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #00ffff;
+  background: rgba(0,255,255,0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #00ffff;
+  transition: all 0.2s ease;
+}
+
+.cover-tools button:hover {
+  background: rgba(0,255,255,0.15);
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+/* -----------------------------
+   CD Canvas
+----------------------------- */
+.cd-canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cd-canvas {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: #1f1f33;
+  box-shadow: inset 0 0 15px rgba(0,255,255,0.2), 0 5px 20px rgba(0,0,0,0.4);
+}
+
+/* -----------------------------
+   Close Button
+----------------------------- */
+.close-cd-window {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #ff0055;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  box-shadow: 0 5px 15px rgba(255,0,85,0.4);
+  transition: all 0.2s ease;
+}
+
+.close-cd-window:hover {
+  background: #ff33aa;
+  box-shadow: 0 8px 20px rgba(255,0,85,0.6);
+}

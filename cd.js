@@ -70,7 +70,7 @@ const CD_LIBRARY = {
   artist: "Levi Bennett", 
   genre: "Jazz",
   art: "images/CD/levi-cd-cover1.JPG",
-  color: "#d4b36a", // warm classical gold
+  color: "#d4b36a", 
   tracks: [
     { title: "Caravan - featuring Levi Bennett", src: "music/cd4/caravan-retro.mp3" },
     { title: "Bug's Interlude", src: "music/cd4/bugs-interlude-retro.mp3" },
@@ -78,6 +78,65 @@ const CD_LIBRARY = {
     { title: "Lady Bird - featuring Levi Bennett", src: "music/cd4/lady-bird-retro.mp3" },
     { title: "Billie's Bounce - featuring Levi Bennett", src: "music/cd4/retro-billies-bounce.mp3" },
     { title: "Some Jazz Piano with Levi", src: "music/cd4/retro-jazz-piano1.mp3" }
+    ]
+  },
+  cd5: {
+  id: "cd5",
+  title: "Natural Light",
+  artist: "Isaac Lourie", 
+  genre: "R&B/Indie",
+  art: "images/CD/natural-light-cover.png",
+  color: "#dedcb5ff", 
+  tracks: [
+    { title: "Natural Light", src: "music/cd5/01.mp3" },
+    { title: "I Wanna Take You There (feat. Jazz Cuti)", src: "music/cd5/02.mp3" },
+    { title: "Meadow (Łąka) (feat. Karolina Wilgus)", src: "music/cd5/03.mp3" },
+    { title: "Pillars (feat. Srushti Gubbi)", src: "music/cd5/04.mp3" },
+    { title: "I'm Good (feat. RICARDO)", src: "music/cd5/05.mp3" },
+    { title: "Take Your Time", src: "music/cd5/06.mp3" }
+    ]
+  },
+  cd6: {
+  id: "cd6",
+  title: "The Road To Hell Is Paved With Good Intentions",
+  artist: "Vegyn", 
+  genre: "Dance/Electronic",
+  art: "images/CD/vegyn.jpg",
+  color: "#4fd592ff", 
+  tracks: [
+    { title: "A Dream Goes On Forever", src: "music/cd6/01.mp3" },
+    { title: "Another 9 Days", src: "music/cd6/02.mp3" },
+    { title: "Turn Me Inside", src: "music/cd6/03.mp3" },
+    { title: "Halo Flip", src: "music/cd6/04.mp3" },
+    { title: "Everything Is the Same", src: "music/cd6/05.mp3" },
+    { title: "The Path Less Travelled", src: "music/cd6/06.mp3" },
+    { title: "Makeshift Tourniquet", src: "music/cd6/07.mp3" },
+    { title: "Time Well Spent", src: "music/cd6/08.mp3" },
+    { title: "In the Front", src: "music/cd6/09.mp3" },
+    { title: "Trust", src: "music/cd6/10.mp3" },
+    { title: "Stress Test", src: "music/cd6/11.mp3" },
+    { title: "Last Night I Dreamt I Was Alone", src: "music/cd6/12.mp3" },
+    { title: "Unlucky for Some...", src: "music/cd6/13.mp3" }
+    ]
+  },
+  cd7: {
+  id: "cd7",
+  title: "Wave",
+  artist: "Antônio Carlos Jobim", 
+  genre: "Bossa Nova/Jazz",
+  art: "images/CD/wave.jpg",
+  color: "#72d184ff", 
+  tracks: [
+    { title: "Wave", src: "music/cd7/01.mp3" },
+    { title: "The Red Blouse", src: "music/cd7/02.mp3" },
+    { title: "Look To The Sky", src: "music/cd7/03.mp3" },
+    { title: "Batidinha", src: "music/cd7/04.mp3" },
+    { title: "Triste", src: "music/cd7/05.mp3" },
+    { title: "Mojave", src: "music/cd7/06.mp3" },
+    { title: "Dialogo", src: "music/cd7/07.mp3" },
+    { title: "Lamento", src: "music/cd7/08.mp3" },
+    { title: "Antigua", src: "music/cd7/09.mp3" },
+    { title: "Captain Bacardi", src: "music/cd7/10.mp3" }
     ]
   }
 };
@@ -145,6 +204,14 @@ const CDPlayer = {
     this.isPlaying = false;
     updateTransportUI();
   },
+
+  resume() {
+  if (!this.currentCD) return;
+  this.audio.play();
+  this.isPlaying = true;
+  updateTransportUI();
+},
+
 
   nextTrack() {
   if (!this.currentCD) return;
@@ -235,8 +302,16 @@ function updateTrackDisplay() {
   const el = document.getElementById("trackDisplay");
   if (!el || !CDPlayer.currentCD) return;
 
-  el.textContent = String(CDPlayer.currentTrackIndex + 1).padStart(2, "0");
+  // Get the track number and pad with 0 for single digits
+  const numStr = String(CDPlayer.currentTrackIndex + 1).padStart(2, "0");
+
+  // Wrap each digit in a span for fixed spacing
+  el.innerHTML = numStr
+    .split("")
+    .map(digit => `<span class="digit">${digit}</span>`)
+    .join("");
 }
+
 
 /* =========================================================
    PLAYBACK SEQUENCE
@@ -438,3 +513,178 @@ function formatTime(seconds) {
   const s = Math.floor(seconds % 60).toString().padStart(2, "0");
   return `${m}:${s}`;
 }
+
+
+
+/* =========================================================
+   CD COLLECTION PAGINATION (SAFE VERSION)
+========================================================= */
+
+const TOTAL_CDS = 40;
+const CDS_PER_PAGE = 8;
+const TOTAL_PAGES = Math.ceil(TOTAL_CDS / CDS_PER_PAGE);
+
+let currentPage = 0;
+
+// All CDs that actually exist
+const filledCDs = Object.keys(CD_LIBRARY); // ["cd1","cd2",...]
+
+// Grab existing DOM (NO creation)
+const allSlots = document.querySelectorAll(".cd-grid .cd");
+const pageIndicator = document.getElementById("pageIndicator");
+const cdCountIndicator = document.getElementById("cdCountIndicator");
+
+function renderPage(pageIndex) {
+  const start = pageIndex * CDS_PER_PAGE;
+
+  allSlots.forEach((cdEl, slotIndex) => {
+    const cdNumber = start + slotIndex + 1;
+    const cdId = `cd${cdNumber}`;
+
+    if (filledCDs.includes(cdId)) {
+      cdEl.dataset.cd = cdId;
+    } else {
+      cdEl.dataset.cd = "";
+    }
+  });
+
+  updateIndicators();
+}
+
+function updateIndicators() {
+  pageIndicator.textContent = `${currentPage + 1} / ${TOTAL_PAGES}`;
+  cdCountIndicator.textContent = `${filledCDs.length} / ${TOTAL_CDS} CDs`;
+}
+
+/* =====================
+   Navigation buttons
+===================== */
+
+document.getElementById("pagePrev")?.addEventListener("click", e => {
+  e.stopPropagation();
+  if (currentPage > 0) {
+    currentPage--;
+    renderPage(currentPage);
+  }
+});
+
+document.getElementById("pageNext")?.addEventListener("click", e => {
+  e.stopPropagation();
+  if (currentPage < TOTAL_PAGES - 1) {
+    currentPage++;
+    renderPage(currentPage);
+  }
+});
+
+/* =====================
+   Init
+===================== */
+
+renderPage(currentPage);
+
+
+
+/* =========================================================
+   ENHANCED BOTTOM VISUALIZER (CDPlayer.audio) with toggle
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const vizCanvas = document.getElementById("simpleVisualizer");
+  const vizCtx = vizCanvas.getContext("2d");
+
+  if (!vizCanvas) {
+    console.warn("Visualizer canvas not found");
+    return;
+  }
+
+  // Start OFF
+  let visualizerEnabled = false;
+  vizCanvas.style.display = "none";
+
+  const toggleBtn = document.getElementById("toggleVisualizerBtn");
+
+  // Toggle logic
+  toggleBtn?.addEventListener("click", () => {
+    visualizerEnabled = !visualizerEnabled;
+    vizCanvas.style.display = visualizerEnabled ? "block" : "none";
+    toggleBtn.textContent = visualizerEnabled ? "Visualizer: On" : "Visualizer: Off";
+    toggleBtn.classList.toggle("active", visualizerEnabled);
+    resizeViz(); // ensure canvas fits
+  });
+
+  // Resize function
+  function resizeViz() {
+    vizCanvas.width = window.innerWidth;
+    vizCanvas.height = vizCanvas.offsetHeight || 60;
+  }
+  resizeViz();
+  window.addEventListener("resize", resizeViz);
+
+  // Web Audio setup
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+
+  const analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 512;
+
+  const sourceNode = audioCtx.createMediaElementSource(CDPlayer.audio);
+  sourceNode.connect(analyser);
+  analyser.connect(audioCtx.destination);
+
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  // Resume audio context on first user interaction
+  function resumeAudioContext() {
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    window.removeEventListener("click", resumeAudioContext);
+  }
+  window.addEventListener("click", resumeAudioContext);
+
+  // Helper: CD color
+  function getCDColor() {
+    return CDPlayer.currentCD?.color || "#ff88ff";
+  }
+
+  // Force resize on CD player open or track start
+  function forceVizResize() {
+    requestAnimationFrame(resizeViz);
+  }
+  document.getElementById("cdPlayerViewBtn")?.addEventListener("click", forceVizResize);
+  const originalPlay = CDPlayer.playTrack;
+  CDPlayer.playTrack = function (...args) {
+    originalPlay.apply(this, args);
+    forceVizResize();
+  };
+
+  // Main draw loop
+  function drawVisualizer() {
+    requestAnimationFrame(drawVisualizer);
+
+    if (!visualizerEnabled) return; // skip if disabled
+
+    analyser.getByteFrequencyData(dataArray);
+    vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
+
+    const barWidth = vizCanvas.width / bufferLength;
+    let x = 0;
+
+    const color = getCDColor();
+
+    for (let i = 0; i < bufferLength; i++) {
+      const boost = 1 + i / bufferLength; // high-end boost
+      const value = dataArray[i] * boost;
+      const barHeight = Math.min((value / 255) * vizCanvas.height, vizCanvas.height);
+
+      const alpha = 0.25 + (value / 255) * 0.75;
+      vizCtx.fillStyle = `rgba(${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)},${alpha})`;
+      vizCtx.fillRect(x, vizCanvas.height - barHeight, barWidth - 1, barHeight);
+
+      x += barWidth;
+    }
+  }
+
+  // Start the loop
+  drawVisualizer();
+});
+

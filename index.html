@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="matrix.css" />
   <link rel="stylesheet" href="header.css" />
+  <link rel="stylesheet" href="burn.css" />
   <link rel="stylesheet" href="playerview.css" />
   <link rel="icon" type="image/svg+xml" href="images/icon.svg">
 
@@ -136,72 +137,86 @@ rel="stylesheet">
 
 <div id="cdCollectionModal" class="modal">
   <div class="modal-content">
-    <img src="images/close-button-red.PNG" alt="Close" class="close">
-    <!-- Floating GIF instead of H2 -->
-<img src="images/cd-collection.gif" alt="CD Collection" class="cd-gif">
 
+    <img src="images/close-button-red.PNG" alt="Close" class="close">
+
+    <!-- Floating GIF instead of H2 -->
+    <img src="images/cd-collection.gif" alt="CD Collection" class="cd-gif">
 
     <div class="cd-binder">
 
-  <!-- Left leather overlay -->
-  <img src="images/leather.png" alt="Leather texture" class="binder-leather left">
-  <!-- Right leather overlay -->
-  <img src="images/leather.png" alt="Leather texture" class="binder-leather right">
+      <!-- Leather overlays -->
+      <img src="images/leather.png" alt="Leather texture" class="binder-leather left">
+      <img src="images/leather.png" alt="Leather texture" class="binder-leather right">
 
-      <!-- LEFT PAGE -->
-<div class="page left">
-  <div class="cd-grid">
-    <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
-      <div class="cd" data-cd=""></div> <!-- EMPTY -->
-      <div class="hub-ring"></div>
-    </div>
+      <!-- ✅ NEW: top indicators (does NOT affect layout below) -->
+      <div class="binder-indicators">
+        <span id="pageIndicator">1 / 5</span>
+        <span id="cdCountIndicator">0 / 40 CDs</span>
+      </div>
 
-    <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
-      <div class="cd" data-cd=""></div> <!-- EMPTY -->
-      <div class="hub-ring"></div>
-    </div>
+      <!-- ✅ NEW: page flip buttons -->
+      <button id="pagePrev" class="page-flip left">‹</button>
+      <button id="pageNext" class="page-flip right">›</button>
 
-    <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
-      <div class="cd" data-cd="cd3" style="--art:url('images/CD/modular.jpg')"></div>
-      <div class="hub-ring"></div>
-    </div>
-
-    <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
-      <div class="cd" data-cd="cd4" style="--art:url('images/CD/levi-cd-cover1.jpg')"></div>
-      <div class="hub-ring"></div>
-    </div>
-  </div>
-</div>
-
-
-      <!-- RIGHT PAGE -->
-      <div class="page right">
+      <!-- LEFT PAGE (UNCHANGED) -->
+      <div class="page left">
         <div class="cd-grid">
+
           <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
-            <div class="cd" data-cd="cd5" style="--art:url('images/CD/cd5.jpg')"></div>
+            <div class="cd" data-cd=""></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
-            <div class="cd" data-cd="cd6" style="--art:url('images/CD/c6.jpg')"></div>
+            <div class="cd" data-cd=""></div>
             <div class="hub-ring"></div>
           </div>
 
           <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
-            <div class="cd" data-cd="cd7" style="--art:url('images/CD/c7.jpg')"></div>
+            <div class="cd" data-cd=""></div>
             <div class="hub-ring"></div>
           </div>
- 
+
           <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
-            <div class="cd" data-cd="cd8" style="--art:url('images/CD/c8.jpg')"></div>
+            <div class="cd" data-cd=""></div>
             <div class="hub-ring"></div>
           </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT PAGE (UNCHANGED) -->
+      <div class="page right">
+        <div class="cd-grid">
+
+          <div class="cd-slot" style="--offset-x: 10px; --offset-y: -2px;">
+            <div class="cd" data-cd=""></div>
+            <div class="hub-ring"></div>
+          </div>
+
+          <div class="cd-slot" style="--offset-x: -8px; --offset-y: -2px;">
+            <div class="cd" data-cd=""></div>
+            <div class="hub-ring"></div>
+          </div>
+
+          <div class="cd-slot" style="--offset-x: 9px; --offset-y: -25px;">
+            <div class="cd" data-cd=""></div>
+            <div class="hub-ring"></div>
+          </div>
+
+          <div class="cd-slot" style="--offset-x: -9px; --offset-y: -25px;">
+            <div class="cd" data-cd=""></div>
+            <div class="hub-ring"></div>
+          </div>
+
         </div>
       </div>
 
     </div>
   </div>
 </div>
+
 
 <!-- CD Player Fullscreen Modal -->
 <div id="cdPlayerView" class="modal">
@@ -245,8 +260,15 @@ rel="stylesheet">
 
     </div>
   </div>
+
+
+
+
   
-  <!-- Progress Bar -->
+<!-- Bottom visualizer -->
+<canvas id="simpleVisualizer"></canvas>
+
+<!-- Progress Bar -->
 <div class="player-progress-wrapper">
   <span id="progressCurrentTime">0:00</span>
 
@@ -256,6 +278,7 @@ rel="stylesheet">
 
   <span id="progressDuration">0:00</span>
 </div>
+
 
 </div>
 
@@ -276,25 +299,13 @@ rel="stylesheet">
   <div class="cd-left">
     <div class="cd-container">
       <div class="cd-shape"></div>
-      <input type="text" placeholder="Title: ___________" class="cd-title">
+      <input type="text" placeholder="CD Title" class="cd-title">
     </div>
 
-    <div class="track-list">
-      <!-- Example track entry, repeatable -->
-      <div class="track-item">
-        <label>Track 1: <input type="text" placeholder="Track Name"></label>
-        <input type="file" accept=".mp3,.wav">
-        <button class="advanced-btn">Advanced Settings</button>
-        <div class="advanced-settings hidden">
-          <label>Artist: <input type="text"></label>
-          <label>Album: <input type="text"></label>
-          <label>Genre: <input type="text"></label>
-          <label>Year: <input type="text"></label>
-        </div>
-      </div>
-    </div>
+    <div class="track-list"></div>
+    <button id="addTrackBtn" class="advanced-btn">Add Track</button>
 
-    <button class="burn-btn">BURN THE DISC</button>
+    <button id="burnBtn" class="burn-btn">BURN THE DISC</button>
   </div>
 
   <!-- Right Side: Cover Editor -->
@@ -302,12 +313,12 @@ rel="stylesheet">
     <div class="cover-editor">
       <h3>Edit Cover Image</h3>
       <input type="file" accept="image/*" class="cover-file">
-      <div class="cover-preview"></div>
+      <div class="cover-preview">No Cover Selected</div>
       <div class="cover-tools">
-        <button>Draw Mode</button>
-        <button>Import Visualizer</button>
-        <button>Stickers Galore</button>
-        <button>Text Editor</button>
+        <button data-tool="draw">Draw Mode</button>
+        <button data-tool="import">Import Visualizer</button>
+        <button data-tool="stickers">Stickers Galore</button>
+        <button data-tool="text">Text Editor</button>
       </div>
       <div class="cd-canvas-container">
         <canvas class="cd-canvas"></canvas>
@@ -317,6 +328,7 @@ rel="stylesheet">
 
   <button class="close-cd-window">X</button>
 </div>
+
 
 
 <img id="hiddenSurprise" src="images/pibble.jpeg" alt="Cute Surprise!" />
@@ -727,6 +739,12 @@ rel="stylesheet">
     Panel Opacity
     <input type="range" id="panelOpacity" min="0" max="1" step="0.01" value="0.93" />
   </label>
+
+  <!-- Visualizer Toggle -->
+<label>
+  <button id="toggleVisualizerBtn" type="button">Visualizer: Off</button>
+</label>
+
 </div>
 
 

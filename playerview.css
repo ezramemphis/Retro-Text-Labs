@@ -237,3 +237,21 @@
   );
   transition: width 0.1s linear;
 }
+
+
+
+
+
+#simpleVisualizer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px; /* same vertical zone as progress bar */
+  width: 100vw;
+  height: 60px;
+
+  z-index: 0;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+

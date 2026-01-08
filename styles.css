@@ -829,24 +829,42 @@ canvas {
 }
 
 
-.cd-slot {
-  position: relative; /* parent for absolute positioning */
-}
-
 .remove-btn {
   position: absolute;
-  bottom: 5px;
+  top: 5px;
   right: 5px;
-  width: 22px;
-  height: 22px;
-  font-size: 14px;
-  border-radius: 50%;
+  background: rgba(255,255,255,0.8);
   border: none;
-  background: rgba(255,255,255,0.9);
-  z-index: 100;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
+}
+
+.cd-slot {
+  position: relative; /* needed so the button positions correctly */
+}
+
+
+#toggleVisualizerBtn {
+  background: none;
+  border: 1px solid #ccc;
+  color: #ccc;
+  padding: 4px 8px;
   cursor: pointer;
-  transform: none !important; /* prevent rotation */
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+#toggleVisualizerBtn.active {
+  background: var(--cd-accent, #ffcf66);
+  color: #000;
+  border-color: var(--cd-accent, #ffcf66);
 }
